@@ -139,32 +139,54 @@ void vec2_norm(float& x, float& y) {
 }
 
 void updateBall() {
+	// Record previous position of ball
+	float prev_ball_pos_x = ball_pos_x;
+	float prev_ball_pos_y = ball_pos_y;
+
 	// Fly in current direction
 	ball_pos_x += ball_dir_x * ball_speed;
 	ball_pos_y += ball_dir_y * ball_speed;
 
-	// Check for collision with left racket
+	// Check if ball passed the plane of the left racket
 	if (
-		(ball_pos_x < racket_left_x + racket_width) &&
-		(ball_pos_x > racket_left_x) &&
-		(ball_pos_y < racket_left_y + racket_height) &&
-		(ball_pos_y > racket_left_y)
+		(prev_ball_pos_x > racket_left_x + racket_width) &&
+		(ball_pos_x < racket_left_x + racket_width)
 	) {
-		float t = ((ball_pos_y - racket_left_y) / racket_height) - 0.5f;
-		ball_dir_x = fabs(ball_dir_x);
-		ball_dir_y = t;
+		float percent = (prev_ball_pos_x - (racket_left_x + racket_width)) / (prev_ball_pos_x - ball_pos_x);
+		float cross_plane_y = prev_ball_pos_y + (ball_dir_y * ball_speed * percent);
+
+		// Check for collision with the left racket
+		if (
+			(cross_plane_y < racket_left_y + racket_height) &&
+			(cross_plane_y > racket_left_y)
+		) {
+			ball_pos_x = (racket_left_x + racket_width) + (fabs(ball_dir_x) * ball_speed * (1 - percent));
+
+			float t = ((cross_plane_y - racket_left_y) / racket_height) - 0.5f;
+			ball_dir_x = fabs(ball_dir_x);
+			ball_dir_y = t;
+		}
 	}
 
-	// Check for collision with right racket
+	// Check if ball passed the plane of the right racket
 	if (
-		(ball_pos_x > racket_right_x) &&
-		(ball_pos_x < racket_right_x + racket_width) &&
-		(ball_pos_y < racket_right_y + racket_height) &&
-		(ball_pos_y > racket_right_y)
+		(prev_ball_pos_x < racket_right_x) &&
+		(ball_pos_x > racket_right_x)
 	) {
-		float t = ((ball_pos_y - racket_right_y) / racket_height) - 0.5f;
-		ball_dir_x = -fabs(ball_dir_x);
-		ball_dir_y = t;
+		float percent = (racket_right_x - prev_ball_pos_x) / (ball_pos_x - prev_ball_pos_x);
+		float cross_plane_y = prev_ball_pos_y + (ball_dir_y * ball_speed * percent);
+
+		// Check for collision with the right racket
+		if (
+			(cross_plane_y < racket_right_y + racket_height) &&
+			(cross_plane_y > racket_right_y)
+		) {
+			ball_pos_x = racket_right_x - (fabs(ball_dir_x) * ball_speed * (1 - percent));
+
+			float t = ((cross_plane_y - racket_right_y) / racket_height) - 0.5f;
+			ball_dir_x = -fabs(ball_dir_x);
+			ball_dir_y = t;
+		}
 	}
 
 	// Check for collision with left wall

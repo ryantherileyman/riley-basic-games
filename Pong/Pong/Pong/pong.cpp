@@ -13,6 +13,8 @@
 // Window size and update rate (60 fps)
 int width = 500;
 int height = 200;
+int playarea_width = width - 20;
+int playarea_height = height - 20;
 int interval = 1000 / 60;
 
 // Score
@@ -29,7 +31,7 @@ float racket_left_x = 10.0f;
 float racket_left_y = 50.0f;
 
 // Right racket position
-float racket_right_x = width - racket_width - 20;
+float racket_right_x = playarea_width - racket_width;
 float racket_right_y = 50.0f;
 
 // Ball properties
@@ -37,8 +39,8 @@ int ball_size = 8;
 int ball_speed = 2;
 
 // Ball position
-float ball_pos_x = width / 2;
-float ball_pos_y = height / 2;
+float ball_pos_x = playarea_width / 2;
+float ball_pos_y = playarea_height / 2;
 float ball_dir_x = -1.0f;
 float ball_dir_y = 0.0f;
 
@@ -95,8 +97,8 @@ void draw() {
 
 float moveRacketUp(float currYPos) {
 	float result = currYPos + racket_speed;
-	if (result + racket_height > height) {
-		result = height - racket_height;
+	if (result + racket_height > playarea_height) {
+		result = playarea_height - racket_height;
 	}
 	return result;
 }
@@ -168,28 +170,30 @@ void updateBall() {
 	// Check for collision with left wall
 	if (ball_pos_x < 0) {
 		score_right++;
-		ball_pos_x = width / 2;
-		ball_pos_y = height / 2;
+		ball_pos_x = playarea_width / 2;
+		ball_pos_y = playarea_height / 2;
 		ball_dir_x = fabs(ball_dir_x);
 		ball_dir_y = 0;
 	}
 
 	// Check for collision with right wall
-	if (ball_pos_x > width) {
+	if (ball_pos_x > playarea_width) {
 		score_left++;
-		ball_pos_x = width / 2;
-		ball_pos_y = height / 2;
+		ball_pos_x = playarea_width / 2;
+		ball_pos_y = playarea_height / 2;
 		ball_dir_x = -fabs(ball_dir_x);
 		ball_dir_y = 0;
 	}
 
 	// Check for collision with top wall
-	if (ball_pos_y > height) {
+	if (ball_pos_y > playarea_height) {
+		ball_pos_y = playarea_height - (ball_pos_y - playarea_height);
 		ball_dir_y = -fabs(ball_dir_y);
 	}
 
 	// Check for collision with bottom wall
 	if (ball_pos_y < 0) {
+		ball_pos_y = fabs(ball_pos_y);
 		ball_dir_y = fabs(ball_dir_y);
 	}
 

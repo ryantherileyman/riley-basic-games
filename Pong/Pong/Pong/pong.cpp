@@ -93,21 +93,37 @@ void draw() {
 	glutSwapBuffers();
 }
 
+float moveRacketUp(float currYPos) {
+	float result = currYPos + racket_speed;
+	if (result + racket_height > height) {
+		result = height - racket_height;
+	}
+	return result;
+}
+
+float moveRacketDown(float currYPos) {
+	float result = currYPos - racket_speed;
+	if (result < 0) {
+		result = 0;
+	}
+	return result;
+}
+
 void pollKeyboardInputs() {
 	// Left racket
 	if (GetAsyncKeyState('W')) {
-		racket_left_y += racket_speed;
+		racket_left_y = moveRacketUp(racket_left_y);
 	}
 	if (GetAsyncKeyState('S')) {
-		racket_left_y -= racket_speed;
+		racket_left_y = moveRacketDown(racket_left_y);
 	}
 
 	// Right racket
 	if (GetAsyncKeyState(VK_UP)) {
-		racket_right_y += racket_speed;
+		racket_right_y = moveRacketUp(racket_right_y);
 	}
 	if (GetAsyncKeyState(VK_DOWN)) {
-		racket_right_y -= racket_speed;
+		racket_right_y = moveRacketDown(racket_right_y);
 	}
 }
 

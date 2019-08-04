@@ -150,7 +150,7 @@ void updateBall() {
 	// Check if ball passed the plane of the left racket
 	if (
 		(prev_ball_pos_x > racket_left_x + racket_width) &&
-		(ball_pos_x < racket_left_x + racket_width)
+		(ball_pos_x <= racket_left_x + racket_width)
 	) {
 		float percent = (prev_ball_pos_x - (racket_left_x + racket_width)) / (prev_ball_pos_x - ball_pos_x);
 		float cross_plane_y = prev_ball_pos_y + (ball_dir_y * ball_speed * percent);
@@ -171,7 +171,7 @@ void updateBall() {
 	// Check if ball passed the plane of the right racket
 	if (
 		(prev_ball_pos_x < racket_right_x) &&
-		(ball_pos_x > racket_right_x)
+		(ball_pos_x >= racket_right_x)
 	) {
 		float percent = (racket_right_x - prev_ball_pos_x) / (ball_pos_x - prev_ball_pos_x);
 		float cross_plane_y = prev_ball_pos_y + (ball_dir_y * ball_speed * percent);

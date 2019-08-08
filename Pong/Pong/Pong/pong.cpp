@@ -8,6 +8,7 @@
 #include <gl/GL.h>
 #include <gl/GLU.h>
 #include "GL/freeglut.h"
+#include "pong-lib.h"
 #pragma comment(lib, "OpenGL32.lib")
 
 // Window size and update rate (60 fps)
@@ -238,6 +239,24 @@ void update(int value) {
 }
 
 int main(int argc, char** argv) {
+
+	pong::LineSegment2D topWall;
+	topWall.point1.x = -250;
+	topWall.point1.y = -100;
+	topWall.point2.x = 250;
+	topWall.point2.y = -100;
+
+	pong::LineSegment2D ballMovement;
+	ballMovement.point1.x = 0;
+	ballMovement.point1.y = -98;
+	ballMovement.point2.x = -2;
+	ballMovement.point2.y = -101;
+
+	pong::LineSegmentIntersectionResult intersectionResult = pong::checkLineSegmentsIntersect(&ballMovement, &topWall);
+	printf("type = %d, x = %f, y = %f, percent = %f\n", intersectionResult.intersectionType, intersectionResult.intersectionPoint1.x, intersectionResult.intersectionPoint1.y, intersectionResult.percentPoint1);
+	printf("(if collinear, x2 = %f, y2 = %f)\n", intersectionResult.intersectionPoint2.x, intersectionResult.intersectionPoint2.y);
+
+	/*
 	// Initialize OpenGL (via Glut)
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
@@ -256,4 +275,5 @@ int main(int argc, char** argv) {
 	glutMainLoop();
 
 	return 0;
+	*/
 }

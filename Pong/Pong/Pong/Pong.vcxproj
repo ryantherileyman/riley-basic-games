@@ -126,13 +126,17 @@
   <ItemGroup>
     <ClCompile Include="pong-CourtCollisionCheckUtil.cpp" />
     <ClCompile Include="pong-GameClient.cpp" />
-    <ClCompile Include="pong-lib.cpp" />
     <ClCompile Include="pong-Match.cpp" />
+    <ClCompile Include="pong-MatchRenderer.cpp" />
     <ClCompile Include="pong-Paddle.cpp" />
     <ClCompile Include="pong.cpp" />
+    <ClCompile Include="riley-gl-utils.cpp" />
+    <ClCompile Include="riley-graphics-2d.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pong-lib.h" />
+    <ClInclude Include="riley-gl-utils.h" />
+    <ClInclude Include="riley-graphics-2d.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

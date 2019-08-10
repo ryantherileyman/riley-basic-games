@@ -3,6 +3,8 @@
 
 namespace pong {
 
+	using namespace r3::graphics2d;
+
 	Match::Match(const MatchDefn* matchDefn) {
 		PaddleDefn leftPaddleDefn;
 		leftPaddleDefn.courtSize = matchDefn->courtSize;
@@ -15,8 +17,8 @@ namespace pong {
 		rightPaddleDefn.side = PaddleSide::RIGHT;
 
 		this->courtSize = matchDefn->courtSize;
-		this->paddleSpeed = 3;
-		this->ballSpeed = 2;
+		this->paddleSpeed = matchDefn->paddleSpeed;
+		this->ballSpeed = matchDefn->ballSpeed;
 
 		this->leftPaddle = new Paddle(&leftPaddleDefn);
 		this->rightPaddle = new Paddle(&rightPaddleDefn);
@@ -30,15 +32,15 @@ namespace pong {
 		this->ballState.direction.x = 1;
 		this->ballState.direction.y = 0;
 
-		this->topWallLineSegment.point1.x = -matchDefn->courtSize.width / 2;
-		this->topWallLineSegment.point1.y = matchDefn->courtSize.height / 2;
-		this->topWallLineSegment.point2.x = matchDefn->courtSize.width / 2;
-		this->topWallLineSegment.point2.y = matchDefn->courtSize.height / 2;
+		this->collisionSet.topWallLineSegment.point1.x = -matchDefn->courtSize.width / 2 + (matchDefn->paddleSize.width * 2);
+		this->collisionSet.topWallLineSegment.point1.y = matchDefn->courtSize.height / 2;
+		this->collisionSet.topWallLineSegment.point2.x = matchDefn->courtSize.width / 2 - (matchDefn->paddleSize.width * 2);
+		this->collisionSet.topWallLineSegment.point2.y = matchDefn->courtSize.height / 2;
 
-		this->bottomWallLineSegment.point1.x = -matchDefn->courtSize.width / 2;
-		this->bottomWallLineSegment.point1.y = -matchDefn->courtSize.height / 2;
-		this->bottomWallLineSegment.point2.x = matchDefn->courtSize.width / 2;
-		this->bottomWallLineSegment.point2.y = -matchDefn->courtSize.height / 2;
+		this->collisionSet.bottomWallLineSegment.point1.x = -matchDefn->courtSize.width / 2 + (matchDefn->paddleSize.width * 2);
+		this->collisionSet.bottomWallLineSegment.point1.y = -matchDefn->courtSize.height / 2;
+		this->collisionSet.bottomWallLineSegment.point2.x = matchDefn->courtSize.width / 2 - (matchDefn->paddleSize.width * 2);
+		this->collisionSet.bottomWallLineSegment.point2.y = -matchDefn->courtSize.height / 2;
 	}
 
 	Match::~Match() {
@@ -46,39 +48,58 @@ namespace pong {
 		delete this->rightPaddle;
 	}
 
+	Size2D Match::getCourtSize() const {
+		return this->courtSize;
+	}
+
+	Paddle* Match::getLeftPaddle() const {
+		return this->leftPaddle;
+	}
+
+	Paddle* Match::getRightPaddle() const {
+		return this->rightPaddle;
+	}
+
+	BallState Match::getBallState() const {
+		return this->ballState;
+	}
+
+	int Match::getLeftScore() const {
+		return this->leftScore;
+	}
+
+	int Match::getRightScore() const {
+		return this->rightScore;
+	}
+
+	void Match::startPoint(PaddleSide side) {
+		this->ballState.position.x = 0.0f;
+		this->ballState.position.y = 0.0f;
+
+		switch (side) {
+		case PaddleSide::LEFT:
+			this->ballState.direction.x = -1.0f;
+			break;
+		case PaddleSide::RIGHT:
+			this->ballState.direction.x = 1.0f;
+			break;
+		}
+		this->ballState.direction.y = 0.0f;
+	}
+
 	MatchUpdateResult Match::update(const MatchInputRequest* input) {
 		this->updatePaddles(input);
 
-		LineSegment2D ballPathLineSegment;
-		ballPathLineSegment.point1 = this->ballState.position;
-		ballPathLineSegment.point2.x = this->ballState.position.x + (this->ballState.direction.x * this->ballSpeed);
-		ballPathLineSegment.point2.y = this->ballState.position.y + (this->ballState.direction.y * this->ballSpeed);
+		BallPathResult ballPath = this->resolveBallPath();
+		this->updateBall(&ballPath);
 
-		LineSegment2D leftPaddleLineSegment = this->leftPaddle->createCollisionLineSegment();
-		LineSegment2D rightPaddleLineSegment = this->rightPaddle->createCollisionLineSegment();
-
-		LineSegmentIntersectionResult topWallIntersectionResult = checkLineSegmentsIntersect(&ballPathLineSegment, &topWallLineSegment);
-		if (topWallIntersectionResult.intersectionType == LineSegmentIntersectionType::SINGLE_POINT) {
-			// TODO: check if remaining flight path will hit a paddle
-		}
-
-		LineSegmentIntersectionResult bottomWallIntersectionResult = checkLineSegmentsIntersect(&ballPathLineSegment, &bottomWallLineSegment);
-		if (bottomWallIntersectionResult.intersectionType == LineSegmentIntersectionType::SINGLE_POINT) {
-			// TODO: check if remaining flight path will hit a paddle
-		}
-
-		LineSegmentIntersectionResult leftPaddleIntersectionResult = checkLineSegmentsIntersect(&ballPathLineSegment, &leftPaddleLineSegment);
-
-		LineSegmentIntersectionResult rightPaddleIntersectionResult = checkLineSegmentsIntersect(&ballPathLineSegment, &rightPaddleLineSegment);
-
-
-		// TODO...
 		MatchUpdateResult result;
-		result.newBallPosition.x = 0;
-		result.newBallPosition.y = 0;
-		result.newBallDirection.x = 0;
-		result.newBallDirection.y = 0;
-		result.ballCollisionResultList = std::vector<BallCollisionResult>();
+		result.ballPath = ballPath;
+		result.leftScoredFlag = ballPath.newPosition.x > (this->courtSize.width / 2);
+		result.rightScoredFlag = ballPath.newPosition.x < (-this->courtSize.width / 2);
+
+		this->updateScore(&result);
+
 		return result;
 	}
 
@@ -95,6 +116,55 @@ namespace pong {
 		}
 		if (input->rightPaddleInput == PaddleInputType::MOVE_DOWN) {
 			this->rightPaddle->moveDown(this->paddleSpeed);
+		}
+	}
+
+	BallPathResult Match::resolveBallPath() {
+		LineSegment2D ballPathLineSegment;
+		ballPathLineSegment.point1 = this->ballState.position;
+		ballPathLineSegment.point2.x = this->ballState.position.x + (this->ballState.direction.x * this->ballSpeed);
+		ballPathLineSegment.point2.y = this->ballState.position.y + (this->ballState.direction.y * this->ballSpeed);
+
+		this->collisionSet.leftPaddleLineSegment = this->leftPaddle->createCollisionLineSegment();
+		this->collisionSet.rightPaddleLineSegment = this->rightPaddle->createCollisionLineSegment();
+
+		CourtCollisionCheckUtil* collisionCheckUtil = new CourtCollisionCheckUtil(&this->collisionSet);
+
+		BallPathResult result;
+		result.collisionResultList = std::vector<BallCollisionResult>();
+
+		BallCollisionResult collisionResult = collisionCheckUtil->detectNextCollision(&ballPathLineSegment);
+		while (collisionResult.collisionTarget != BallCollisionTarget::NONE) {
+			result.collisionResultList.push_back(collisionResult);
+
+			ballPathLineSegment = collisionCheckUtil->adjustBallPath(&ballPathLineSegment, &collisionResult);
+			collisionResult = collisionCheckUtil->detectNextCollision(&ballPathLineSegment);
+		}
+
+		result.newPosition = ballPathLineSegment.point2;
+
+		result.newDirection = this->ballState.direction;
+
+		if (result.collisionResultList.size() > 0) {
+			if (result.collisionResultList.back().collisionTarget != BallCollisionTarget::NONE) {
+				result.newDirection = result.collisionResultList.back().newDirection;
+			}
+		}
+
+		return result;
+	}
+
+	void Match::updateBall(const BallPathResult* ballPath) {
+		this->ballState.position = ballPath->newPosition;
+		this->ballState.direction = ballPath->newDirection;
+	}
+
+	void Match::updateScore(const MatchUpdateResult* matchUpdate) {
+		if (matchUpdate->leftScoredFlag) {
+			this->leftScore++;
+		}
+		if (matchUpdate->rightScoredFlag) {
+			this->rightScore++;
 		}
 	}
 

@@ -27,15 +27,27 @@
     <ClCompile Include="pong-GameClient.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pong-lib.cpp">
+    <ClCompile Include="pong-CourtCollisionCheckUtil.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="pong-CourtCollisionCheckUtil.cpp">
+    <ClCompile Include="pong-MatchRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="riley-graphics-2d.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="riley-gl-utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pong-lib.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="riley-gl-utils.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="riley-graphics-2d.h">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

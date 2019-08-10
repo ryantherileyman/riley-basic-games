@@ -3,6 +3,8 @@
 
 namespace pong {
 
+	using namespace r3::graphics2d;
+
 	Paddle::Paddle(const PaddleDefn* paddleDefn) {
 		this->courtSize = paddleDefn->courtSize;
 		this->size = paddleDefn->paddleSize;
@@ -10,21 +12,33 @@ namespace pong {
 
 		switch (paddleDefn->side) {
 		case PaddleSide::LEFT:
-			this->position.x = -paddleDefn->courtSize.width / 2;
+			this->position.x = -paddleDefn->courtSize.width / 2 + (paddleDefn->paddleSize.width * 2);
 			break;
 		case PaddleSide::RIGHT:
-			this->position.x = paddleDefn->courtSize.width / 2;
+			this->position.x = paddleDefn->courtSize.width / 2 - (paddleDefn->paddleSize.width * 2);
 			break;
 		}
 		this->position.y = 0;
 	}
 
+	Size2D Paddle::getSize() const {
+		return this->size;
+	}
+
+	PaddleSide Paddle::getSide() const {
+		return this->side;
+	}
+
+	Position2D Paddle::getPosition() const {
+		return this->position;
+	}
+
 	LineSegment2D Paddle::createCollisionLineSegment() {
 		LineSegment2D result;
 		result.point1.x = this->position.x;
-		result.point1.y = this->position.y + (this->size.height / 2);
+		result.point1.y = this->position.y - (this->size.height / 2);
 		result.point2.x = this->position.x;
-		result.point2.y = this->position.y - (this->size.height / 2);
+		result.point2.y = this->position.y + (this->size.height / 2);
 		return result;
 	}
 

@@ -1,49 +1,14 @@
 
 #include <vector>
+#include "riley-graphics-2d.h"
 #pragma once
 
 namespace pong {
 
-	typedef struct Pong_Size2D {
-		float width;
-		float height;
-	} Size2D;
-
-	typedef struct Pong_Vector2D {
-		float x;
-		float y;
-	} Vector2D, Position2D;
-
-	typedef struct Pong_LineSegment2D {
-		Position2D point1;
-		Position2D point2;
-	} LineSegment2D;
-
-	Vector2D createVectorFromLineSegment(const Position2D* point1, const Position2D* point2);
-	Vector2D createVectorFromLineSegment(const LineSegment2D* lineSegment);
-	float dotProduct(const Vector2D* vector1, const Vector2D* vector2);
-	float crossProduct(const Vector2D* vector1, const Vector2D* vector2);
-
-	typedef enum class Pong_LineSegment2DIntersectionType {
-		NO_INTERSECTION,
-		SINGLE_POINT,
-		COLLINEAR_OVERLAP,
-	} LineSegmentIntersectionType;
-
-	typedef struct Pong_LineSegment2DIntersectionResult {
-		LineSegmentIntersectionType intersectionType;
-		Position2D intersectionPoint1;
-		float percentPoint1;
-		Position2D intersectionPoint2;
-		float percentPoint2;
-	} LineSegmentIntersectionResult;
-
-	LineSegmentIntersectionResult checkLineSegmentsIntersect(const LineSegment2D* lineSegment1, const LineSegment2D* lineSegment2);
-
 	typedef struct Pong_BallState {
 		float size;
-		Position2D position;
-		Vector2D direction;
+		r3::graphics2d::Position2D position;
+		r3::graphics2d::Vector2D direction;
 	} BallState;
 
 	typedef enum class Pong_PaddleSide {
@@ -52,14 +17,14 @@ namespace pong {
 	} PaddleSide;
 
 	typedef struct Pong_PaddleDefn {
-		Size2D courtSize;
-		Size2D paddleSize;
+		r3::graphics2d::Size2D courtSize;
+		r3::graphics2d::Size2D paddleSize;
 		PaddleSide side;
 	} PaddleDefn;
 
 	typedef struct Pong_MatchDefn {
-		Size2D courtSize;
-		Size2D paddleSize;
+		r3::graphics2d::Size2D courtSize;
+		r3::graphics2d::Size2D paddleSize;
 		float paddleSpeed;
 		float ballSize;
 		float ballSpeed;
@@ -77,10 +42,10 @@ namespace pong {
 	} MatchInputRequest;
 
 	typedef struct Pong_CourtCollisionSet {
-		LineSegment2D topWallLineSegment;
-		LineSegment2D bottomWallLineSegment;
-		LineSegment2D leftPaddleLineSegment;
-		LineSegment2D rightPaddleLineSegment;
+		r3::graphics2d::LineSegment2D topWallLineSegment;
+		r3::graphics2d::LineSegment2D bottomWallLineSegment;
+		r3::graphics2d::LineSegment2D leftPaddleLineSegment;
+		r3::graphics2d::LineSegment2D rightPaddleLineSegment;
 	} CourtCollisionSet;
 
 	typedef enum class Pong_BallCollisionTarget {
@@ -94,13 +59,20 @@ namespace pong {
 	typedef struct Pong_BallCollisionResult {
 		BallCollisionTarget collisionTarget;
 		float percent;
-		Position2D collisionPoint;
+		r3::graphics2d::Position2D collisionPoint;
+		r3::graphics2d::Vector2D newDirection;
 	} BallCollisionResult;
 
+	typedef struct Pong_BallPathResult {
+		std::vector<BallCollisionResult> collisionResultList;
+		r3::graphics2d::Position2D newPosition;
+		r3::graphics2d::Vector2D newDirection;
+	} BallPathResult;
+
 	typedef struct Pong_MatchUpdateResult {
-		std::vector<BallCollisionResult> ballCollisionResultList;
-		Position2D newBallPosition;
-		Vector2D newBallDirection;
+		BallPathResult ballPath;
+		bool leftScoredFlag;
+		bool rightScoredFlag;
 	} MatchUpdateResult;
 
 	typedef enum class Pong_ClientMode {
@@ -118,17 +90,22 @@ namespace pong {
 	class Paddle {
 
 	private:
-		Size2D courtSize;
+		r3::graphics2d::Size2D courtSize;
 
-		Size2D size;
+		r3::graphics2d::Size2D size;
 		PaddleSide side;
-		Position2D position;
+		r3::graphics2d::Position2D position;
 
 	public:
 		Paddle(const PaddleDefn* paddleDefn);
 
 	public:
-		LineSegment2D createCollisionLineSegment();
+		r3::graphics2d::Size2D getSize() const;
+		PaddleSide getSide() const;
+		r3::graphics2d::Position2D getPosition() const;
+
+	public:
+		r3::graphics2d::LineSegment2D createCollisionLineSegment();
 
 	public:
 		float moveUp(float distance);
@@ -145,15 +122,37 @@ namespace pong {
 		CourtCollisionCheckUtil(const CourtCollisionSet* collisionSet);
 
 	public:
-		BallCollisionResult detectNextCollision(const LineSegment2D* ballPathLineSegment);
-		LineSegment2D adjustBallPath(const LineSegment2D* originalPathLineSegment, const BallCollisionResult* collisionResult);
+		static r3::graphics2d::Vector2D resolveNewDirectionForWallCollision(
+			const r3::graphics2d::LineSegment2D* originalPathLineSegment
+		);
+
+		static r3::graphics2d::Vector2D resolveNewDirectionForPaddleCollision(
+			const r3::graphics2d::LineSegment2D* originalPathLineSegment,
+			const r3::graphics2d::Position2D* collisionPoint,
+			const r3::graphics2d::LineSegment2D* paddleLineSegment
+		);
+
+		static r3::graphics2d::LineSegment2D adjustBallPathForWallCollision(
+			const r3::graphics2d::LineSegment2D* originalPathLineSegment,
+			const BallCollisionResult* collisionResult
+		);
+
+		static r3::graphics2d::LineSegment2D adjustBallPathForPaddleCollision(
+			const r3::graphics2d::LineSegment2D* originalPathLineSegment,
+			const BallCollisionResult* collisionResult,
+			const r3::graphics2d::LineSegment2D* paddleLineSegment
+		);
+
+	public:
+		BallCollisionResult detectNextCollision(const r3::graphics2d::LineSegment2D* ballPathLineSegment);
+		r3::graphics2d::LineSegment2D adjustBallPath(const r3::graphics2d::LineSegment2D* originalPathLineSegment, const BallCollisionResult* collisionResult);
 
 	};
 
 	class Match {
 
 	private:
-		Size2D courtSize;
+		r3::graphics2d::Size2D courtSize;
 		float paddleSpeed;
 		float ballSpeed;
 
@@ -165,8 +164,7 @@ namespace pong {
 
 		BallState ballState;
 
-		LineSegment2D topWallLineSegment;
-		LineSegment2D bottomWallLineSegment;
+		CourtCollisionSet collisionSet;
 
 	public:
 		Match(const MatchDefn* matchDefn);
@@ -175,13 +173,35 @@ namespace pong {
 		~Match();
 
 	public:
-
+		r3::graphics2d::Size2D getCourtSize() const;
+		Paddle* getLeftPaddle() const;
+		Paddle* getRightPaddle() const;
+		BallState getBallState() const;
+		int getLeftScore() const;
+		int getRightScore() const;
 
 	public:
+		void startPoint(PaddleSide side);
 		MatchUpdateResult update(const MatchInputRequest* input);
 
 	private:
 		void updatePaddles(const MatchInputRequest* input);
+		BallPathResult resolveBallPath();
+		void updateBall(const BallPathResult* ballPath);
+		void updateScore(const MatchUpdateResult* matchUpdate);
+
+	};
+
+	class MatchRenderer {
+
+	private:
+		const Match* match;
+
+	public:
+		MatchRenderer(const Match* match);
+
+	public:
+		void render();
 
 	};
 
@@ -191,12 +211,23 @@ namespace pong {
 		ClientMode mode;
 
 		Match* match;
+		MatchRenderer* matchRenderer;
 
 		int leftWinCount;
 		int rightWinCount;
 
 	public:
 		GameClient();
+
+	public:
+		~GameClient();
+
+	public:
+		void update();
+		void draw();
+
+	private:
+		MatchInputRequest pollMatchInputs();
 
 	};
 

@@ -12,7 +12,7 @@ namespace pong {
 		matchDefn.paddleSize.height = 80.0f;
 		matchDefn.paddleSpeed = 3.0f;
 		matchDefn.ballSize = 8.0f;
-		matchDefn.ballSpeed = 10.0f;
+		matchDefn.ballSpeed = 2.0f;
 
 		this->mode = ClientMode::MATCH_RUNNING;
 

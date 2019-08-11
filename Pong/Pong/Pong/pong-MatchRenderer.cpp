@@ -13,15 +13,39 @@ namespace pong {
 		this->match = match;
 	}
 
-	void MatchRenderer::render() {
+	void MatchRenderer::renderWaitToStart() {
+		this->clearScene();
+		this->prepareTransform();
+
+		this->renderCourt();
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawText(0.0f, 0.0f, (unsigned char*)"Press ENTER to start!");
+	}
+
+	void MatchRenderer::renderMatchRunning() {
+		this->clearScene();
+		this->prepareTransform();
+
+		this->renderCourt();
+		this->renderMatchScore();
+		this->renderMatchObjects();
+	}
+
+	void MatchRenderer::clearScene() {
 		// Clear contents of buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	}
+
+	void MatchRenderer::prepareTransform() {
 		// Set transformation so that screen-center is (0,0)
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 		glTranslatef(300.0f, 150.0f, 0.0f);
-		
+	}
+
+	void MatchRenderer::renderCourt() {
 		float paddleWidth = this->match->getLeftPaddle()->getSize().width;
 
 		// Draw out-of-bounds area
@@ -46,7 +70,17 @@ namespace pong {
 		glColor3f(0.8f, 0.8f, 0.8f);
 		drawRect(-this->match->getCourtSize().width / 2 + (paddleWidth * 2), -this->match->getCourtSize().height / 2, this->match->getCourtSize().width - (paddleWidth * 4), -paddleWidth);
 		drawRect(-this->match->getCourtSize().width / 2 + (paddleWidth * 2), this->match->getCourtSize().height / 2, this->match->getCourtSize().width - (paddleWidth * 4), paddleWidth);
+	}
 
+	void MatchRenderer::renderMatchScore() {
+		char scoreString[100];
+		sprintf_s(scoreString, "%d : %d", this->match->getLeftScore(), this->match->getRightScore());
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawText(0.0f, (this->match->getCourtSize().height / 2) + (this->match->getLeftPaddle()->getSize().width * 1.5f), (unsigned char*)scoreString);
+	}
+
+	void MatchRenderer::renderMatchObjects() {
 		// Set colour to white for paddles and ball
 		glColor3f(1.0f, 1.0f, 1.0f);
 
@@ -61,11 +95,6 @@ namespace pong {
 		// Draw ball
 		BallState ballState = this->match->getBallState();
 		drawRect(ballState.position.x - (ballState.size / 2), ballState.position.y - (ballState.size / 2), ballState.size, ballState.size);
-
-		// Draw score
-		char scoreString[100];
-		sprintf_s(scoreString, "%d : %d", this->match->getLeftScore(), this->match->getRightScore());
-		drawText(0.0f, (this->match->getCourtSize().height / 2) + (paddleWidth * 1.5f), (unsigned char*)scoreString);
 	}
 
 }

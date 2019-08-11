@@ -14,7 +14,7 @@ namespace pong {
 		matchDefn.ballSize = 8.0f;
 		matchDefn.ballSpeed = 2.0f;
 
-		this->mode = ClientMode::MATCH_RUNNING;
+		this->mode = ClientMode::WAIT_TO_START;
 
 		this->match = new Match(&matchDefn);
 		this->matchRenderer = new MatchRenderer(this->match);
@@ -29,8 +29,13 @@ namespace pong {
 
 	void GameClient::update() {
 		switch (this->mode) {
+		case ClientMode::WAIT_TO_START:
+			if (this->pollWaitToStartInputs()) {
+				this->mode = ClientMode::MATCH_RUNNING;
+			}
+			break;
 		case ClientMode::MATCH_RUNNING:
-			MatchInputRequest inputRequest = this->pollMatchInputs();
+			MatchInputRequest inputRequest = this->pollMatchRunningInputs();
 			MatchUpdateResult matchUpdate = this->match->update(&inputRequest);
 
 			if (matchUpdate.leftScoredFlag) {
@@ -44,13 +49,23 @@ namespace pong {
 
 	void GameClient::draw() {
 		switch (this->mode) {
+		case ClientMode::WAIT_TO_START:
+			this->matchRenderer->renderWaitToStart();
+			break;
 		case ClientMode::MATCH_RUNNING:
-			this->matchRenderer->render();
+			this->matchRenderer->renderMatchRunning();
 			break;
 		}
 	}
 
-	MatchInputRequest GameClient::pollMatchInputs() {
+	bool GameClient::pollWaitToStartInputs() {
+		bool result =
+			GetAsyncKeyState(13) ||
+			GetAsyncKeyState(VK_SPACE);
+		return result;
+	}
+
+	MatchInputRequest GameClient::pollMatchRunningInputs() {
 		MatchInputRequest result;
 		result.leftPaddleInput = PaddleInputType::NONE;
 		result.rightPaddleInput = PaddleInputType::NONE;

@@ -201,7 +201,15 @@ namespace pong {
 		MatchRenderer(const Match* match);
 
 	public:
-		void render();
+		void renderWaitToStart();
+		void renderMatchRunning();
+
+	private:
+		void clearScene();
+		void prepareTransform();
+		void renderCourt();
+		void renderMatchScore();
+		void renderMatchObjects();
 
 	};
 
@@ -227,7 +235,8 @@ namespace pong {
 		void draw();
 
 	private:
-		MatchInputRequest pollMatchInputs();
+		bool pollWaitToStartInputs();
+		MatchInputRequest pollMatchRunningInputs();
 
 	};
 

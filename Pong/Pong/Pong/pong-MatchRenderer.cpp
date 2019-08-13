@@ -32,6 +32,16 @@ namespace pong {
 		this->renderMatchObjects();
 	}
 
+	void MatchRenderer::renderMatchPaused() {
+		this->clearScene();
+		this->prepareTransform();
+
+		this->renderCourt();
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawText(0.0f, 0.0f, (unsigned char*)"Paused - Press ENTER to continue");
+	}
+
 	void MatchRenderer::clearScene() {
 		// Clear contents of buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

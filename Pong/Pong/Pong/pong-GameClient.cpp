@@ -1,5 +1,6 @@
 
 #include <Windows.h>
+#include "GL/freeglut.h"
 #include "pong-lib.h"
 
 namespace pong {
@@ -29,18 +30,14 @@ namespace pong {
 
 	void GameClient::update() {
 		switch (this->mode) {
-		case ClientMode::WAIT_TO_START:
-			if (this->pollWaitToStartInputs()) {
-				this->mode = ClientMode::MATCH_RUNNING;
-			}
-			break;
 		case ClientMode::MATCH_RUNNING:
 			MatchInputRequest inputRequest = this->pollMatchRunningInputs();
 			MatchUpdateResult matchUpdate = this->match->update(&inputRequest);
 
 			if (matchUpdate.leftScoredFlag) {
 				this->match->startPoint(PaddleSide::LEFT);
-			} else if ( matchUpdate.rightScoredFlag ) {
+			}
+			else if (matchUpdate.rightScoredFlag) {
 				this->match->startPoint(PaddleSide::RIGHT);
 			}
 			break;
@@ -55,14 +52,51 @@ namespace pong {
 		case ClientMode::MATCH_RUNNING:
 			this->matchRenderer->renderMatchRunning();
 			break;
+		case ClientMode::MATCH_PAUSED:
+			this->matchRenderer->renderMatchPaused();
+			break;
 		}
 	}
 
-	bool GameClient::pollWaitToStartInputs() {
-		bool result =
-			GetAsyncKeyState(13) ||
-			GetAsyncKeyState(VK_SPACE);
-		return result;
+	void GameClient::processKeystroke(unsigned char key) {
+		bool unpauseFlag = false;
+		switch (this->mode) {
+		case ClientMode::WAIT_TO_START:
+			this->processWaitToStartKeystroke(key);
+			break;
+		case ClientMode::MATCH_RUNNING:
+			this->processMatchRunningKeystroke(key);
+			break;
+		case ClientMode::MATCH_PAUSED:
+			this->processMatchPausedKeystroke(key);
+			break;
+		}
+	}
+
+	void GameClient::processWaitToStartKeystroke(unsigned char key) {
+		bool startMatchFlag =
+			(key == 13) ||
+			(key == ' ');
+		if (startMatchFlag) {
+			this->mode = ClientMode::MATCH_RUNNING;
+		}
+	}
+
+	void GameClient::processMatchRunningKeystroke(unsigned char key) {
+		bool pauseFlag = (key == 'p');
+		if (pauseFlag) {
+			this->mode = ClientMode::MATCH_PAUSED;
+		}
+	}
+
+	void GameClient::processMatchPausedKeystroke(unsigned char key) {
+		bool unpauseFlag =
+			(key == 13) ||
+			(key == ' ') ||
+			(key == 'p');
+		if (unpauseFlag) {
+			this->mode = ClientMode::MATCH_RUNNING;
+		}
 	}
 
 	MatchInputRequest GameClient::pollMatchRunningInputs() {

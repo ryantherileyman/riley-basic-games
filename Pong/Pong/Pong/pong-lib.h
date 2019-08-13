@@ -203,6 +203,7 @@ namespace pong {
 	public:
 		void renderWaitToStart();
 		void renderMatchRunning();
+		void renderMatchPaused();
 
 	private:
 		void clearScene();
@@ -233,9 +234,12 @@ namespace pong {
 	public:
 		void update();
 		void draw();
+		void processKeystroke(unsigned char key);
 
 	private:
-		bool pollWaitToStartInputs();
+		void processWaitToStartKeystroke(unsigned char key);
+		void processMatchRunningKeystroke(unsigned char key);
+		void processMatchPausedKeystroke(unsigned char key);
 		MatchInputRequest pollMatchRunningInputs();
 
 	};

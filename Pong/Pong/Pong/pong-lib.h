@@ -82,16 +82,9 @@ namespace pong {
 		MATCH_WON,
 	} ClientMode;
 
-	typedef struct Pong_MatchWonState {
-		PaddleSide sideWon;
-		int leftMatchWonCount;
-		int rightMatchWonCount;
-	} MatchWonState;
-
 	class Paddle;
 	class CourtCollisionCheckUtil;
 	class Match;
-	class MatchRenderer;
 	class GameClient;
 
 	class Paddle {
@@ -211,7 +204,6 @@ namespace pong {
 		void renderWaitToStart();
 		void renderMatchRunning();
 		void renderMatchPaused();
-		void renderMatchWon(MatchWonState matchWonState);
 
 	private:
 		void clearScene();
@@ -225,14 +217,13 @@ namespace pong {
 	class GameClient {
 
 	private:
-		MatchDefn matchDefn;
 		ClientMode mode;
 
 		Match* match;
 		MatchRenderer* matchRenderer;
 
-		int matchWinThreshold;
-		MatchWonState matchWonState;
+		int leftWinCount;
+		int rightWinCount;
 
 	public:
 		GameClient();
@@ -246,13 +237,10 @@ namespace pong {
 		void processKeystroke(unsigned char key);
 
 	private:
-		bool processWaitToStartKeystroke(unsigned char key);
+		void processWaitToStartKeystroke(unsigned char key);
 		void processMatchRunningKeystroke(unsigned char key);
 		void processMatchPausedKeystroke(unsigned char key);
 		MatchInputRequest pollMatchRunningInputs();
-
-	private:
-		void startNewMatch();
 
 	};
 

@@ -42,27 +42,6 @@ namespace pong {
 		drawText(0.0f, 0.0f, (unsigned char*)"Paused - Press ENTER to continue");
 	}
 
-	void MatchRenderer::renderMatchWon(MatchWonState matchWonState) {
-		this->clearScene();
-		this->prepareTransform();
-
-		this->renderCourt();
-
-		glColor3f(1.0f, 1.0f, 1.0f);
-		if (matchWonState.sideWon == PaddleSide::LEFT) {
-			drawText(0.0f, 30.0f, (unsigned char*)"Left Wins!");
-		}
-		else {
-			drawText(0.0f, 30.0f, (unsigned char*)"Right Wins!");
-		}
-
-		char matchScoreString[100];
-		sprintf_s(matchScoreString, "Games Won:  Left %d -- Right %d", matchWonState.leftMatchWonCount, matchWonState.rightMatchWonCount);
-		drawText(0.0f, 0.0f, (unsigned char*)matchScoreString);
-
-		drawText(0.0f, -30.0f, (unsigned char*)"Press ENTER to play again");
-	}
-
 	void MatchRenderer::clearScene() {
 		// Clear contents of buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);

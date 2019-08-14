@@ -6,26 +6,25 @@
 namespace pong {
 
 	GameClient::GameClient() {
-		this->matchDefn.courtSize.width = 500.0f;
-		this->matchDefn.courtSize.height = 200.0f;
-		this->matchDefn.paddleSize.width = 10.0f;
-		this->matchDefn.paddleSize.height = 80.0f;
-		this->matchDefn.paddleSpeed = 3.0f;
-		this->matchDefn.ballSize = 8.0f;
-		this->matchDefn.ballSpeed = 2.0f;
+		MatchDefn matchDefn;
+		matchDefn.courtSize.width = 500.0f;
+		matchDefn.courtSize.height = 200.0f;
+		matchDefn.paddleSize.width = 10.0f;
+		matchDefn.paddleSize.height = 80.0f;
+		matchDefn.paddleSpeed = 3.0f;
+		matchDefn.ballSize = 8.0f;
+		matchDefn.ballSpeed = 2.0f;
 
 		this->mode = ClientMode::WAIT_TO_START;
 
-		this->match = new Match(&this->matchDefn);
+		this->match = new Match(&matchDefn);
 		this->matchRenderer = new MatchRenderer(this->match);
 
-		this->matchWinThreshold = 10;
-		this->matchWonState.leftMatchWonCount = 0;
-		this->matchWonState.rightMatchWonCount = 0;
+		this->leftWinCount = 0;
+		this->rightWinCount = 0;
 	}
 
 	GameClient::~GameClient() {
-		delete this->matchRenderer;
 		delete this->match;
 	}
 
@@ -36,24 +35,10 @@ namespace pong {
 			MatchUpdateResult matchUpdate = this->match->update(&inputRequest);
 
 			if (matchUpdate.leftScoredFlag) {
-				this->matchWonState.sideWon = PaddleSide::LEFT;
-
-				if (this->match->getLeftScore() >= this->matchWinThreshold) {
-					this->matchWonState.leftMatchWonCount++;
-					this->mode = ClientMode::MATCH_WON;
-				} else {
-					this->match->startPoint(PaddleSide::LEFT);
-				}
+				this->match->startPoint(PaddleSide::LEFT);
 			}
 			else if (matchUpdate.rightScoredFlag) {
-				this->matchWonState.sideWon = PaddleSide::RIGHT;
-
-				if (this->match->getRightScore() >= this->matchWinThreshold) {
-					this->matchWonState.rightMatchWonCount++;
-					this->mode = ClientMode::MATCH_WON;
-				} else {
-					this->match->startPoint(PaddleSide::RIGHT);
-				}
+				this->match->startPoint(PaddleSide::RIGHT);
 			}
 			break;
 		}
@@ -70,9 +55,6 @@ namespace pong {
 		case ClientMode::MATCH_PAUSED:
 			this->matchRenderer->renderMatchPaused();
 			break;
-		case ClientMode::MATCH_WON:
-			this->matchRenderer->renderMatchWon(this->matchWonState);
-			break;
 		}
 	}
 
@@ -88,24 +70,16 @@ namespace pong {
 		case ClientMode::MATCH_PAUSED:
 			this->processMatchPausedKeystroke(key);
 			break;
-		case ClientMode::MATCH_WON:
-			if (this->processWaitToStartKeystroke(key)) {
-				this->startNewMatch();
-			}
-			break;
 		}
 	}
 
-	bool GameClient::processWaitToStartKeystroke(unsigned char key) {
+	void GameClient::processWaitToStartKeystroke(unsigned char key) {
 		bool startMatchFlag =
 			(key == 13) ||
 			(key == ' ');
-		
 		if (startMatchFlag) {
 			this->mode = ClientMode::MATCH_RUNNING;
 		}
-
-		return startMatchFlag;
 	}
 
 	void GameClient::processMatchRunningKeystroke(unsigned char key) {
@@ -147,14 +121,6 @@ namespace pong {
 		}
 
 		return result;
-	}
-
-	void GameClient::startNewMatch() {
-		delete this->matchRenderer;
-		delete this->match;
-
-		this->match = new Match(&this->matchDefn);
-		this->matchRenderer = new MatchRenderer(this->match);
 	}
 
 }

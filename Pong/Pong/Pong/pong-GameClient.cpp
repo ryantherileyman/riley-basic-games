@@ -11,6 +11,8 @@ namespace pong {
 		this->matchDefn.paddleSize.width = 10.0f;
 		this->matchDefn.paddleSize.height = PaddleSizeOptions::MEDIUM;
 		this->matchDefn.paddleSpeed = 3.0f;
+		this->matchDefn.leftPaddleControlSource = PaddleControlSource::PLAYER;
+		this->matchDefn.rightPaddleControlSource = PaddleControlSource::COMPUTER;
 		this->matchDefn.ballSize = 8.0f;
 		this->matchDefn.ballSpeed = BallSpeedOptions::NORMAL;
 
@@ -167,19 +169,39 @@ namespace pong {
 		result.rightPaddleInput = PaddleInputType::NONE;
 
 		// Left paddle
-		if (GetAsyncKeyState('W')) {
-			result.leftPaddleInput = PaddleInputType::MOVE_UP;
-		}
-		if (GetAsyncKeyState('S')) {
-			result.leftPaddleInput = PaddleInputType::MOVE_DOWN;
+		if (this->match->getLeftPaddle()->getControlSource() == PaddleControlSource::PLAYER) {
+			if (GetAsyncKeyState('W')) {
+				result.leftPaddleInput = PaddleInputType::MOVE_UP;
+			}
+			if (GetAsyncKeyState('S')) {
+				result.leftPaddleInput = PaddleInputType::MOVE_DOWN;
+			}
+		} else {
+			Paddle* leftPaddle = this->match->getLeftPaddle();
+			if (this->match->getBallState().position.y > leftPaddle->getPosition().y + (leftPaddle->getSize().height / 2.0f)) {
+				result.leftPaddleInput = PaddleInputType::MOVE_UP;
+			}
+			else if (this->match->getBallState().position.y < leftPaddle->getPosition().y - (leftPaddle->getSize().height / 2.0f)) {
+				result.leftPaddleInput = PaddleInputType::MOVE_DOWN;
+			}
 		}
 
 		// Right paddle
-		if (GetAsyncKeyState(VK_UP)) {
-			result.rightPaddleInput = PaddleInputType::MOVE_UP;
-		}
-		if (GetAsyncKeyState(VK_DOWN)) {
-			result.rightPaddleInput = PaddleInputType::MOVE_DOWN;
+		if (this->match->getRightPaddle()->getControlSource() == PaddleControlSource::PLAYER) {
+			if (GetAsyncKeyState(VK_UP)) {
+				result.rightPaddleInput = PaddleInputType::MOVE_UP;
+			}
+			if (GetAsyncKeyState(VK_DOWN)) {
+				result.rightPaddleInput = PaddleInputType::MOVE_DOWN;
+			}
+		} else {
+			Paddle* rightPaddle = this->match->getRightPaddle();
+			if (this->match->getBallState().position.y > rightPaddle->getPosition().y + (rightPaddle->getSize().height / 2.0f)) {
+				result.rightPaddleInput = PaddleInputType::MOVE_UP;
+			}
+			else if (this->match->getBallState().position.y < rightPaddle->getPosition().y - (rightPaddle->getSize().height / 2.0f)) {
+				result.rightPaddleInput = PaddleInputType::MOVE_DOWN;
+			}
 		}
 
 		return result;
@@ -194,6 +216,8 @@ namespace pong {
 		if (closeOptionsFlag) {
 			this->matchDefn.paddleSize = this->matchOptionsController->getPaddleSize();
 			this->matchDefn.ballSpeed = this->matchOptionsController->getBallSpeed();
+			this->matchDefn.leftPaddleControlSource = this->matchOptionsController->getLeftPaddleControlSource();
+			this->matchDefn.rightPaddleControlSource = this->matchOptionsController->getRightPaddleControlSource();
 
 			delete this->matchOptionsController;
 			this->matchOptionsController = { nullptr };

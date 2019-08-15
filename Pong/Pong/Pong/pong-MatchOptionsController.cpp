@@ -6,9 +6,7 @@ namespace pong {
 	using namespace r3::graphics2d;
 
 	/* Available game options */
-	const int OPTION_PADDLE_SIZE = 0;
-	const int OPTION_BALL_SPEED = 1;
-	const int OPTION_LAST = OPTION_BALL_SPEED;
+	const int OPTION_LAST = MatchOptionsController::OPTION_RIGHT_PADDLE_CONTROL_SOURCE;
 
 	/* Paddle size option values */
 	namespace PaddleSizeOptions {
@@ -29,6 +27,8 @@ namespace pong {
 		const float LUDICROUS = 20.0f;
 	}
 	const int BALL_SPEED_LAST = MatchOptionsController::BALL_SPEED_LUDICROUS;
+
+	const int PADDLE_CONTROL_SOURCE_LAST = MatchOptionsController::PADDLE_CONTROL_SOURCE_COMPUTER;
 
 	int MatchOptionsController::resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize) {
 		int result = PADDLE_SIZE_MEDIUM;
@@ -64,14 +64,26 @@ namespace pong {
 		return result;
 	}
 
+	int MatchOptionsController::resolvePaddleControlSourceValue(PaddleControlSource paddleControlSource) {
+		int result = PADDLE_CONTROL_SOURCE_PLAYER;
+		if (paddleControlSource == PaddleControlSource::COMPUTER) {
+			result = PADDLE_CONTROL_SOURCE_COMPUTER;
+		}
+		return result;
+	}
+
 	MatchOptionsController::MatchOptionsController(const MatchDefn* matchDefn) {
 		this->currMatchOption = OPTION_PADDLE_SIZE;
 
 		this->currOptionValueArray[OPTION_PADDLE_SIZE] = resolvePaddleSizeOptionValue(matchDefn->paddleSize);
 		this->currOptionValueArray[OPTION_BALL_SPEED] = resolveBallSpeedOptionValue(matchDefn->ballSpeed);
+		this->currOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE] = resolvePaddleControlSourceValue(matchDefn->leftPaddleControlSource);
+		this->currOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE] = resolvePaddleControlSourceValue(matchDefn->rightPaddleControlSource);
 
 		this->maxOptionValueArray[OPTION_PADDLE_SIZE] = PADDLE_SIZE_LAST;
 		this->maxOptionValueArray[OPTION_BALL_SPEED] = BALL_SPEED_LAST;
+		this->maxOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE] = PADDLE_CONTROL_SOURCE_LAST;
+		this->maxOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE] = PADDLE_CONTROL_SOURCE_LAST;
 	}
 
 	int MatchOptionsController::getCurrOption() const {
@@ -84,6 +96,14 @@ namespace pong {
 
 	int MatchOptionsController::getBallSpeedOptionValue() const {
 		return this->currOptionValueArray[OPTION_BALL_SPEED];
+	}
+
+	int MatchOptionsController::getLeftPaddleControlSourceValue() const {
+		return this->currOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE];
+	}
+
+	int MatchOptionsController::getRightPaddleControlSourceValue() const {
+		return this->currOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE];
 	}
 
 	Size2D MatchOptionsController::getPaddleSize() {
@@ -131,6 +151,26 @@ namespace pong {
 		case BALL_SPEED_LUDICROUS:
 			result = BallSpeedOptions::LUDICROUS;
 			break;
+		}
+
+		return result;
+	}
+
+	PaddleControlSource MatchOptionsController::getLeftPaddleControlSource() {
+		PaddleControlSource result = PaddleControlSource::PLAYER;
+
+		if (this->currOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_COMPUTER) {
+			result = PaddleControlSource::COMPUTER;
+		}
+
+		return result;
+	}
+
+	PaddleControlSource MatchOptionsController::getRightPaddleControlSource() {
+		PaddleControlSource result = PaddleControlSource::PLAYER;
+
+		if (this->currOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_COMPUTER) {
+			result = PaddleControlSource::COMPUTER;
 		}
 
 		return result;

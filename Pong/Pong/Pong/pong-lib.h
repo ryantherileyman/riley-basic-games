@@ -32,16 +32,24 @@ namespace pong {
 		RIGHT,
 	} PaddleSide;
 
+	typedef enum class Pong_PaddleControlSource {
+		PLAYER,
+		COMPUTER,
+	} PaddleControlSource;
+
 	typedef struct Pong_PaddleDefn {
 		r3::graphics2d::Size2D courtSize;
 		r3::graphics2d::Size2D paddleSize;
 		PaddleSide side;
+		PaddleControlSource controlSource;
 	} PaddleDefn;
 
 	typedef struct Pong_MatchDefn {
 		r3::graphics2d::Size2D courtSize;
 		r3::graphics2d::Size2D paddleSize;
 		float paddleSpeed;
+		PaddleControlSource leftPaddleControlSource;
+		PaddleControlSource rightPaddleControlSource;
 		float ballSize;
 		float ballSpeed;
 	} MatchDefn;
@@ -128,6 +136,8 @@ namespace pong {
 		PaddleSide side;
 		r3::graphics2d::Position2D position;
 
+		PaddleControlSource controlSource;
+
 	public:
 		Paddle(const PaddleDefn* paddleDefn);
 
@@ -135,6 +145,7 @@ namespace pong {
 		r3::graphics2d::Size2D getSize() const;
 		PaddleSide getSide() const;
 		r3::graphics2d::Position2D getPosition() const;
+		PaddleControlSource getControlSource() const;
 
 	public:
 		r3::graphics2d::LineSegment2D createCollisionLineSegment();
@@ -255,6 +266,8 @@ namespace pong {
 	public:
 		static const int OPTION_PADDLE_SIZE = 0;
 		static const int OPTION_BALL_SPEED = 1;
+		static const int OPTION_LEFT_PADDLE_CONTROL_SOURCE = 2;
+		static const int OPTION_RIGHT_PADDLE_CONTROL_SOURCE = 3;
 
 		static const int PADDLE_SIZE_TINY = 0;
 		static const int PADDLE_SIZE_SMALL = 1;
@@ -268,14 +281,18 @@ namespace pong {
 		static const int BALL_SPEED_BLAZING = 3;
 		static const int BALL_SPEED_LUDICROUS = 4;
 
+		static const int PADDLE_CONTROL_SOURCE_PLAYER = 0;
+		static const int PADDLE_CONTROL_SOURCE_COMPUTER = 1;
+
 	private:
 		static int resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize);
 		static int resolveBallSpeedOptionValue(float ballSpeed);
+		static int resolvePaddleControlSourceValue(PaddleControlSource paddleControlSource);
 
 	private:
 		int currMatchOption;
-		int currOptionValueArray[2];
-		int maxOptionValueArray[2];
+		int currOptionValueArray[4];
+		int maxOptionValueArray[4];
 
 	public:
 		MatchOptionsController(const MatchDefn* matchDefn);
@@ -284,10 +301,14 @@ namespace pong {
 		int getCurrOption() const;
 		int getPaddleSizeOptionValue() const;
 		int getBallSpeedOptionValue() const;
+		int getLeftPaddleControlSourceValue() const;
+		int getRightPaddleControlSourceValue() const;
 
 	public:
 		r3::graphics2d::Size2D getPaddleSize();
 		float getBallSpeed();
+		PaddleControlSource getLeftPaddleControlSource();
+		PaddleControlSource getRightPaddleControlSource();
 
 	public:
 		void update(MatchOptionsInputType input);

@@ -153,13 +153,35 @@ namespace pong {
 			break;
 		}
 
-		/* TODO...
 		glColor3f(1.0f, 1.0f, 1.0f);
+		if (matchOptionsController->getCurrOption() == MatchOptionsController::OPTION_LEFT_PADDLE_CONTROL_SOURCE) {
+			glColor3f(1.0f, 1.0f, 0.0f);
+		}
 		drawText(-200.0f, 0.0f, (unsigned char*)"Left Paddle:");
+		switch (matchOptionsController->getLeftPaddleControlSourceValue()) {
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
+			drawText(0.0f, 0.0f, (unsigned char*)"Player");
+			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_COMPUTER:
+			drawText(0.0f, 0.0f, (unsigned char*)"Computer");
+			break;
+		}
 
 		glColor3f(1.0f, 1.0f, 1.0f);
+		if (matchOptionsController->getCurrOption() == MatchOptionsController::OPTION_RIGHT_PADDLE_CONTROL_SOURCE) {
+			glColor3f(1.0f, 1.0f, 0.0f);
+		}
+		switch (matchOptionsController->getRightPaddleControlSourceValue()) {
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
+			drawText(0.0f, -25.0f, (unsigned char*)"Player");
+			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_COMPUTER:
+			drawText(0.0f, -25.0f, (unsigned char*)"Computer");
+			break;
+		}
 		drawText(-200.0f, -25.0f, (unsigned char*)"Right Paddle:");
 
+		/* TODO...
 		glColor3f(1.0f, 1.0f, 1.0f);
 		drawText(-200.0f, -50.0f, (unsigned char*)"AI Behaviour:");
 		*/

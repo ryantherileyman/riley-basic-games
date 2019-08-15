@@ -10,11 +10,13 @@ namespace pong {
 		leftPaddleDefn.courtSize = matchDefn->courtSize;
 		leftPaddleDefn.paddleSize = matchDefn->paddleSize;
 		leftPaddleDefn.side = PaddleSide::LEFT;
+		leftPaddleDefn.controlSource = matchDefn->leftPaddleControlSource;
 
 		PaddleDefn rightPaddleDefn;
 		rightPaddleDefn.courtSize = matchDefn->courtSize;
 		rightPaddleDefn.paddleSize = matchDefn->paddleSize;
 		rightPaddleDefn.side = PaddleSide::RIGHT;
+		rightPaddleDefn.controlSource = matchDefn->rightPaddleControlSource;
 
 		this->courtSize = matchDefn->courtSize;
 		this->paddleSpeed = matchDefn->paddleSpeed;

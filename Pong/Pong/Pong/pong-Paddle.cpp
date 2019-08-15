@@ -19,6 +19,8 @@ namespace pong {
 			break;
 		}
 		this->position.y = 0;
+
+		this->controlSource = paddleDefn->controlSource;
 	}
 
 	Size2D Paddle::getSize() const {
@@ -31,6 +33,10 @@ namespace pong {
 
 	Position2D Paddle::getPosition() const {
 		return this->position;
+	}
+
+	PaddleControlSource Paddle::getControlSource() const {
+		return this->controlSource;
 	}
 
 	LineSegment2D Paddle::createCollisionLineSegment() {

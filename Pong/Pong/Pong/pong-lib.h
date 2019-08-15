@@ -13,6 +13,14 @@ namespace pong {
 		extern const float ENORMOUS;
 	}
 
+	namespace BallSpeedOptions {
+		extern const float SLOW;
+		extern const float NORMAL;
+		extern const float FAST;
+		extern const float BLAZING;
+		extern const float LUDICROUS;
+	}
+
 	typedef struct Pong_BallState {
 		float size;
 		r3::graphics2d::Position2D position;
@@ -246,6 +254,7 @@ namespace pong {
 
 	public:
 		static const int OPTION_PADDLE_SIZE = 0;
+		static const int OPTION_BALL_SPEED = 1;
 
 		static const int PADDLE_SIZE_TINY = 0;
 		static const int PADDLE_SIZE_SMALL = 1;
@@ -253,13 +262,20 @@ namespace pong {
 		static const int PADDLE_SIZE_LARGE = 3;
 		static const int PADDLE_SIZE_ENORMOUS = 4;
 
+		static const int BALL_SPEED_SLOW = 0;
+		static const int BALL_SPEED_NORMAL = 1;
+		static const int BALL_SPEED_FAST = 2;
+		static const int BALL_SPEED_BLAZING = 3;
+		static const int BALL_SPEED_LUDICROUS = 4;
+
 	private:
 		static int resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize);
+		static int resolveBallSpeedOptionValue(float ballSpeed);
 
 	private:
 		int currMatchOption;
-		int currOptionValueArray[1];
-		int maxOptionValueArray[1];
+		int currOptionValueArray[2];
+		int maxOptionValueArray[2];
 
 	public:
 		MatchOptionsController(const MatchDefn* matchDefn);
@@ -267,9 +283,11 @@ namespace pong {
 	public:
 		int getCurrOption() const;
 		int getPaddleSizeOptionValue() const;
+		int getBallSpeedOptionValue() const;
 
 	public:
 		r3::graphics2d::Size2D getPaddleSize();
+		float getBallSpeed();
 
 	public:
 		void update(MatchOptionsInputType input);

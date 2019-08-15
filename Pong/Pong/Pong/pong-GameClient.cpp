@@ -12,7 +12,7 @@ namespace pong {
 		this->matchDefn.paddleSize.height = PaddleSizeOptions::MEDIUM;
 		this->matchDefn.paddleSpeed = 3.0f;
 		this->matchDefn.ballSize = 8.0f;
-		this->matchDefn.ballSpeed = 2.0f;
+		this->matchDefn.ballSpeed = BallSpeedOptions::NORMAL;
 
 		this->mode = ClientMode::WAIT_TO_START;
 
@@ -115,6 +115,12 @@ namespace pong {
 			else if (key == GLUT_KEY_RIGHT) {
 				this->matchOptionsController->update(MatchOptionsInputType::NEXT_VALUE);
 			}
+			else if (key == GLUT_KEY_UP) {
+				this->matchOptionsController->update(MatchOptionsInputType::PREV_OPTION);
+			}
+			else if (key == GLUT_KEY_DOWN) {
+				this->matchOptionsController->update(MatchOptionsInputType::NEXT_OPTION);
+			}
 			break;
 		}
 	}
@@ -187,6 +193,7 @@ namespace pong {
 
 		if (closeOptionsFlag) {
 			this->matchDefn.paddleSize = this->matchOptionsController->getPaddleSize();
+			this->matchDefn.ballSpeed = this->matchOptionsController->getBallSpeed();
 
 			delete this->matchOptionsController;
 			this->matchOptionsController = { nullptr };

@@ -67,10 +67,8 @@ namespace pong {
 		this->clearScene();
 		this->prepareTransform();
 
-		/* TODO...
 		glColor3f(1.0f, 1.0f, 1.0f);
 		drawCenteredText(0.0f, 105.0f, (unsigned char*)"Press Up or Down Arrow to navigate between options");
-		*/
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 		drawCenteredText(0.0f, 80.0f, (unsigned char*)"Press Left or Right Arrow to change an option value");
@@ -115,10 +113,47 @@ namespace pong {
 			break;
 		}
 
-		/* TODO...
 		glColor3f(1.0f, 1.0f, 1.0f);
+		if (matchOptionsController->getCurrOption() == MatchOptionsController::OPTION_BALL_SPEED) {
+			glColor3f(1.0f, 1.0f, 0.0f);
+			switch (matchOptionsController->getBallSpeedOptionValue()) {
+			case MatchOptionsController::BALL_SPEED_SLOW:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"Go for a bio break...");
+				break;
+			case MatchOptionsController::BALL_SPEED_NORMAL:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"Kinda leisurely...");
+				break;
+			case MatchOptionsController::BALL_SPEED_FAST:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"The way it's meant to be played");
+				break;
+			case MatchOptionsController::BALL_SPEED_BLAZING:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"Now this has some kick to it!");
+				break;
+			case MatchOptionsController::BALL_SPEED_LUDICROUS:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"They've gone to plaid!");
+				break;
+			}
+		}
 		drawText(-200.0f, 25.0f, (unsigned char*)"Ball Speed:");
+		switch (matchOptionsController->getBallSpeedOptionValue()) {
+		case MatchOptionsController::BALL_SPEED_SLOW:
+			drawText(0.0f, 25.0f, (unsigned char*)"Slow");
+			break;
+		case MatchOptionsController::BALL_SPEED_NORMAL:
+			drawText(0.0f, 25.0f, (unsigned char*)"Normal");
+			break;
+		case MatchOptionsController::BALL_SPEED_FAST:
+			drawText(0.0f, 25.0f, (unsigned char*)"Fast");
+			break;
+		case MatchOptionsController::BALL_SPEED_BLAZING:
+			drawText(0.0f, 25.0f, (unsigned char*)"Blazing");
+			break;
+		case MatchOptionsController::BALL_SPEED_LUDICROUS:
+			drawText(0.0f, 25.0f, (unsigned char*)"Ludicrous");
+			break;
+		}
 
+		/* TODO...
 		glColor3f(1.0f, 1.0f, 1.0f);
 		drawText(-200.0f, 0.0f, (unsigned char*)"Left Paddle:");
 

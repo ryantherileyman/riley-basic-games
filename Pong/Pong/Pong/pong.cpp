@@ -43,6 +43,10 @@ void processKeystroke(unsigned char key, int x, int y) {
 	pongGameClient->processKeystroke(key);
 }
 
+void processSpecialKeystroke(int key, int x, int y) {
+	pongGameClient->processSpecialKeystroke(key);
+}
+
 int main(int argc, char** argv) {
 
 	// Initialize OpenGL (via Glut)
@@ -51,6 +55,7 @@ int main(int argc, char** argv) {
 	glutInitWindowSize(width, height);
 	glutCreateWindow("Pong - Riley Entertainment");
 	glutKeyboardFunc(processKeystroke);
+	glutSpecialFunc(processSpecialKeystroke);
 
 	pongGameClient = new pong::GameClient();
 

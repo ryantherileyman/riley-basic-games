@@ -9,7 +9,7 @@ namespace pong {
 		this->matchDefn.courtSize.width = 500.0f;
 		this->matchDefn.courtSize.height = 200.0f;
 		this->matchDefn.paddleSize.width = 10.0f;
-		this->matchDefn.paddleSize.height = 80.0f;
+		this->matchDefn.paddleSize.height = PaddleSizeOptions::MEDIUM;
 		this->matchDefn.paddleSpeed = 3.0f;
 		this->matchDefn.ballSize = 8.0f;
 		this->matchDefn.ballSpeed = 2.0f;
@@ -18,6 +18,7 @@ namespace pong {
 
 		this->match = new Match(&this->matchDefn);
 		this->matchRenderer = new MatchRenderer(this->match);
+		this->matchOptionsController = { nullptr };
 
 		this->matchWinThreshold = 10;
 		this->matchWonState.leftMatchWonCount = 0;
@@ -25,6 +26,10 @@ namespace pong {
 	}
 
 	GameClient::~GameClient() {
+		if (this->matchOptionsController != nullptr) {
+			delete this->matchOptionsController;
+		}
+
 		delete this->matchRenderer;
 		delete this->match;
 	}
@@ -73,11 +78,13 @@ namespace pong {
 		case ClientMode::MATCH_WON:
 			this->matchRenderer->renderMatchWon(this->matchWonState);
 			break;
+		case ClientMode::MATCH_OPTIONS:
+			this->matchRenderer->renderMatchOptions(this->matchOptionsController);
+			break;
 		}
 	}
 
 	void GameClient::processKeystroke(unsigned char key) {
-		bool unpauseFlag = false;
 		switch (this->mode) {
 		case ClientMode::WAIT_TO_START:
 			this->processWaitToStartKeystroke(key);
@@ -93,6 +100,22 @@ namespace pong {
 				this->startNewMatch();
 			}
 			break;
+		case ClientMode::MATCH_OPTIONS:
+			this->processMatchOptionsKeystroke(key);
+			break;
+		}
+	}
+
+	void GameClient::processSpecialKeystroke(int key) {
+		switch (this->mode) {
+		case ClientMode::MATCH_OPTIONS:
+			if (key == GLUT_KEY_LEFT) {
+				this->matchOptionsController->update(MatchOptionsInputType::PREV_VALUE);
+			}
+			else if (key == GLUT_KEY_RIGHT) {
+				this->matchOptionsController->update(MatchOptionsInputType::NEXT_VALUE);
+			}
+			break;
 		}
 	}
 
@@ -100,9 +123,16 @@ namespace pong {
 		bool startMatchFlag =
 			(key == 13) ||
 			(key == ' ');
+
+		bool matchOptionsFlag = (key == 27);
 		
 		if (startMatchFlag) {
 			this->mode = ClientMode::MATCH_RUNNING;
+		}
+
+		if (matchOptionsFlag) {
+			this->matchOptionsController = new MatchOptionsController(&this->matchDefn);
+			this->mode = ClientMode::MATCH_OPTIONS;
 		}
 
 		return startMatchFlag;
@@ -147,6 +177,24 @@ namespace pong {
 		}
 
 		return result;
+	}
+
+	void GameClient::processMatchOptionsKeystroke(unsigned char key) {
+		bool closeOptionsFlag =
+			(key == 27) ||
+			(key == 13) ||
+			(key == ' ');
+
+		if (closeOptionsFlag) {
+			this->matchDefn.paddleSize = this->matchOptionsController->getPaddleSize();
+
+			delete this->matchOptionsController;
+			this->matchOptionsController = { nullptr };
+
+			this->startNewMatch();
+
+			this->mode = ClientMode::WAIT_TO_START;
+		}
 	}
 
 	void GameClient::startNewMatch() {

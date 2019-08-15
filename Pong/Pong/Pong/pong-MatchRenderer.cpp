@@ -20,7 +20,7 @@ namespace pong {
 		this->renderCourt();
 
 		glColor3f(1.0f, 1.0f, 1.0f);
-		drawText(0.0f, 0.0f, (unsigned char*)"Press ENTER to start!");
+		drawCenteredText(0.0f, 0.0f, (unsigned char*)"Press ENTER to start!");
 	}
 
 	void MatchRenderer::renderMatchRunning() {
@@ -39,7 +39,7 @@ namespace pong {
 		this->renderCourt();
 
 		glColor3f(1.0f, 1.0f, 1.0f);
-		drawText(0.0f, 0.0f, (unsigned char*)"Paused - Press ENTER to continue");
+		drawCenteredText(0.0f, 0.0f, (unsigned char*)"Paused - Press ENTER to continue");
 	}
 
 	void MatchRenderer::renderMatchWon(MatchWonState matchWonState) {
@@ -50,17 +50,87 @@ namespace pong {
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 		if (matchWonState.sideWon == PaddleSide::LEFT) {
-			drawText(0.0f, 30.0f, (unsigned char*)"Left Wins!");
+			drawCenteredText(0.0f, 30.0f, (unsigned char*)"Left Wins!");
 		}
 		else {
-			drawText(0.0f, 30.0f, (unsigned char*)"Right Wins!");
+			drawCenteredText(0.0f, 30.0f, (unsigned char*)"Right Wins!");
 		}
 
 		char matchScoreString[100];
 		sprintf_s(matchScoreString, "Games Won:  Left %d -- Right %d", matchWonState.leftMatchWonCount, matchWonState.rightMatchWonCount);
-		drawText(0.0f, 0.0f, (unsigned char*)matchScoreString);
+		drawCenteredText(0.0f, 0.0f, (unsigned char*)matchScoreString);
 
-		drawText(0.0f, -30.0f, (unsigned char*)"Press ENTER to play again");
+		drawCenteredText(0.0f, -30.0f, (unsigned char*)"Press ENTER to play again");
+	}
+
+	void MatchRenderer::renderMatchOptions(const MatchOptionsController* matchOptionsController) {
+		this->clearScene();
+		this->prepareTransform();
+
+		/* TODO...
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawCenteredText(0.0f, 105.0f, (unsigned char*)"Press Up or Down Arrow to navigate between options");
+		*/
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawCenteredText(0.0f, 80.0f, (unsigned char*)"Press Left or Right Arrow to change an option value");
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		if (matchOptionsController->getCurrOption() == MatchOptionsController::OPTION_PADDLE_SIZE) {
+			glColor3f(1.0f, 1.0f, 0.0f);
+			switch (matchOptionsController->getPaddleSizeOptionValue()) {
+			case MatchOptionsController::PADDLE_SIZE_TINY:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"Best of luck!");
+				break;
+			case MatchOptionsController::PADDLE_SIZE_SMALL:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"This could be a challenge...");
+				break;
+			case MatchOptionsController::PADDLE_SIZE_MEDIUM:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"How typical...");
+				break;
+			case MatchOptionsController::PADDLE_SIZE_LARGE:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"This should be easy...");
+				break;
+			case MatchOptionsController::PADDLE_SIZE_ENORMOUS:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"You can't miss!");
+				break;
+			}
+		}
+		drawText(-200.0f, 50.0f, (unsigned char*)"Paddle Size:");
+		switch (matchOptionsController->getPaddleSizeOptionValue()) {
+		case MatchOptionsController::PADDLE_SIZE_TINY:
+			drawText(0.0f, 50.0f, (unsigned char*)"Tiny");
+			break;
+		case MatchOptionsController::PADDLE_SIZE_SMALL:
+			drawText(0.0f, 50.0f, (unsigned char*)"Small");
+			break;
+		case MatchOptionsController::PADDLE_SIZE_MEDIUM:
+			drawText(0.0f, 50.0f, (unsigned char*)"Medium");
+			break;
+		case MatchOptionsController::PADDLE_SIZE_LARGE:
+			drawText(0.0f, 50.0f, (unsigned char*)"Large");
+			break;
+		case MatchOptionsController::PADDLE_SIZE_ENORMOUS:
+			drawText(0.0f, 50.0f, (unsigned char*)"Enormous");
+			break;
+		}
+
+		/* TODO...
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawText(-200.0f, 25.0f, (unsigned char*)"Ball Speed:");
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawText(-200.0f, 0.0f, (unsigned char*)"Left Paddle:");
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawText(-200.0f, -25.0f, (unsigned char*)"Right Paddle:");
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawText(-200.0f, -50.0f, (unsigned char*)"AI Behaviour:");
+		*/
+
+		glColor3f(1.0f, 1.0f, 1.0f);
+		drawCenteredText(0.0f, -110.0f, (unsigned char*)"Press ENTER to accept options");
 	}
 
 	void MatchRenderer::clearScene() {
@@ -108,7 +178,7 @@ namespace pong {
 		sprintf_s(scoreString, "%d : %d", this->match->getLeftScore(), this->match->getRightScore());
 
 		glColor3f(1.0f, 1.0f, 1.0f);
-		drawText(0.0f, (this->match->getCourtSize().height / 2) + (this->match->getLeftPaddle()->getSize().width * 1.5f), (unsigned char*)scoreString);
+		drawCenteredText(0.0f, (this->match->getCourtSize().height / 2) + (this->match->getLeftPaddle()->getSize().width * 1.5f), (unsigned char*)scoreString);
 	}
 
 	void MatchRenderer::renderMatchObjects() {

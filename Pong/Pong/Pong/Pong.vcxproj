@@ -127,6 +127,7 @@
     <ClCompile Include="pong-CourtCollisionCheckUtil.cpp" />
     <ClCompile Include="pong-GameClient.cpp" />
     <ClCompile Include="pong-Match.cpp" />
+    <ClCompile Include="pong-MatchOptionsController.cpp" />
     <ClCompile Include="pong-MatchRenderer.cpp" />
     <ClCompile Include="pong-Paddle.cpp" />
     <ClCompile Include="pong.cpp" />

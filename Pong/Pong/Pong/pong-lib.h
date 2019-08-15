@@ -5,6 +5,14 @@
 
 namespace pong {
 
+	namespace PaddleSizeOptions {
+		extern const float TINY;
+		extern const float SMALL;
+		extern const float MEDIUM;
+		extern const float LARGE;
+		extern const float ENORMOUS;
+	}
+
 	typedef struct Pong_BallState {
 		float size;
 		r3::graphics2d::Position2D position;
@@ -80,6 +88,7 @@ namespace pong {
 		MATCH_RUNNING,
 		MATCH_PAUSED,
 		MATCH_WON,
+		MATCH_OPTIONS,
 	} ClientMode;
 
 	typedef struct Pong_MatchWonState {
@@ -88,10 +97,18 @@ namespace pong {
 		int rightMatchWonCount;
 	} MatchWonState;
 
+	typedef enum class Pong_MatchOptionsInputType {
+		PREV_OPTION,
+		NEXT_OPTION,
+		PREV_VALUE,
+		NEXT_VALUE,
+	} MatchOptionsInputType;
+
 	class Paddle;
 	class CourtCollisionCheckUtil;
 	class Match;
 	class MatchRenderer;
+	class MatchOptionsController;
 	class GameClient;
 
 	class Paddle {
@@ -212,6 +229,7 @@ namespace pong {
 		void renderMatchRunning();
 		void renderMatchPaused();
 		void renderMatchWon(MatchWonState matchWonState);
+		void renderMatchOptions(const MatchOptionsController* matchOptionsController);
 
 	private:
 		void clearScene();
@@ -219,6 +237,42 @@ namespace pong {
 		void renderCourt();
 		void renderMatchScore();
 		void renderMatchObjects();
+
+	};
+
+
+
+	class MatchOptionsController {
+
+	public:
+		static const int OPTION_PADDLE_SIZE = 0;
+
+		static const int PADDLE_SIZE_TINY = 0;
+		static const int PADDLE_SIZE_SMALL = 1;
+		static const int PADDLE_SIZE_MEDIUM = 2;
+		static const int PADDLE_SIZE_LARGE = 3;
+		static const int PADDLE_SIZE_ENORMOUS = 4;
+
+	private:
+		static int resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize);
+
+	private:
+		int currMatchOption;
+		int currOptionValueArray[1];
+		int maxOptionValueArray[1];
+
+	public:
+		MatchOptionsController(const MatchDefn* matchDefn);
+
+	public:
+		int getCurrOption() const;
+		int getPaddleSizeOptionValue() const;
+
+	public:
+		r3::graphics2d::Size2D getPaddleSize();
+
+	public:
+		void update(MatchOptionsInputType input);
 
 	};
 
@@ -230,6 +284,7 @@ namespace pong {
 
 		Match* match;
 		MatchRenderer* matchRenderer;
+		MatchOptionsController* matchOptionsController;
 
 		int matchWinThreshold;
 		MatchWonState matchWonState;
@@ -244,12 +299,14 @@ namespace pong {
 		void update();
 		void draw();
 		void processKeystroke(unsigned char key);
+		void processSpecialKeystroke(int key);
 
 	private:
 		bool processWaitToStartKeystroke(unsigned char key);
 		void processMatchRunningKeystroke(unsigned char key);
 		void processMatchPausedKeystroke(unsigned char key);
 		MatchInputRequest pollMatchRunningInputs();
+		void processMatchOptionsKeystroke(unsigned char key);
 
 	private:
 		void startNewMatch();

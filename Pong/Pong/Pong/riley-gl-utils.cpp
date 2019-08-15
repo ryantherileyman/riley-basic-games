@@ -8,6 +8,11 @@ namespace r3 {
 	namespace gl {
 
 		void drawText(float x, float y, const unsigned char* text) {
+			glRasterPos2f(x, y);
+			glutBitmapString(GLUT_BITMAP_8_BY_13, text);
+		}
+
+		void drawCenteredText(float x, float y, const unsigned char* text) {
 			int displayWidth = glutBitmapLength(GLUT_BITMAP_8_BY_13, text);
 			glRasterPos2f(x - (displayWidth / 2), y);
 

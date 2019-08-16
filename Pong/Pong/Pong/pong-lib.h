@@ -34,7 +34,9 @@ namespace pong {
 
 	typedef enum class Pong_PaddleControlSource {
 		PLAYER,
+		AI_LATE_FOLLOWER,
 		AI_FOLLOWER,
+		AI_CLOSE_FOLLOWER,
 	} PaddleControlSource;
 
 	typedef struct Pong_PaddleDefn {
@@ -320,7 +322,9 @@ namespace pong {
 		static const int BALL_SPEED_LUDICROUS = 4;
 
 		static const int PADDLE_CONTROL_SOURCE_PLAYER = 0;
-		static const int PADDLE_CONTROL_SOURCE_AI_FOLLOWER = 1;
+		static const int PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER = 1;
+		static const int PADDLE_CONTROL_SOURCE_AI_FOLLOWER = 2;
+		static const int PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER = 3;
 
 	private:
 		static int resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize);
@@ -347,6 +351,9 @@ namespace pong {
 		float getBallSpeed();
 		PaddleControlSource getLeftPaddleControlSource();
 		PaddleControlSource getRightPaddleControlSource();
+
+	private:
+		static PaddleControlSource getPaddleControlSource(int paddleControlSourceValue);
 
 	public:
 		void update(MatchOptionsInputType input);

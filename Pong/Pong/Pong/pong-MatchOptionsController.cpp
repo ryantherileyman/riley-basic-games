@@ -28,7 +28,7 @@ namespace pong {
 	}
 	const int BALL_SPEED_LAST = MatchOptionsController::BALL_SPEED_LUDICROUS;
 
-	const int PADDLE_CONTROL_SOURCE_LAST = MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER;
+	const int PADDLE_CONTROL_SOURCE_LAST = MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER;
 
 	int MatchOptionsController::resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize) {
 		int result = PADDLE_SIZE_MEDIUM;
@@ -66,8 +66,14 @@ namespace pong {
 
 	int MatchOptionsController::resolvePaddleControlSourceValue(PaddleControlSource paddleControlSource) {
 		int result = PADDLE_CONTROL_SOURCE_PLAYER;
-		if (paddleControlSource == PaddleControlSource::AI_FOLLOWER) {
+		if (paddleControlSource == PaddleControlSource::AI_LATE_FOLLOWER) {
+			result = PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER;
+		}
+		else if (paddleControlSource == PaddleControlSource::AI_FOLLOWER) {
 			result = PADDLE_CONTROL_SOURCE_AI_FOLLOWER;
+		}
+		else if (paddleControlSource == PaddleControlSource::AI_CLOSE_FOLLOWER) {
+			result = PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER;
 		}
 		return result;
 	}
@@ -157,20 +163,28 @@ namespace pong {
 	}
 
 	PaddleControlSource MatchOptionsController::getLeftPaddleControlSource() {
-		PaddleControlSource result = PaddleControlSource::PLAYER;
-
-		if (this->currOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_AI_FOLLOWER) {
-			result = PaddleControlSource::AI_FOLLOWER;
-		}
-
+		PaddleControlSource result = getPaddleControlSource(this->currOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE]);
 		return result;
 	}
 
 	PaddleControlSource MatchOptionsController::getRightPaddleControlSource() {
+		PaddleControlSource result = getPaddleControlSource(this->currOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE]);
+		return result;
+	}
+
+	PaddleControlSource MatchOptionsController::getPaddleControlSource(int paddleControlSourceValue) {
 		PaddleControlSource result = PaddleControlSource::PLAYER;
 
-		if (this->currOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_AI_FOLLOWER) {
+		switch (paddleControlSourceValue) {
+		case PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
+			result = PaddleControlSource::AI_LATE_FOLLOWER;
+			break;
+		case PADDLE_CONTROL_SOURCE_AI_FOLLOWER:
 			result = PaddleControlSource::AI_FOLLOWER;
+			break;
+		case PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
+			result = PaddleControlSource::AI_CLOSE_FOLLOWER;
+			break;
 		}
 
 		return result;

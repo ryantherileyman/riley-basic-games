@@ -34,6 +34,11 @@ namespace pong {
 			}
 		}
 
+		// To prevent two AI's from just sitting at their starting position
+		if (ballState.position.y == input.paddle->getPosition().y) {
+			result = PaddleInputType::MOVE_DOWN;
+		}
+
 		return result;
 	}
 

@@ -156,27 +156,67 @@ namespace pong {
 		glColor3f(1.0f, 1.0f, 1.0f);
 		if (matchOptionsController->getCurrOption() == MatchOptionsController::OPTION_LEFT_PADDLE_CONTROL_SOURCE) {
 			glColor3f(1.0f, 1.0f, 0.0f);
+			switch (matchOptionsController->getLeftPaddleControlSourceValue()) {
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"It's all you");
+				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'll follow the ball when it's coming at me");
+				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'll follow the ball");
+				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'm perfect at following the ball");
+				break;
+			}
 		}
 		drawText(-200.0f, 0.0f, (unsigned char*)"Left Paddle:");
 		switch (matchOptionsController->getLeftPaddleControlSourceValue()) {
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 			drawText(0.0f, 0.0f, (unsigned char*)"Player");
 			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
+			drawText(0.0f, 0.0f, (unsigned char*)"AI - Late Follower");
+			break;
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER:
 			drawText(0.0f, 0.0f, (unsigned char*)"AI - Follower");
+			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
+			drawText(0.0f, 0.0f, (unsigned char*)"AI - Close Follower");
 			break;
 		}
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 		if (matchOptionsController->getCurrOption() == MatchOptionsController::OPTION_RIGHT_PADDLE_CONTROL_SOURCE) {
 			glColor3f(1.0f, 1.0f, 0.0f);
+			switch (matchOptionsController->getRightPaddleControlSourceValue()) {
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"It's all you");
+				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'll follow the ball when it's coming at me");
+				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'll follow the ball");
+				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'm perfect at following the ball");
+				break;
+			}
 		}
 		switch (matchOptionsController->getRightPaddleControlSourceValue()) {
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 			drawText(0.0f, -25.0f, (unsigned char*)"Player");
 			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
+			drawText(0.0f, -25.0f, (unsigned char*)"AI - Late Follower");
+			break;
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER:
 			drawText(0.0f, -25.0f, (unsigned char*)"AI - Follower");
+			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
+			drawText(0.0f, -25.0f, (unsigned char*)"AI - Close Follower");
 			break;
 		}
 		drawText(-200.0f, -25.0f, (unsigned char*)"Right Paddle:");

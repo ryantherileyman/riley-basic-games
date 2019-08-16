@@ -24,12 +24,27 @@ namespace pong {
 		this->controlSource = paddleDefn->controlSource;
 
 		this->ai = { nullptr };
-		if (paddleDefn->controlSource == PaddleControlSource::AI_FOLLOWER) {
-			FollowerPaddleAiDefn aiDefn;
+
+		FollowerPaddleAiDefn aiDefn;
+		switch (paddleDefn->controlSource) {
+		case PaddleControlSource::AI_LATE_FOLLOWER:
+			aiDefn.paddleHeightMultiplier = 0.5f;
+			aiDefn.onlyFollowIfBallIsApproaching = true;
+
+			this->ai = new FollowerPaddleAi(&aiDefn);
+			break;
+		case PaddleControlSource::AI_FOLLOWER:
 			aiDefn.paddleHeightMultiplier = 0.5f;
 			aiDefn.onlyFollowIfBallIsApproaching = false;
 
 			this->ai = new FollowerPaddleAi(&aiDefn);
+			break;
+		case PaddleControlSource::AI_CLOSE_FOLLOWER:
+			aiDefn.paddleHeightMultiplier = 0.0f;
+			aiDefn.onlyFollowIfBallIsApproaching = false;
+
+			this->ai = new FollowerPaddleAi(&aiDefn);
+			break;
 		}
 	}
 

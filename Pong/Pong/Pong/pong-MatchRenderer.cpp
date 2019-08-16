@@ -162,8 +162,8 @@ namespace pong {
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 			drawText(0.0f, 0.0f, (unsigned char*)"Player");
 			break;
-		case MatchOptionsController::PADDLE_CONTROL_SOURCE_COMPUTER:
-			drawText(0.0f, 0.0f, (unsigned char*)"Computer");
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER:
+			drawText(0.0f, 0.0f, (unsigned char*)"AI - Follower");
 			break;
 		}
 
@@ -175,16 +175,11 @@ namespace pong {
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 			drawText(0.0f, -25.0f, (unsigned char*)"Player");
 			break;
-		case MatchOptionsController::PADDLE_CONTROL_SOURCE_COMPUTER:
-			drawText(0.0f, -25.0f, (unsigned char*)"Computer");
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER:
+			drawText(0.0f, -25.0f, (unsigned char*)"AI - Follower");
 			break;
 		}
 		drawText(-200.0f, -25.0f, (unsigned char*)"Right Paddle:");
-
-		/* TODO...
-		glColor3f(1.0f, 1.0f, 1.0f);
-		drawText(-200.0f, -50.0f, (unsigned char*)"AI Behaviour:");
-		*/
 
 		glColor3f(1.0f, 1.0f, 1.0f);
 		drawCenteredText(0.0f, -110.0f, (unsigned char*)"Press ENTER to accept options");

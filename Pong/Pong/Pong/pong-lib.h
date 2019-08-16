@@ -34,7 +34,7 @@ namespace pong {
 
 	typedef enum class Pong_PaddleControlSource {
 		PLAYER,
-		COMPUTER,
+		AI_FOLLOWER,
 	} PaddleControlSource;
 
 	typedef struct Pong_PaddleDefn {
@@ -120,12 +120,42 @@ namespace pong {
 		NEXT_VALUE,
 	} MatchOptionsInputType;
 
+	class PaddleAi;
+	class FollowerPaddleAi;
 	class Paddle;
 	class CourtCollisionCheckUtil;
 	class Match;
 	class MatchRenderer;
 	class MatchOptionsController;
 	class GameClient;
+
+	typedef struct Pong_PaddleAiInput {
+		const Paddle* paddle;
+		const Match* match;
+	} PaddleAiInput;
+
+	class PaddleAi {
+	public:
+		virtual PaddleInputType resolvePaddleInputType(PaddleAiInput input) = 0;
+	};
+
+	typedef struct Pong_FollowerPaddleAiDefn {
+		float paddleHeightMultiplier;
+		bool onlyFollowIfBallIsApproaching;
+	} FollowerPaddleAiDefn;
+
+	class FollowerPaddleAi : public PaddleAi {
+
+	private:
+		FollowerPaddleAiDefn aiDefn;
+
+	public:
+		FollowerPaddleAi(const FollowerPaddleAiDefn* aiDefn);
+
+	public:
+		PaddleInputType resolvePaddleInputType(PaddleAiInput input);
+
+	};
 
 	class Paddle {
 
@@ -138,8 +168,13 @@ namespace pong {
 
 		PaddleControlSource controlSource;
 
+		PaddleAi* ai;
+
 	public:
 		Paddle(const PaddleDefn* paddleDefn);
+
+	public:
+		~Paddle();
 
 	public:
 		r3::graphics2d::Size2D getSize() const;
@@ -153,6 +188,9 @@ namespace pong {
 	public:
 		float moveUp(float distance);
 		float moveDown(float distance);
+
+	public:
+		PaddleInputType resolvePaddleInputType(const Match* match);
 
 	};
 
@@ -282,7 +320,7 @@ namespace pong {
 		static const int BALL_SPEED_LUDICROUS = 4;
 
 		static const int PADDLE_CONTROL_SOURCE_PLAYER = 0;
-		static const int PADDLE_CONTROL_SOURCE_COMPUTER = 1;
+		static const int PADDLE_CONTROL_SOURCE_AI_FOLLOWER = 1;
 
 	private:
 		static int resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize);

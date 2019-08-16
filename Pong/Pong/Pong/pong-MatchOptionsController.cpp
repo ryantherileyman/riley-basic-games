@@ -28,7 +28,7 @@ namespace pong {
 	}
 	const int BALL_SPEED_LAST = MatchOptionsController::BALL_SPEED_LUDICROUS;
 
-	const int PADDLE_CONTROL_SOURCE_LAST = MatchOptionsController::PADDLE_CONTROL_SOURCE_COMPUTER;
+	const int PADDLE_CONTROL_SOURCE_LAST = MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_FOLLOWER;
 
 	int MatchOptionsController::resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize) {
 		int result = PADDLE_SIZE_MEDIUM;
@@ -66,8 +66,8 @@ namespace pong {
 
 	int MatchOptionsController::resolvePaddleControlSourceValue(PaddleControlSource paddleControlSource) {
 		int result = PADDLE_CONTROL_SOURCE_PLAYER;
-		if (paddleControlSource == PaddleControlSource::COMPUTER) {
-			result = PADDLE_CONTROL_SOURCE_COMPUTER;
+		if (paddleControlSource == PaddleControlSource::AI_FOLLOWER) {
+			result = PADDLE_CONTROL_SOURCE_AI_FOLLOWER;
 		}
 		return result;
 	}
@@ -159,8 +159,8 @@ namespace pong {
 	PaddleControlSource MatchOptionsController::getLeftPaddleControlSource() {
 		PaddleControlSource result = PaddleControlSource::PLAYER;
 
-		if (this->currOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_COMPUTER) {
-			result = PaddleControlSource::COMPUTER;
+		if (this->currOptionValueArray[OPTION_LEFT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_AI_FOLLOWER) {
+			result = PaddleControlSource::AI_FOLLOWER;
 		}
 
 		return result;
@@ -169,8 +169,8 @@ namespace pong {
 	PaddleControlSource MatchOptionsController::getRightPaddleControlSource() {
 		PaddleControlSource result = PaddleControlSource::PLAYER;
 
-		if (this->currOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_COMPUTER) {
-			result = PaddleControlSource::COMPUTER;
+		if (this->currOptionValueArray[OPTION_RIGHT_PADDLE_CONTROL_SOURCE] == PADDLE_CONTROL_SOURCE_AI_FOLLOWER) {
+			result = PaddleControlSource::AI_FOLLOWER;
 		}
 
 		return result;

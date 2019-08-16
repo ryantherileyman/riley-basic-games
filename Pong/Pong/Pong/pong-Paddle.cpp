@@ -1,4 +1,5 @@
 
+#include <cassert>
 #include "pong-lib.h"
 
 namespace pong {
@@ -21,6 +22,21 @@ namespace pong {
 		this->position.y = 0;
 
 		this->controlSource = paddleDefn->controlSource;
+
+		this->ai = { nullptr };
+		if (paddleDefn->controlSource == PaddleControlSource::AI_FOLLOWER) {
+			FollowerPaddleAiDefn aiDefn;
+			aiDefn.paddleHeightMultiplier = 0.5f;
+			aiDefn.onlyFollowIfBallIsApproaching = false;
+
+			this->ai = new FollowerPaddleAi(&aiDefn);
+		}
+	}
+
+	Paddle::~Paddle() {
+		if (this->ai != nullptr) {
+			delete this->ai;
+		}
 	}
 
 	Size2D Paddle::getSize() const {
@@ -67,6 +83,16 @@ namespace pong {
 
 		this->position.y = result;
 
+		return result;
+	}
+
+	PaddleInputType Paddle::resolvePaddleInputType(const Match* match) {
+		PaddleAiInput input;
+		input.paddle = this;
+		input.match = match;
+
+		assert(this->ai != nullptr);
+		PaddleInputType result = this->ai->resolvePaddleInputType(input);
 		return result;
 	}
 

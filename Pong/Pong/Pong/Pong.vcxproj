@@ -125,6 +125,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="pong-CourtCollisionCheckUtil.cpp" />
+    <ClCompile Include="pong-FollowerPaddleAi.cpp" />
     <ClCompile Include="pong-GameClient.cpp" />
     <ClCompile Include="pong-Match.cpp" />
     <ClCompile Include="pong-MatchOptionsController.cpp" />

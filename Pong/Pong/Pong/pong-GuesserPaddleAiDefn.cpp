@@ -13,7 +13,6 @@ namespace pong {
 
 		int threshold = 95;
 		if (fabsf(input.paddle->getPosition().y) >= input.match->getCourtSize().height / 2.0f - input.paddle->getSize().height / 2.0f) {
-			printf("paddleY = %f, comparison = %f, setting threshold to 50\n", input.paddle->getPosition().y, input.match->getCourtSize().height / 2.0f - input.paddle->getSize().height / 2.0f);
 			threshold = 50;
 		}
 

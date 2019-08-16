@@ -1,5 +1,6 @@
 
 #include <vector>
+#include <random>
 #include "riley-graphics-2d.h"
 #pragma once
 
@@ -34,6 +35,7 @@ namespace pong {
 
 	typedef enum class Pong_PaddleControlSource {
 		PLAYER,
+		AI_GUESSER,
 		AI_LATE_FOLLOWER,
 		AI_FOLLOWER,
 		AI_CLOSE_FOLLOWER,
@@ -123,6 +125,7 @@ namespace pong {
 	} MatchOptionsInputType;
 
 	class PaddleAi;
+	class GuesserPaddleAi;
 	class FollowerPaddleAi;
 	class Paddle;
 	class CourtCollisionCheckUtil;
@@ -139,6 +142,23 @@ namespace pong {
 	class PaddleAi {
 	public:
 		virtual PaddleInputType resolvePaddleInputType(PaddleAiInput input) = 0;
+	};
+
+	class GuesserPaddleAi : public PaddleAi {
+
+	private:
+		std::default_random_engine generator;
+		std::uniform_int_distribution<int> changeDirectionChanceDistribution = std::uniform_int_distribution<int>(1, 100);
+		std::uniform_int_distribution<int> newDirectionDistribution = std::uniform_int_distribution<int>(1, 3);
+
+		PaddleInputType currInput = PaddleInputType::NONE;
+
+	public:
+		GuesserPaddleAi();
+
+	public:
+		PaddleInputType resolvePaddleInputType(PaddleAiInput input);
+
 	};
 
 	typedef struct Pong_FollowerPaddleAiDefn {
@@ -322,9 +342,10 @@ namespace pong {
 		static const int BALL_SPEED_LUDICROUS = 4;
 
 		static const int PADDLE_CONTROL_SOURCE_PLAYER = 0;
-		static const int PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER = 1;
-		static const int PADDLE_CONTROL_SOURCE_AI_FOLLOWER = 2;
-		static const int PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER = 3;
+		static const int PADDLE_CONTROL_SOURCE_AI_GUESSER = 1;
+		static const int PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER = 2;
+		static const int PADDLE_CONTROL_SOURCE_AI_FOLLOWER = 3;
+		static const int PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER = 4;
 
 	private:
 		static int resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize);

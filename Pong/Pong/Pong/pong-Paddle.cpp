@@ -27,6 +27,9 @@ namespace pong {
 
 		FollowerPaddleAiDefn aiDefn;
 		switch (paddleDefn->controlSource) {
+		case PaddleControlSource::AI_GUESSER:
+			this->ai = new GuesserPaddleAi();
+			break;
 		case PaddleControlSource::AI_LATE_FOLLOWER:
 			aiDefn.paddleHeightMultiplier = 0.5f;
 			aiDefn.onlyFollowIfBallIsApproaching = true;

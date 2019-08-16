@@ -66,7 +66,10 @@ namespace pong {
 
 	int MatchOptionsController::resolvePaddleControlSourceValue(PaddleControlSource paddleControlSource) {
 		int result = PADDLE_CONTROL_SOURCE_PLAYER;
-		if (paddleControlSource == PaddleControlSource::AI_LATE_FOLLOWER) {
+		if (paddleControlSource == PaddleControlSource::AI_GUESSER) {
+			result = PADDLE_CONTROL_SOURCE_AI_GUESSER;
+		}
+		else if (paddleControlSource == PaddleControlSource::AI_LATE_FOLLOWER) {
 			result = PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER;
 		}
 		else if (paddleControlSource == PaddleControlSource::AI_FOLLOWER) {
@@ -176,6 +179,9 @@ namespace pong {
 		PaddleControlSource result = PaddleControlSource::PLAYER;
 
 		switch (paddleControlSourceValue) {
+		case PADDLE_CONTROL_SOURCE_AI_GUESSER:
+			result = PaddleControlSource::AI_GUESSER;
+			break;
 		case PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
 			result = PaddleControlSource::AI_LATE_FOLLOWER;
 			break;

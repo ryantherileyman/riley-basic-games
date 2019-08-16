@@ -45,6 +45,9 @@
     <ClCompile Include="pong-FollowerPaddleAi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pong-GuesserPaddleAiDefn.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pong-lib.h">

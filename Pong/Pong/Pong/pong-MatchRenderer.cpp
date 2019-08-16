@@ -160,6 +160,9 @@ namespace pong {
 			case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 				drawCenteredText(0.0f, -80.0f, (unsigned char*)"It's all you");
 				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_GUESSER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"My back is turned, I'll pretend to know where the ball is");
+				break;
 			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
 				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'll follow the ball when it's coming at me");
 				break;
@@ -175,6 +178,9 @@ namespace pong {
 		switch (matchOptionsController->getLeftPaddleControlSourceValue()) {
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 			drawText(0.0f, 0.0f, (unsigned char*)"Player");
+			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_GUESSER:
+			drawText(0.0f, 0.0f, (unsigned char*)"AI - Guesser");
 			break;
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
 			drawText(0.0f, 0.0f, (unsigned char*)"AI - Late Follower");
@@ -194,6 +200,9 @@ namespace pong {
 			case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 				drawCenteredText(0.0f, -80.0f, (unsigned char*)"It's all you");
 				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_GUESSER:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"My back is turned, I'll pretend to know where the ball is");
+				break;
 			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
 				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'll follow the ball when it's coming at me");
 				break;
@@ -208,6 +217,9 @@ namespace pong {
 		switch (matchOptionsController->getRightPaddleControlSourceValue()) {
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_PLAYER:
 			drawText(0.0f, -25.0f, (unsigned char*)"Player");
+			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_GUESSER:
+			drawText(0.0f, -25.0f, (unsigned char*)"AI - Guesser");
 			break;
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER:
 			drawText(0.0f, -25.0f, (unsigned char*)"AI - Late Follower");

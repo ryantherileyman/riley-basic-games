@@ -5,7 +5,7 @@
 namespace pong {
 
 	GuesserPaddleAi::GuesserPaddleAi() {
-		this->generator.seed(time(NULL));
+		this->generator.seed((unsigned int)time(NULL));
 	}
 
 	PaddleInputType GuesserPaddleAi::resolvePaddleInputType(PaddleAiInput input) {

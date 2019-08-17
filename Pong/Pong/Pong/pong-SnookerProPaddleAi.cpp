@@ -7,7 +7,7 @@ namespace pong {
 	using namespace r3::graphics2d;
 
 	SnookerProPaddleAi::SnookerProPaddleAi() {
-		this->generator.seed(time(NULL));
+		this->generator.seed((unsigned int)time(NULL));
 
 		this->collisionSet.topWallLineSegment = { 0.0f, 0.0f, 0.0f, 0.0f };
 		this->collisionSet.bottomWallLineSegment = { 0.0f, 0.0f, 0.0f, 0.0f };

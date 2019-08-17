@@ -39,6 +39,7 @@ namespace pong {
 		AI_LATE_FOLLOWER,
 		AI_FOLLOWER,
 		AI_CLOSE_FOLLOWER,
+		AI_SNOOKER_PRO,
 	} PaddleControlSource;
 
 	typedef struct Pong_PaddleDefn {
@@ -127,6 +128,7 @@ namespace pong {
 	class PaddleAi;
 	class GuesserPaddleAi;
 	class FollowerPaddleAi;
+	class SnookerProPaddleAi;
 	class Paddle;
 	class CourtCollisionCheckUtil;
 	class Match;
@@ -173,6 +175,24 @@ namespace pong {
 
 	public:
 		FollowerPaddleAi(const FollowerPaddleAiDefn* aiDefn);
+
+	public:
+		PaddleInputType resolvePaddleInputType(PaddleAiInput input);
+
+	};
+
+	class SnookerProPaddleAi : public PaddleAi {
+
+	private:
+		float prevBallDirectionX = 0.0f;
+		float desiredPaddlePosition = 0.0f;
+		bool performedDeflectionAdjustmentFlag = false;
+
+		std::default_random_engine generator;
+		std::uniform_real_distribution<float> paddleDeflectionDistribution = std::uniform_real_distribution<float>(-0.5f, 0.5f);
+
+	public:
+		SnookerProPaddleAi();
 
 	public:
 		PaddleInputType resolvePaddleInputType(PaddleAiInput input);
@@ -282,6 +302,8 @@ namespace pong {
 		BallState getBallState() const;
 		int getLeftScore() const;
 		int getRightScore() const;
+		r3::graphics2d::LineSegment2D getTopWallLineSegment() const;
+		r3::graphics2d::LineSegment2D getBottomWallLineSegment() const;
 
 	public:
 		void startPoint(PaddleSide side);
@@ -319,8 +341,6 @@ namespace pong {
 
 	};
 
-
-
 	class MatchOptionsController {
 
 	public:
@@ -346,6 +366,7 @@ namespace pong {
 		static const int PADDLE_CONTROL_SOURCE_AI_LATE_FOLLOWER = 2;
 		static const int PADDLE_CONTROL_SOURCE_AI_FOLLOWER = 3;
 		static const int PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER = 4;
+		static const int PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO = 5;
 
 	private:
 		static int resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize);

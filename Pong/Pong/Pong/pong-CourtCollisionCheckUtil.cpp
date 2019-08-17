@@ -118,7 +118,7 @@ namespace pong {
 			(ballPathLineSegment->point1.y < this->collisionSet->topWallLineSegment.point1.y) &&
 			(ballPathLineSegment->point2.y >= this->collisionSet->topWallLineSegment.point1.y)
 		) {
-			float percent = (ballPathLineSegment->point2.y - this->collisionSet->topWallLineSegment.point1.y) / (ballPathLineSegment->point2.y - ballPathLineSegment->point1.y);
+			float percent = (this->collisionSet->topWallLineSegment.point1.y - ballPathLineSegment->point1.y) / (ballPathLineSegment->point2.y - ballPathLineSegment->point1.y);
 			float crossPlaneX = ballPathLineSegment->point1.x + ((ballPathLineSegment->point2.x - ballPathLineSegment->point1.x) * percent);
 
 			// Check if the ball collided with the top wall
@@ -139,7 +139,7 @@ namespace pong {
 			(ballPathLineSegment->point1.y > this->collisionSet->bottomWallLineSegment.point1.y) &&
 			(ballPathLineSegment->point2.y <= this->collisionSet->bottomWallLineSegment.point1.y)
 		) {
-			float percent = (ballPathLineSegment->point2.y - this->collisionSet->bottomWallLineSegment.point1.y) / (ballPathLineSegment->point2.y - ballPathLineSegment->point1.y);
+			float percent = (this->collisionSet->bottomWallLineSegment.point1.y - ballPathLineSegment->point1.y) / (ballPathLineSegment->point2.y - ballPathLineSegment->point1.y);
 			float crossPlaneX = ballPathLineSegment->point1.x + ((ballPathLineSegment->point2.x - ballPathLineSegment->point1.x) * percent);
 
 			// Check if the ball collided with the bottom wall

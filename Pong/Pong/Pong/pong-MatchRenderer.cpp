@@ -172,6 +172,9 @@ namespace pong {
 			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
 				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'm perfect at following the ball");
 				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I know my angles!");
+				break;
 			}
 		}
 		drawText(-200.0f, 0.0f, (unsigned char*)"Left Paddle:");
@@ -190,6 +193,9 @@ namespace pong {
 			break;
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
 			drawText(0.0f, 0.0f, (unsigned char*)"AI - Close Follower");
+			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO:
+			drawText(0.0f, 0.0f, (unsigned char*)"AI - Snooker Pro");
 			break;
 		}
 
@@ -212,6 +218,9 @@ namespace pong {
 			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
 				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I'm perfect at following the ball");
 				break;
+			case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO:
+				drawCenteredText(0.0f, -80.0f, (unsigned char*)"I know my angles!");
+				break;
 			}
 		}
 		switch (matchOptionsController->getRightPaddleControlSourceValue()) {
@@ -230,6 +239,9 @@ namespace pong {
 		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
 			drawText(0.0f, -25.0f, (unsigned char*)"AI - Close Follower");
 			break;
+		case MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO:
+			drawText(0.0f, -25.0f, (unsigned char*)"AI - Snooker Pro");
+			break;
 		}
 		drawText(-200.0f, -25.0f, (unsigned char*)"Right Paddle:");
 
@@ -240,7 +252,6 @@ namespace pong {
 	void MatchRenderer::clearScene() {
 		// Clear contents of buffer
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	}
 
 	void MatchRenderer::prepareTransform() {

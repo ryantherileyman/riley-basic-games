@@ -28,7 +28,7 @@ namespace pong {
 	}
 	const int BALL_SPEED_LAST = MatchOptionsController::BALL_SPEED_LUDICROUS;
 
-	const int PADDLE_CONTROL_SOURCE_LAST = MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER;
+	const int PADDLE_CONTROL_SOURCE_LAST = MatchOptionsController::PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO;
 
 	int MatchOptionsController::resolvePaddleSizeOptionValue(r3::graphics2d::Size2D paddleSize) {
 		int result = PADDLE_SIZE_MEDIUM;
@@ -77,6 +77,9 @@ namespace pong {
 		}
 		else if (paddleControlSource == PaddleControlSource::AI_CLOSE_FOLLOWER) {
 			result = PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER;
+		}
+		else if (paddleControlSource == PaddleControlSource::AI_SNOOKER_PRO) {
+			result = PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO;
 		}
 		return result;
 	}
@@ -190,6 +193,9 @@ namespace pong {
 			break;
 		case PADDLE_CONTROL_SOURCE_AI_CLOSE_FOLLOWER:
 			result = PaddleControlSource::AI_CLOSE_FOLLOWER;
+			break;
+		case PADDLE_CONTROL_SOURCE_AI_SNOOKER_PRO:
+			result = PaddleControlSource::AI_SNOOKER_PRO;
 			break;
 		}
 

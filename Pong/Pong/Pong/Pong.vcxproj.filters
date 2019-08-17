@@ -48,6 +48,9 @@
     <ClCompile Include="pong-GuesserPaddleAiDefn.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="pong-SnookerProPaddleAi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pong-lib.h">

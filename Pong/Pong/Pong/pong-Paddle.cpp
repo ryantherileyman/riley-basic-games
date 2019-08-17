@@ -48,6 +48,9 @@ namespace pong {
 
 			this->ai = new FollowerPaddleAi(&aiDefn);
 			break;
+		case PaddleControlSource::AI_SNOOKER_PRO:
+			this->ai = new SnookerProPaddleAi();
+			break;
 		}
 	}
 

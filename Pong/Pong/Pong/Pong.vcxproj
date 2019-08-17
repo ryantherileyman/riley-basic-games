@@ -132,6 +132,7 @@
     <ClCompile Include="pong-MatchOptionsController.cpp" />
     <ClCompile Include="pong-MatchRenderer.cpp" />
     <ClCompile Include="pong-Paddle.cpp" />
+    <ClCompile Include="pong-SnookerProPaddleAi.cpp" />
     <ClCompile Include="pong.cpp" />
     <ClCompile Include="riley-gl-utils.cpp" />
     <ClCompile Include="riley-graphics-2d.cpp" />

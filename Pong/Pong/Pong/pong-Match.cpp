@@ -74,6 +74,14 @@ namespace pong {
 		return this->rightScore;
 	}
 
+	LineSegment2D Match::getTopWallLineSegment() const {
+		return this->collisionSet.topWallLineSegment;
+	}
+
+	LineSegment2D Match::getBottomWallLineSegment() const {
+		return this->collisionSet.bottomWallLineSegment;
+	}
+
 	void Match::startPoint(PaddleSide side) {
 		this->ballState.position.x = 0.0f;
 		this->ballState.position.y = 0.0f;

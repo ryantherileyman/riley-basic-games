@@ -184,6 +184,9 @@ namespace pong {
 	class SnookerProPaddleAi : public PaddleAi {
 
 	private:
+		bool courtCollisionSetInitializedFlag = false;
+		CourtCollisionSet collisionSet;
+
 		float prevBallDirectionX = 0.0f;
 		float desiredPaddlePosition = 0.0f;
 		bool performedDeflectionAdjustmentFlag = false;
@@ -196,6 +199,16 @@ namespace pong {
 
 	public:
 		PaddleInputType resolvePaddleInputType(PaddleAiInput input);
+
+	private:
+		void initializeCollisionSet(PaddleAiInput input);
+
+	private:
+		bool ballHeadedTowardPaddle(PaddleAiInput input);
+		float calculateYPositionBallWillCrossPlaneOfPaddle(PaddleAiInput input);
+
+	private:
+		bool ballNearPaddle(PaddleAiInput input);
 
 	};
 

@@ -3,6 +3,5 @@
 This GitHub repository is where I'll keep my recreations of some classic 2D games.
 
 PONG
-Last updated Aug 15, 2019
-
+Riley Entertainment Pong 1.5 released on August 17, 2019.
 

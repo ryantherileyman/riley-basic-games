@@ -130,10 +130,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\r3-snake-GameClient.cpp" />
+    <ClCompile Include="src\r3-snake-SplashSceneController.cpp" />
+    <ClCompile Include="src\r3-snake-SplashSceneRenderer.cpp" />
     <ClCompile Include="src\snake-main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\splash-screen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="src\r3-snake-lib.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -20,3 +20,10 @@ Copyright (c) 2011, Sideshow (a DBA of Font Diner, Inc) (www.fontdiner.com), wit
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
 See "OFL.txt" for the full SIL Open Font Licence.
 
+Tileable Grass Texture from https://www.goodtextures.com/
+https://www.goodtextures.com/image/13275/seamless-and-tileable-grass-texture-13275
+
+
+Additional artwork created by rileyman can be found in the /artwork/ folder:
+Snake, Shrub, Apple
+

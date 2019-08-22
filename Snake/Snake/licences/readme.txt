@@ -1,6 +1,14 @@
 
 Riley Entertainment - The Garden of Eating
 
+
+Licence Information for referenced libraries
+
+SFML Libraries are distributed under the zlib/png licence.
+https://www.sfml-dev.org/license.php
+https://opensource.org/licenses/Zlib
+
+
 Licence Information for referenced artwork
 
 Music from https://filmmusic.io

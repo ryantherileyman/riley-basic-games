@@ -1,5 +1,5 @@
 
-#include "r3-snake-lib.hpp"
+#include "includes/r3-snake-splashscene.hpp"
 
 namespace r3 {
 

@@ -12,13 +12,8 @@ namespace r3 {
 			EXIT_GAME,
 		} SplashSceneClientRequest;
 
-		typedef enum Snake_ClientMode {
-			SPLASH_SCREEN,
-		} ClientMode;
-
 		class SplashSceneController;
 		class SplashSceneRenderer;
-		class GameClient;
 
 		class SplashSceneController {
 
@@ -60,29 +55,6 @@ namespace r3 {
 
 		public:
 			void render(sf::RenderTarget& renderTarget);
-
-		};
-
-		class GameClient {
-
-		private:
-			ClientMode mode;
-			sf::RenderWindow window;
-			
-		private:
-			SplashSceneController* splashSceneController;
-
-		public:
-			GameClient();
-
-		public:
-			~GameClient();
-
-		public:
-			void run();
-
-		private:
-			void processSplashScreenEvent(sf::Event& event);
 
 		};
 

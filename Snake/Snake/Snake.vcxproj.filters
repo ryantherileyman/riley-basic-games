@@ -34,7 +34,10 @@
     </Image>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\r3-snake-lib.hpp">
+    <ClInclude Include="src\includes\r3-snake-client.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\includes\r3-snake-splashscene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

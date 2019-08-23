@@ -5,6 +5,7 @@
 
 #include "includes/r3-snake-client.hpp"
 #include "includes/r3-snake-splashscene.hpp"
+#include "includes/r3-snake-quickgamescene.hpp"
 
 namespace r3 {
 
@@ -22,11 +23,14 @@ namespace r3 {
 			this->window.create(sf::VideoMode(WINDOW_INITIAL_WIDTH, WINDOW_INITIAL_HEIGHT), WINDOW_TITLE);
 
 			this->splashSceneController = new SplashSceneController(this->window);
+			this->quickGameController = new QuickGameController(this->window);
+
 			this->splashSceneController->start();
 		}
 
 		GameClient::~GameClient() {
 			delete this->splashSceneController;
+			delete this->quickGameController;
 		}
 
 		void GameClient::run() {
@@ -41,6 +45,9 @@ namespace r3 {
 					case ClientMode::SPLASH_SCREEN:
 						this->processSplashScreenEvent(event);
 						break;
+					case ClientMode::QUICK_GAME:
+						this->processQuickGameEvent(event);
+						break;
 					}
 				}
 
@@ -48,6 +55,9 @@ namespace r3 {
 					switch (this->mode) {
 					case ClientMode::SPLASH_SCREEN:
 						this->splashSceneController->render();
+						break;
+					case ClientMode::QUICK_GAME:
+						this->quickGameController->render();
 						break;
 					}
 
@@ -68,7 +78,26 @@ namespace r3 {
 				this->splashSceneController->finish();
 				window.close();
 				break;
+			case SplashSceneClientRequest::START_QUICK_GAME:
+				this->splashSceneController->finish();
+				this->mode = ClientMode::QUICK_GAME;
+				break;
 			}
+		}
+
+		void GameClient::processQuickGameEvent(sf::Event& event) {
+			QuickGameSceneClientRequest request = this->quickGameController->processEvent(event);
+
+			switch (request) {
+			case QuickGameSceneClientRequest::EXIT_GAME:
+				window.close();
+				break;
+			case QuickGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN:
+				this->mode = ClientMode::SPLASH_SCREEN;
+				this->splashSceneController->start();
+				break;
+			}
+
 		}
 
 	}

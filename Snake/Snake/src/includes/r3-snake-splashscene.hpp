@@ -7,9 +7,10 @@ namespace r3 {
 
 	namespace snake {
 
-		typedef enum Snake_SplashSceneClientRequest {
+		typedef enum class Snake_SplashSceneClientRequest {
 			NONE,
 			EXIT_GAME,
+			START_QUICK_GAME,
 		} SplashSceneClientRequest;
 
 		class SplashSceneController;
@@ -44,7 +45,13 @@ namespace r3 {
 		class SplashSceneRenderer {
 
 		private:
+			sf::Font* uiFont;
 			sf::Texture* splashTexture;
+
+		private:
+			sf::Text startGameInstructionsText;
+
+		private:
 			sf::Sprite* splashSprite;
 
 		public:

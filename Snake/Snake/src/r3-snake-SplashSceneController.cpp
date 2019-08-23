@@ -1,4 +1,5 @@
 
+#include "includes/r3-snake-utils.hpp"
 #include "includes/r3-snake-splashscene.hpp"
 
 namespace r3 {
@@ -7,34 +8,9 @@ namespace r3 {
 
 		const char* SPLASH_MUSIC_PATH = "resources/music/AtTheShore.ogg";
 
-		namespace SplashSceneViewUtils {
-
-			const float VIEW_ASPECT_RATIO = 1.77777778f;
-			const sf::Vector2f VIEW_SIZE(1920.0f, 1080.0f);
-
-			sf::View createView(unsigned int windowWidth, unsigned int windowHeight) {
-				float aspectRatio = (float)windowWidth / (float)windowHeight;
-				
-				sf::FloatRect viewport(0.0f, 0.0f, VIEW_SIZE.x, VIEW_SIZE.y);
-
-				if (aspectRatio > VIEW_ASPECT_RATIO) {
-					viewport.width = VIEW_SIZE.x * (aspectRatio / VIEW_ASPECT_RATIO);
-					viewport.left = 0.0f - ((viewport.width - VIEW_SIZE.x) / 2.0f);
-				}
-				else {
-					viewport.height = VIEW_SIZE.y * (VIEW_ASPECT_RATIO / aspectRatio);
-					viewport.top = 0.0f - ((viewport.height - VIEW_SIZE.y) / 2.0f);
-				}
-
-				sf::View result(viewport);
-				return result;
-			}
-
-		}
-
 		SplashSceneController::SplashSceneController(sf::RenderWindow& window) {
 			this->window = &window;
-			this->window->setView(SplashSceneViewUtils::createView(window.getSize().x, window.getSize().y));
+			this->window->setView(ViewUtils::createView(window.getSize().x, window.getSize().y));
 
 			this->renderer = new SplashSceneRenderer();
 
@@ -76,7 +52,15 @@ namespace r3 {
 				result = SplashSceneClientRequest::EXIT_GAME;
 			}
 			else if (event.type == sf::Event::Resized) {
-				this->window->setView(SplashSceneViewUtils::createView(event.size.width, event.size.height));
+				this->window->setView(ViewUtils::createView(event.size.width, event.size.height));
+			}
+			else if (event.type == sf::Event::KeyPressed) {
+				if (
+					(event.key.code == sf::Keyboard::Key::Enter) ||
+					(event.key.code == sf::Keyboard::Key::Space)
+				) {
+					result = SplashSceneClientRequest::START_QUICK_GAME;
+				}
 			}
 
 			return result;

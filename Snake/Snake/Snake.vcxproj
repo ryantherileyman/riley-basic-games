@@ -131,8 +131,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\r3-snake-GameClient.cpp" />
+    <ClCompile Include="src\r3-snake-QuickGameController.cpp" />
+    <ClCompile Include="src\r3-snake-QuickGameRenderer.cpp" />
     <ClCompile Include="src\r3-snake-SplashSceneController.cpp" />
     <ClCompile Include="src\r3-snake-SplashSceneRenderer.cpp" />
+    <ClCompile Include="src\r3-snake-utils.cpp" />
     <ClCompile Include="src\snake-main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -140,7 +143,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp" />
+    <ClInclude Include="src\includes\r3-snake-quickgamescene.hpp" />
     <ClInclude Include="src\includes\r3-snake-splashscene.hpp" />
+    <ClInclude Include="src\includes\r3-snake-utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

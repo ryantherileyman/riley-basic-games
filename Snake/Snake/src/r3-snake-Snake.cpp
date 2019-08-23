@@ -31,7 +31,7 @@ namespace r3 {
 
 		}
 
-		Snake::Snake(SnakeStartDefn& startDefn) {
+		Snake::Snake(const SnakeStartDefn& startDefn) {
 			assert(startDefn.length >= 2);
 
 			sf::Vector2i nextSegmentPosition = startDefn.headPosition;

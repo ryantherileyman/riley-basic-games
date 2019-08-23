@@ -50,7 +50,7 @@ namespace r3 {
 			SnakeSegment tail;
 
 		public:
-			Snake(SnakeStartDefn& startDefn);
+			Snake(const SnakeStartDefn& startDefn);
 
 		public:
 			SnakeSegment getHead() const;

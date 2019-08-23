@@ -6,18 +6,10 @@ namespace r3 {
 	namespace snake {
 
 		QuickGame::QuickGame(const QuickGameDefn* quickGameDefn) {
-			this->fieldSize.x = 50;
-			this->fieldSize.y = 25;
+			this->fieldSize = quickGameDefn->fieldSize;
+			this->snakeSpeedTilesPerSecond = quickGameDefn->snakeSpeedTilesPerSecond;
 
-			this->snakeSpeedTilesPerSecond = 4.0f;
-
-			SnakeStartDefn snakeStartDefn;
-			snakeStartDefn.headPosition.x = 25;
-			snakeStartDefn.headPosition.y = 10;
-			snakeStartDefn.facingDirection = ObjectDirection::DOWN;
-			snakeStartDefn.length = 3;
-
-			this->snake = new Snake(snakeStartDefn);
+			this->snake = new Snake(quickGameDefn->snakeStartDefn);
 
 			this->framesSinceSnakeMoved = 0;
 			this->queuedSnakeInput = ObjectDirection::NONE;
@@ -25,6 +17,14 @@ namespace r3 {
 
 		QuickGame::~QuickGame() {
 			delete this->snake;
+		}
+
+		sf::Vector2i QuickGame::getFieldSize() const {
+			return this->fieldSize;
+		}
+
+		Snake* QuickGame::getSnake() const {
+			return this->snake;
 		}
 
 		QuickGameUpdateResult QuickGame::update(const QuickGameInputRequest* input) {

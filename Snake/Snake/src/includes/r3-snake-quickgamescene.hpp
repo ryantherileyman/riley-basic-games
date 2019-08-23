@@ -22,6 +22,11 @@ namespace r3 {
 			bool snakeHitBarrierFlag;
 		} QuickGameUpdateResult;
 
+		typedef enum class Snake_QuickGameMode {
+			WAIT_TO_START,
+			GAME_RUNNING,
+		} QuickGameMode;
+
 		typedef enum class Snake_QuickGameSceneClientRequest {
 			NONE,
 			EXIT_GAME,
@@ -50,6 +55,10 @@ namespace r3 {
 			~QuickGame();
 
 		public:
+			sf::Vector2i getFieldSize() const;
+			Snake* getSnake() const;
+
+		public:
 			QuickGameUpdateResult update(const QuickGameInputRequest* input);
 
 		private:
@@ -63,6 +72,11 @@ namespace r3 {
 			sf::RenderWindow* window;
 			QuickGameRenderer* renderer;
 
+		private:
+			QuickGameMode mode;
+			QuickGame* game;
+			ObjectDirection nextSnakeMovementInput;
+
 		public:
 			QuickGameController(sf::RenderWindow& window);
 
@@ -71,7 +85,12 @@ namespace r3 {
 
 		public:
 			QuickGameSceneClientRequest processEvent(sf::Event& event);
+			void update();
 			void render();
+
+		private:
+			QuickGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
+			QuickGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
 
 		};
 
@@ -97,11 +116,18 @@ namespace r3 {
 			~QuickGameRenderer();
 
 		public:
-			void render(sf::RenderTarget& renderTarget);
+			void renderWaitToStart(sf::RenderTarget& renderTarget);
+			void renderGameRunning(sf::RenderTarget& renderTarget, const QuickGame& game);
 
 		private:
 			void renderPlayingField(sf::RenderTarget& renderTarget);
+			void renderSnake(sf::RenderTarget& renderTarget, const QuickGame& game);
 			void renderScoreUi(sf::RenderTarget& renderTarget);
+
+		private:
+			sf::Sprite createSnakeHeadSprite(const QuickGame& game);
+			sf::Sprite createSnakeTailSprite(const QuickGame& game);
+			sf::Sprite createSnakeBodySprite(const SnakeSegment& snakeSegment);
 
 		};
 

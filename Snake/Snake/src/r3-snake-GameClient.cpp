@@ -57,6 +57,7 @@ namespace r3 {
 						this->splashSceneController->render();
 						break;
 					case ClientMode::QUICK_GAME:
+						this->quickGameController->update();
 						this->quickGameController->render();
 						break;
 					}
@@ -64,6 +65,7 @@ namespace r3 {
 				}
 
 				sf::Int64 microSecondsElapsed = clock.getElapsedTime().asMicroseconds();
+				printf("microseconds elapsed this frame = %d\n", microSecondsElapsed);
 				if (microSecondsElapsed < MICROSECONDS_PER_FRAME) {
 					std::this_thread::sleep_for(std::chrono::microseconds(MICROSECONDS_PER_FRAME - microSecondsElapsed));
 				}

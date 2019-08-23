@@ -62,6 +62,7 @@ namespace r3 {
 		public:
 			bool isValidMovementDirection(ObjectDirection direction);
 			bool occupiesPosition(sf::Vector2i position);
+			bool bodyOccupiesPosition(sf::Vector2i position);
 
 		public:
 			void moveForward(ObjectDirection direction);

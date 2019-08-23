@@ -115,13 +115,12 @@ namespace r3 {
 		bool QuickGame::snakeWouldHitBarrier(ObjectDirection direction) {
 			sf::Vector2i newHeadPosition = this->snake->getHead().position + SnakeUtils::directionToVector(direction);
 
-			// TODO: this should also check if any of the snake's body segments occupies this position
-
 			bool result =
 				(newHeadPosition.x <= 0) ||
 				(newHeadPosition.x >= (this->fieldSize.x - 1)) ||
 				(newHeadPosition.y <= 0) ||
-				(newHeadPosition.y >= (this->fieldSize.y - 1));
+				(newHeadPosition.y >= (this->fieldSize.y - 1)) ||
+				this->snake->bodyOccupiesPosition(newHeadPosition);
 			return result;
 		}
 

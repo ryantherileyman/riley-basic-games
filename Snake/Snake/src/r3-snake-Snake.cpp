@@ -110,16 +110,21 @@ namespace r3 {
 		bool Snake::occupiesPosition(sf::Vector2i position) {
 			bool result =
 				(this->head.position == position) ||
+				this->bodyOccupiesPosition(position) ||
 				(this->tail.position == position);
 
-			if (!result) {
-				int bodyLength = this->bodyList.size();
-				for (int currSegmentIndex = 0; currSegmentIndex < bodyLength; currSegmentIndex++) {
-					SnakeSegment currBodySegment = this->bodyList.at(currSegmentIndex);
-					result = result || (currBodySegment.position == position);
-					if (result) {
-						break;
-					}
+			return result;
+		}
+
+		bool Snake::bodyOccupiesPosition(sf::Vector2i position) {
+			bool result = false;
+
+			int bodyLength = this->bodyList.size();
+			for (int currSegmentIndex = 0; currSegmentIndex < bodyLength; currSegmentIndex++) {
+				SnakeSegment currBodySegment = this->bodyList.at(currSegmentIndex);
+				result = result || (currBodySegment.position == position);
+				if (result) {
+					break;
 				}
 			}
 

@@ -28,6 +28,7 @@ namespace r3 {
 		typedef enum class Snake_QuickGameMode {
 			WAIT_TO_START,
 			GAME_RUNNING,
+			GAME_DONE_SUMMARY,
 		} QuickGameMode;
 
 		typedef enum class Snake_QuickGameSceneClientRequest {
@@ -89,6 +90,12 @@ namespace r3 {
 		private:
 			QuickGameMode mode;
 			QuickGame* game;
+
+		private:
+			int longestSnakeLength;
+			bool lastGameBeatLongestSnakeLength;
+
+		private:
 			ObjectDirection nextSnakeMovementInput;
 
 		public:
@@ -106,7 +113,16 @@ namespace r3 {
 			QuickGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
 			QuickGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
 
+		private:
+			void startGame();
+
 		};
+
+		typedef struct Snake_QuickGameRenderState {
+			const QuickGame* game;
+			int longestSnake;
+			bool lastGameBeatLongestSnakeLength;
+		} QuickGameRenderState;
 
 		class QuickGameRenderer {
 
@@ -117,6 +133,7 @@ namespace r3 {
 		private:
 			sf::Text snakeLengthText;
 			sf::Text longestSnakeText;
+			sf::Text startInstructionsText;
 			sf::Text exitInstructionsText;
 
 		private:
@@ -131,14 +148,16 @@ namespace r3 {
 			~QuickGameRenderer();
 
 		public:
-			void renderWaitToStart(sf::RenderTarget& renderTarget);
-			void renderGameRunning(sf::RenderTarget& renderTarget, const QuickGame& game);
+			void renderWaitToStart(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState);
+			void renderGameRunning(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState);
+			void renderGameDoneSummary(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState);
 
 		private:
 			void renderPlayingField(sf::RenderTarget& renderTarget);
 			void renderApple(sf::RenderTarget& renderTarget, const QuickGame& game);
 			void renderSnake(sf::RenderTarget& renderTarget, const QuickGame& game);
-			void renderScoreUi(sf::RenderTarget& renderTarget);
+			void renderScoreUi(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState);
+			void renderLongestSnakeUi(sf::RenderTarget& renderTarget);
 
 		private:
 			sf::Sprite createSnakeHeadSprite(const QuickGame& game);

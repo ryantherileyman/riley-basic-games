@@ -20,7 +20,9 @@ namespace r3 {
 		const wchar_t* SNAKE_LENGTH_FORMAT_STRING = L"Snake Length: %d";
 		const wchar_t* LONGEST_SNAKE_FORMAT_STRING = L"Longest Snake: %d";
 
+		const wchar_t* START_INSTRUCTIONS = L"Press ENTER to start game";
 		const wchar_t* EXIT_INSTRUCTIONS = L"Press ESC to return to the main menu";
+		const wchar_t* LAST_GAME_WON_STRING = L"Congratulations!  You got the longest snake!";
 
 		namespace QuickGameRendererUtils {
 
@@ -157,12 +159,19 @@ namespace r3 {
 			this->longestSnakeText.setOutlineColor(sf::Color::White);
 			this->longestSnakeText.setPosition(0.0f, 24.0f);
 
+			this->startInstructionsText.setFont(*this->uiFont);
+			this->startInstructionsText.setCharacterSize(64);
+			this->startInstructionsText.setOutlineColor(sf::Color::White);
+			this->startInstructionsText.setString(START_INSTRUCTIONS);
+			float startInstructionsWidth = FontUtils::resolveTextWidth(startInstructionsText);
+			this->startInstructionsText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (startInstructionsWidth / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) - 35.0f);
+
 			this->exitInstructionsText.setFont(*this->uiFont);
 			this->exitInstructionsText.setCharacterSize(64);
 			this->exitInstructionsText.setOutlineColor(sf::Color::White);
 			this->exitInstructionsText.setString(EXIT_INSTRUCTIONS);
 			float exitInstructionsWidth = FontUtils::resolveTextWidth(exitInstructionsText);
-			this->exitInstructionsText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (exitInstructionsWidth / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f));
+			this->exitInstructionsText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (exitInstructionsWidth / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) + 35.0f);
 
 			QuickGameRendererUtils::initSprite(this->grassSprite, *this->snakeTilesetTexture, 0, 375);
 			QuickGameRendererUtils::initSprite(this->shrubSprite, *this->snakeTilesetTexture, 75, 375);
@@ -178,19 +187,32 @@ namespace r3 {
 			}
 		}
 
-		void QuickGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget) {
+		void QuickGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState) {
 			renderTarget.clear(QUICK_GAME_BACKGROUND_COLOR);
 			this->renderPlayingField(renderTarget);
-			this->renderScoreUi(renderTarget);
+			this->renderScoreUi(renderTarget, gameRenderState);
+			renderTarget.draw(startInstructionsText);
 			renderTarget.draw(exitInstructionsText);
 		}
 
-		void QuickGameRenderer::renderGameRunning(sf::RenderTarget& renderTarget, const QuickGame& game) {
+		void QuickGameRenderer::renderGameRunning(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState) {
 			renderTarget.clear(QUICK_GAME_BACKGROUND_COLOR);
 			this->renderPlayingField(renderTarget);
-			this->renderApple(renderTarget, game);
-			this->renderSnake(renderTarget, game);
-			this->renderScoreUi(renderTarget);
+			this->renderApple(renderTarget, *gameRenderState.game);
+			this->renderSnake(renderTarget, *gameRenderState.game);
+			this->renderScoreUi(renderTarget, gameRenderState);
+		}
+
+		void QuickGameRenderer::renderGameDoneSummary(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState) {
+			renderTarget.clear(QUICK_GAME_BACKGROUND_COLOR);
+			this->renderPlayingField(renderTarget);
+			this->renderSnake(renderTarget, *gameRenderState.game);
+			this->renderScoreUi(renderTarget, gameRenderState);
+			if (gameRenderState.lastGameBeatLongestSnakeLength) {
+				this->renderLongestSnakeUi(renderTarget);
+			}
+			renderTarget.draw(startInstructionsText);
+			renderTarget.draw(exitInstructionsText);
 		}
 
 		void QuickGameRenderer::renderPlayingField(sf::RenderTarget& renderTarget) {
@@ -243,20 +265,48 @@ namespace r3 {
 			renderTarget.draw(headSprite);
 		}
 
-		void QuickGameRenderer::renderScoreUi(sf::RenderTarget& renderTarget) {
+		void QuickGameRenderer::renderScoreUi(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState) {
 			// Draw current snake length
+			int currSnakeLength = 0;
+			if (gameRenderState.game != nullptr) {
+				currSnakeLength = gameRenderState.game->getSnake()->getLength();
+			}
+
 			wchar_t snakeLengthString[32];
-			swprintf_s(snakeLengthString, SNAKE_LENGTH_FORMAT_STRING, 0);
+			swprintf_s(snakeLengthString, SNAKE_LENGTH_FORMAT_STRING, currSnakeLength);
 			snakeLengthText.setString(snakeLengthString);
 			renderTarget.draw(snakeLengthText);
 
 			// Draw longest snake length
 			wchar_t longestSnakeString[32];
-			swprintf_s(longestSnakeString, LONGEST_SNAKE_FORMAT_STRING, 0);
+			swprintf_s(longestSnakeString, LONGEST_SNAKE_FORMAT_STRING, gameRenderState.longestSnake);
 			longestSnakeText.setString(longestSnakeString);
 			float longestSnakeTextWidth = FontUtils::resolveTextWidth(longestSnakeText);
 			longestSnakeText.setPosition(ViewUtils::VIEW_SIZE.x - longestSnakeTextWidth - 24.0f, 24.0f);
 			renderTarget.draw(longestSnakeText);
+		}
+
+		void QuickGameRenderer::renderLongestSnakeUi(sf::RenderTarget& renderTarget) {
+			sf::Text gameWonText;
+			gameWonText.setFont(*this->uiFont);
+			gameWonText.setCharacterSize(64);
+			gameWonText.setOutlineColor(sf::Color::White);
+			gameWonText.setString(LAST_GAME_WON_STRING);
+			float gameWonWidth = FontUtils::resolveTextWidth(gameWonText);
+			float gameWonLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) - (gameWonWidth / 2.0f);
+			float gameWonTopPos = FIELD_VIEWPORT_POSITION.y + (SNAKE_TILE_VIEWPORT_SIZE * 2.0f);
+			gameWonText.setPosition(gameWonLeftPos, gameWonTopPos);
+			renderTarget.draw(gameWonText);
+
+			this->appleSprite.setScale(1.2f, 1.2f);
+
+			this->appleSprite.setPosition(gameWonLeftPos - (SNAKE_TILE_VIEWPORT_SIZE * 3.0f), gameWonTopPos);
+			renderTarget.draw(this->appleSprite);
+
+			this->appleSprite.setPosition(gameWonLeftPos  + gameWonWidth + SNAKE_TILE_VIEWPORT_SIZE, gameWonTopPos);
+			renderTarget.draw(this->appleSprite);
+
+			this->appleSprite.setScale(0.5f, 0.5f);
 		}
 
 		sf::Sprite QuickGameRenderer::createSnakeHeadSprite(const QuickGame& game) {

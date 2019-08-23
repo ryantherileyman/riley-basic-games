@@ -13,21 +13,18 @@ namespace r3 {
 
 			this->mode = QuickGameMode::WAIT_TO_START;
 
-			QuickGameDefn gameDefn;
-			gameDefn.fieldSize = sf::Vector2i(50, 25);
-			gameDefn.snakeSpeedTilesPerSecond = 10.0f;
-			gameDefn.snakeStartDefn.headPosition.x = 25;
-			gameDefn.snakeStartDefn.headPosition.y = 10;
-			gameDefn.snakeStartDefn.facingDirection = ObjectDirection::DOWN;
-			gameDefn.snakeStartDefn.length = 3;
+			this->game = nullptr;
 
-			this->game = new QuickGame(&gameDefn);
+			this->longestSnakeLength = 0;
+			this->lastGameBeatLongestSnakeLength = false;
 
 			this->nextSnakeMovementInput = ObjectDirection::NONE;
 		}
 
 		QuickGameController::~QuickGameController() {
-			delete this->game;
+			if (this->game != nullptr) {
+				delete this->game;
+			}
 			delete this->renderer;
 		}
 
@@ -43,6 +40,7 @@ namespace r3 {
 			else if (event.type == sf::Event::KeyPressed) {
 				switch (this->mode) {
 				case QuickGameMode::WAIT_TO_START:
+				case QuickGameMode::GAME_DONE_SUMMARY:
 					result = this->processWaitToStartKeyEvent(event);
 					break;
 				case QuickGameMode::GAME_RUNNING:
@@ -61,7 +59,14 @@ namespace r3 {
 
 				QuickGameUpdateResult updateResult = this->game->update(&inputRequest);
 				if (updateResult.snakeHitBarrierFlag) {
-					this->mode = QuickGameMode::WAIT_TO_START;
+					this->mode = QuickGameMode::GAME_DONE_SUMMARY;
+
+					this->lastGameBeatLongestSnakeLength = false;
+					int endedGameSnakeLength = this->game->getSnake()->getLength();
+					if (endedGameSnakeLength > this->longestSnakeLength) {
+						this->lastGameBeatLongestSnakeLength = true;
+						this->longestSnakeLength = this->game->getSnake()->getLength();
+					}
 				}
 
 				this->nextSnakeMovementInput = ObjectDirection::NONE;
@@ -69,12 +74,20 @@ namespace r3 {
 		}
 
 		void QuickGameController::render() {
+			QuickGameRenderState renderState;
+			renderState.game = this->game;
+			renderState.longestSnake = this->longestSnakeLength;
+			renderState.lastGameBeatLongestSnakeLength = this->lastGameBeatLongestSnakeLength;
+
 			switch (this->mode) {
 			case QuickGameMode::WAIT_TO_START:
-				this->renderer->renderWaitToStart(*this->window);
+				this->renderer->renderWaitToStart(*this->window, renderState);
 				break;
 			case QuickGameMode::GAME_RUNNING:
-				this->renderer->renderGameRunning(*this->window, *this->game);
+				this->renderer->renderGameRunning(*this->window, renderState);
+				break;
+			case QuickGameMode::GAME_DONE_SUMMARY:
+				this->renderer->renderGameDoneSummary(*this->window, renderState);
 				break;
 			}
 			this->window->display();
@@ -88,6 +101,11 @@ namespace r3 {
 				result = QuickGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
 			case sf::Keyboard::Key::Enter:
+				if (this->game != nullptr) {
+					delete this->game;
+				}
+
+				this->startGame();
 				this->mode = QuickGameMode::GAME_RUNNING;
 				break;
 			}
@@ -101,6 +119,9 @@ namespace r3 {
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Escape:
 				this->mode = QuickGameMode::WAIT_TO_START;
+
+				delete this->game;
+				this->game = nullptr;
 				break;
 			case sf::Keyboard::Key::W:
 			case sf::Keyboard::Key::Up:
@@ -121,6 +142,18 @@ namespace r3 {
 			}
 
 			return result;
+		}
+
+		void QuickGameController::startGame() {
+			QuickGameDefn gameDefn;
+			gameDefn.fieldSize = sf::Vector2i(50, 25);
+			gameDefn.snakeSpeedTilesPerSecond = 10.0f;
+			gameDefn.snakeStartDefn.headPosition.x = 25;
+			gameDefn.snakeStartDefn.headPosition.y = 10;
+			gameDefn.snakeStartDefn.facingDirection = ObjectDirection::DOWN;
+			gameDefn.snakeStartDefn.length = 3;
+
+			this->game = new QuickGame(&gameDefn);
 		}
 
 	}

@@ -166,6 +166,7 @@ namespace r3 {
 
 			QuickGameRendererUtils::initSprite(this->grassSprite, *this->snakeTilesetTexture, 0, 375);
 			QuickGameRendererUtils::initSprite(this->shrubSprite, *this->snakeTilesetTexture, 75, 375);
+			QuickGameRendererUtils::initSprite(this->appleSprite, *this->snakeTilesetTexture, 150, 375);
 		}
 
 		QuickGameRenderer::~QuickGameRenderer() {
@@ -187,6 +188,7 @@ namespace r3 {
 		void QuickGameRenderer::renderGameRunning(sf::RenderTarget& renderTarget, const QuickGame& game) {
 			renderTarget.clear(QUICK_GAME_BACKGROUND_COLOR);
 			this->renderPlayingField(renderTarget);
+			this->renderApple(renderTarget, game);
 			this->renderSnake(renderTarget, game);
 			this->renderScoreUi(renderTarget);
 		}
@@ -216,6 +218,14 @@ namespace r3 {
 
 				this->shrubSprite.setPosition((FIELD_SIZE.x - 1) * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
 				renderTarget.draw(this->shrubSprite);
+			}
+		}
+
+		void QuickGameRenderer::renderApple(sf::RenderTarget& renderTarget, const QuickGame& game) {
+			if (game.getAppleExists()) {
+				sf::Vector2i applePosition = game.getApplePosition();
+				this->appleSprite.setPosition(applePosition.x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, applePosition.y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+				renderTarget.draw(this->appleSprite);
 			}
 		}
 

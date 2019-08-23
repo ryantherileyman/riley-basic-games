@@ -1,4 +1,5 @@
 
+#include <random>
 #include <SFML/Graphics.hpp>
 #include "r3-snake-gamestate.hpp"
 #pragma once
@@ -20,6 +21,7 @@ namespace r3 {
 		typedef struct Snake_QuickGameUpdateResult {
 			ObjectDirection snakeMovementResult;
 			bool snakeHitBarrierFlag;
+			bool snakeAteAppleFlag;
 		} QuickGameUpdateResult;
 
 		typedef enum class Snake_QuickGameMode {
@@ -40,9 +42,16 @@ namespace r3 {
 		class QuickGame {
 
 		private:
+			std::default_random_engine randomizer;
+
+		private:
 			sf::Vector2i fieldSize;
 			float snakeSpeedTilesPerSecond;
 			Snake* snake;
+			
+		private:
+			bool appleExistsFlag;
+			sf::Vector2i applePosition;
 
 		private:
 			int framesSinceSnakeMoved;
@@ -57,11 +66,14 @@ namespace r3 {
 		public:
 			sf::Vector2i getFieldSize() const;
 			Snake* getSnake() const;
+			bool getAppleExists() const;
+			sf::Vector2i getApplePosition() const;
 
 		public:
 			QuickGameUpdateResult update(const QuickGameInputRequest* input);
 
 		private:
+			sf::Vector2i resolveNewApplePosition();
 			bool snakeWouldHitBarrier(ObjectDirection direction);
 
 		};
@@ -108,6 +120,7 @@ namespace r3 {
 		private:
 			sf::Sprite grassSprite;
 			sf::Sprite shrubSprite;
+			sf::Sprite appleSprite;
 
 		public:
 			QuickGameRenderer();
@@ -121,6 +134,7 @@ namespace r3 {
 
 		private:
 			void renderPlayingField(sf::RenderTarget& renderTarget);
+			void renderApple(sf::RenderTarget& renderTarget, const QuickGame& game);
 			void renderSnake(sf::RenderTarget& renderTarget, const QuickGame& game);
 			void renderScoreUi(sf::RenderTarget& renderTarget);
 

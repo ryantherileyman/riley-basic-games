@@ -19,6 +19,7 @@ namespace r3 {
 
 			this->framesSinceSnakeMoved = 0;
 			this->queuedSnakeInput = ObjectDirection::NONE;
+			this->queuedSnakeGrowth = 0;
 		}
 
 		QuickGame::~QuickGame() {
@@ -46,6 +47,7 @@ namespace r3 {
 			result.snakeMovementResult = ObjectDirection::NONE;
 			result.snakeHitBarrierFlag = false;
 			result.snakeAteAppleFlag = false;
+			result.snakeGrewFlag = false;
 
 			if (!this->appleExistsFlag) {
 				this->applePosition = this->resolveNewApplePosition();
@@ -67,12 +69,23 @@ namespace r3 {
 				if (this->snakeWouldHitBarrier(directionToMoveSnake)) {
 					result.snakeHitBarrierFlag = true;
 				} else {
-					this->snake->moveForward(directionToMoveSnake);
+					if (this->queuedSnakeGrowth > 0) {
+						this->snake->growForward(directionToMoveSnake);
+						this->queuedSnakeGrowth--;
+
+						result.snakeGrewFlag = true;
+					}
+					else {
+						this->snake->moveForward(directionToMoveSnake);
+					}
+
 					result.snakeMovementResult = directionToMoveSnake;
 
 					if (this->snake->getHead().position == this->applePosition) {
 						result.snakeAteAppleFlag = true;
+
 						this->appleExistsFlag = false;
+						this->queuedSnakeGrowth += 2;
 					}
 				}
 

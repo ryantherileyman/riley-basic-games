@@ -22,6 +22,7 @@ namespace r3 {
 			ObjectDirection snakeMovementResult;
 			bool snakeHitBarrierFlag;
 			bool snakeAteAppleFlag;
+			bool snakeGrewFlag;
 		} QuickGameUpdateResult;
 
 		typedef enum class Snake_QuickGameMode {
@@ -56,6 +57,7 @@ namespace r3 {
 		private:
 			int framesSinceSnakeMoved;
 			ObjectDirection queuedSnakeInput;
+			int queuedSnakeGrowth;
 
 		public:
 			QuickGame(const QuickGameDefn* quickGameDefn);

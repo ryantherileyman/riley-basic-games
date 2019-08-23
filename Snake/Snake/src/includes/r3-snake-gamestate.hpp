@@ -72,6 +72,9 @@ namespace r3 {
 			void moveBodyForward();
 			void moveTailForward();
 
+		private:
+			void assertContiguous();
+
 		};
 
 	}

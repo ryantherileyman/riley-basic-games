@@ -130,6 +130,8 @@ namespace r3 {
 			this->moveHeadForward(direction);
 			this->moveBodyForward();
 			this->moveTailForward();
+
+			this->assertContiguous();
 		}
 
 		void Snake::growForward(ObjectDirection direction) {
@@ -140,7 +142,7 @@ namespace r3 {
 
 			SnakeSegment extraBodySegment;
 			extraBodySegment.segmentType = SnakeSegmentType::BODY;
-			extraBodySegment.position = lastBodySegment.position - SnakeUtils::directionToVector(lastBodySegment.exitDirection);
+			extraBodySegment.position = lastBodySegment.position - SnakeUtils::directionToVector(lastBodySegment.enterDirection);
 			extraBodySegment.exitDirection = lastBodySegment.enterDirection;
 			extraBodySegment.enterDirection = tail.exitDirection;
 
@@ -149,6 +151,8 @@ namespace r3 {
 			}
 
 			this->bodyList.push_back(extraBodySegment);
+
+			this->assertContiguous();
 		}
 
 		void Snake::moveHeadForward(ObjectDirection direction) {
@@ -175,6 +179,28 @@ namespace r3 {
 
 			this->tail.position += SnakeUtils::directionToVector(this->tail.exitDirection);
 			this->tail.exitDirection = newExitDirection;
+		}
+
+		void Snake::assertContiguous() {
+			int bodyLength = this->getBodyLength();
+
+			SnakeSegment* prevSnakeSegment = &this->head;
+			for (int currSegmentIndex = 0; currSegmentIndex < bodyLength; currSegmentIndex++) {
+				SnakeSegment* currSnakeSegment = &this->bodyList.at(currSegmentIndex);
+
+				sf::Vector2i positionDifference = currSnakeSegment->position - prevSnakeSegment->position;
+				int tileDifference = abs(positionDifference.x) + abs(positionDifference.y);
+				assert(tileDifference <= 1);
+				assert(currSnakeSegment->exitDirection == prevSnakeSegment->enterDirection);
+
+				prevSnakeSegment = currSnakeSegment;
+			}
+
+			SnakeSegment* currSnakeSegment = &this->tail;
+			sf::Vector2i positionDifference = currSnakeSegment->position - prevSnakeSegment->position;
+			int tileDifference = abs(positionDifference.x) + abs(positionDifference.y);
+			assert(tileDifference <= 1);
+			assert(currSnakeSegment->exitDirection == prevSnakeSegment->enterDirection);
 		}
 
 	}

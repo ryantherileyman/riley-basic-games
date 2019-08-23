@@ -18,6 +18,11 @@ License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 Font "Flavor" from https://www.fontsquirrel.com/
 Copyright (c) 2011, Sideshow (a DBA of Font Diner, Inc) (www.fontdiner.com), with Reserved Font Name "Flavors".
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
+
+Font "Source Sans Pro" from https://www.fontsquirrel.com/
+Copyright 2010, 2012 Adobe Systems Incorporated (http://www.adobe.com/), with Reserved Font Name ‘Source’.  All Rights Reserved. Source is a trademark of Adobe Systems Incorporated in the United States and/or other countries.
+This Font Software is licensed under the SIL Open Font License, Version 1.1.
+
 See "OFL.txt" for the full SIL Open Font Licence.
 
 Tileable Grass Texture from https://www.goodtextures.com/

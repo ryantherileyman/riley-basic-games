@@ -39,6 +39,9 @@
     <ClCompile Include="src\r3-snake-Snake.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\r3-snake-QuickGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\splash-screen.png">

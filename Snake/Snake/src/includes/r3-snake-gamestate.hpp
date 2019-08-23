@@ -57,6 +57,10 @@ namespace r3 {
 			int getBodyLength() const;
 			SnakeSegment getBody(int segmentIndex) const;
 			SnakeSegment getTail() const;
+			int getLength() const;
+
+		public:
+			bool isValidMovementDirection(ObjectDirection direction);
 
 		public:
 			void moveForward(ObjectDirection direction);

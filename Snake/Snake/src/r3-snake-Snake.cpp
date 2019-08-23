@@ -81,6 +81,32 @@ namespace r3 {
 			return this->tail;
 		}
 
+		int Snake::getLength() const {
+			int result = this->bodyList.size() + 2;
+			return result;
+		}
+
+		bool Snake::isValidMovementDirection(ObjectDirection direction) {
+			bool result = false;
+
+			switch (this->head.enterDirection) {
+			case ObjectDirection::UP:
+				result = (direction != ObjectDirection::NONE) && (direction != ObjectDirection::DOWN);
+				break;
+			case ObjectDirection::RIGHT:
+				result = (direction != ObjectDirection::NONE) && (direction != ObjectDirection::LEFT);
+				break;
+			case ObjectDirection::DOWN:
+				result = (direction != ObjectDirection::NONE) && (direction != ObjectDirection::UP);
+				break;
+			case ObjectDirection::LEFT:
+				result = (direction != ObjectDirection::NONE) && (direction != ObjectDirection::RIGHT);
+				break;
+			}
+
+			return result;
+		}
+
 		void Snake::moveForward(ObjectDirection direction) {
 			this->moveHeadForward(direction);
 			this->moveBodyForward();

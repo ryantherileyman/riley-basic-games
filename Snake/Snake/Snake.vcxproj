@@ -131,6 +131,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\r3-snake-GameClient.cpp" />
+    <ClCompile Include="src\r3-snake-QuickGame.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameController.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameRenderer.cpp" />
     <ClCompile Include="src\r3-snake-Snake.cpp" />

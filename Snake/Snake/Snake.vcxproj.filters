@@ -36,6 +36,9 @@
     <ClCompile Include="src\r3-snake-utils.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\r3-snake-Snake.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="resources\textures\splash-screen.png">
@@ -53,6 +56,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\includes\r3-snake-utils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\includes\r3-snake-gamestate.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

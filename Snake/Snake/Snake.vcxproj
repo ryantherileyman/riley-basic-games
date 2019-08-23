@@ -133,6 +133,7 @@
     <ClCompile Include="src\r3-snake-GameClient.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameController.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameRenderer.cpp" />
+    <ClCompile Include="src\r3-snake-Snake.cpp" />
     <ClCompile Include="src\r3-snake-SplashSceneController.cpp" />
     <ClCompile Include="src\r3-snake-SplashSceneRenderer.cpp" />
     <ClCompile Include="src\r3-snake-utils.cpp" />
@@ -143,6 +144,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp" />
+    <ClInclude Include="src\includes\r3-snake-gamestate.hpp" />
     <ClInclude Include="src\includes\r3-snake-quickgamescene.hpp" />
     <ClInclude Include="src\includes\r3-snake-splashscene.hpp" />
     <ClInclude Include="src\includes\r3-snake-utils.hpp" />

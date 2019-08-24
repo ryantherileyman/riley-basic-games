@@ -93,6 +93,14 @@ namespace r3 {
 			QuickGame* game;
 
 		private:
+			sf::SoundBuffer* eatAppleSoundBuffer;
+			sf::SoundBuffer* hitBarrierSoundBuffer;
+
+		private:
+			sf::Sound eatAppleSound;
+			sf::Sound hitBarrierSound;
+
+		private:
 			sf::Music* gameRunningMusic;
 			bool gameRunningMusicLoaded;
 

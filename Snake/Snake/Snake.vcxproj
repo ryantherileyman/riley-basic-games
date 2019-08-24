@@ -141,9 +141,6 @@
     <ClCompile Include="src\snake-main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\textures\splash-screen.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp" />
     <ClInclude Include="src\includes\r3-snake-gamestate.hpp" />
     <ClInclude Include="src\includes\r3-snake-quickgamescene.hpp" />

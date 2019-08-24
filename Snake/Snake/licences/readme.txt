@@ -17,6 +17,10 @@ Music from https://filmmusic.io
 "AngloZulu" by Kevin MacLeod (https://incompetech.com)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 
+Sound Effects from https://www.zapsplat.com/
+Snake hitting barrier is "Small dense bush hit with wood post 1"
+https://www.zapsplat.com/license-type/standard-license/
+
 Font "Flavor" from https://www.fontsquirrel.com/
 Copyright (c) 2011, Sideshow (a DBA of Font Diner, Inc) (www.fontdiner.com), with Reserved Font Name "Flavors".
 This Font Software is licensed under the SIL Open Font License, Version 1.1.
@@ -33,4 +37,7 @@ https://www.goodtextures.com/image/13275/seamless-and-tileable-grass-texture-132
 
 Additional artwork created by rileyman can be found in the /artwork/ folder:
 Snake, Shrub, Apple
+
+Additional sound effects created by rileyman:
+Snake eating apple
 

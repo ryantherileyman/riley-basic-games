@@ -44,11 +44,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="resources\textures\splash-screen.png">
-      <Filter>Resource Files</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>

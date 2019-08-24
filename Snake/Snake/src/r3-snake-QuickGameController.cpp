@@ -6,6 +6,9 @@ namespace r3 {
 
 	namespace snake {
 
+		const char* QUICK_GAME_EAT_APPLE_SOUND_PATH = "resources/sounds/eat-apple.wav";
+		const char* QUICK_GAME_HIT_BARRIER_SOUND_PATH = "resources/sounds/hit-barrier.wav";
+
 		const char* QUICK_GAME_RUNNING_MUSIC_PATH = "resources/music/WhimsyGroove.ogg";
 		const char* QUICK_GAME_DONE_SUMMARY_MUSIC_PATH = "resources/music/AngloZulu.ogg";
 
@@ -18,6 +21,9 @@ namespace r3 {
 
 			this->game = nullptr;
 
+			this->eatAppleSoundBuffer = new sf::SoundBuffer();
+			this->hitBarrierSoundBuffer = new sf::SoundBuffer();
+
 			this->gameRunningMusic = nullptr;
 			this->gameRunningMusicLoaded = false;
 
@@ -28,6 +34,15 @@ namespace r3 {
 			this->lastGameBeatLongestSnakeLength = false;
 
 			this->nextSnakeMovementInput = ObjectDirection::NONE;
+
+			if (
+				!this->eatAppleSoundBuffer->loadFromFile(QUICK_GAME_EAT_APPLE_SOUND_PATH) ||
+				!this->hitBarrierSoundBuffer->loadFromFile(QUICK_GAME_HIT_BARRIER_SOUND_PATH)
+				) {
+				throw "Could not load sound effects";
+			}
+			this->eatAppleSound.setBuffer(*this->eatAppleSoundBuffer);
+			this->hitBarrierSound.setBuffer(*this->hitBarrierSoundBuffer);
 		}
 
 		QuickGameController::~QuickGameController() {
@@ -35,6 +50,9 @@ namespace r3 {
 				delete this->game;
 			}
 			delete this->renderer;
+
+			delete this->eatAppleSoundBuffer;
+			delete this->hitBarrierSoundBuffer;
 
 			if (this->gameRunningMusic != nullptr) {
 				delete this->gameRunningMusic;
@@ -83,7 +101,13 @@ namespace r3 {
 				inputRequest.snakeMovementInput = this->nextSnakeMovementInput;
 
 				QuickGameUpdateResult updateResult = this->game->update(&inputRequest);
+				if (updateResult.snakeAteAppleFlag) {
+					this->eatAppleSound.play();
+				}
+
 				if (updateResult.snakeHitBarrierFlag) {
+					this->hitBarrierSound.play();
+
 					this->mode = QuickGameMode::GAME_DONE_SUMMARY;
 
 					this->lastGameBeatLongestSnakeLength = false;

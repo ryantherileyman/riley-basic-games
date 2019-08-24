@@ -5,6 +5,7 @@ This GitHub repository is where I'll keep my recreations of some classic 2D game
 Game Releases
 
 Garden of Eating 1.0 (Windows only) released on August 24, 2019.  Download the ZIP from the root folder.
+
 Riley Entertainment Pong 1.5 (Windows only) released on August 17, 2019.  Download the ZIP from the Pong folder.
 
 

@@ -13,6 +13,8 @@ Licence Information for referenced artwork
 
 Music from https://filmmusic.io
 "At The Shore" by Kevin MacLeod (https://incompetech.com)
+"Whimsey Groove" by Kevin MacLeod (https://incompetech.com)
+"AngloZulu" by Kevin MacLeod (https://incompetech.com)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 
 Font "Flavor" from https://www.fontsquirrel.com/

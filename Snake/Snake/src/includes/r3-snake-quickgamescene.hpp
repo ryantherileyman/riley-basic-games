@@ -1,6 +1,7 @@
 
 #include <random>
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "r3-snake-gamestate.hpp"
 #pragma once
 
@@ -92,6 +93,14 @@ namespace r3 {
 			QuickGame* game;
 
 		private:
+			sf::Music* gameRunningMusic;
+			bool gameRunningMusicLoaded;
+
+		private:
+			sf::Music* gameDoneSummaryMusic;
+			bool gameDoneSummaryMusicLoaded;
+
+		private:
 			int longestSnakeLength;
 			bool lastGameBeatLongestSnakeLength;
 
@@ -115,6 +124,19 @@ namespace r3 {
 
 		private:
 			void startGame();
+
+		private:
+			void ensureGameRunningMusicLoaded();
+			void freeGameRunningMusic();
+
+		private:
+			void ensureGameDoneSummaryMusicLoaded();
+			void freeGameDoneSummaryMusic();
+
+		private:
+			void beginWaitToStartMusic();
+			void beginGameRunningMusic();
+			void beginGameDoneSummaryMusic();
 
 		};
 

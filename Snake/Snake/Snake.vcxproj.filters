@@ -42,6 +42,12 @@
     <ClCompile Include="src\r3-snake-QuickGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\r3-snake-SplashMenuFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\r3-snake-SplashMenu.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp">

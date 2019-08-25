@@ -136,6 +136,8 @@
     <ClCompile Include="src\r3-snake-QuickGameController.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameRenderer.cpp" />
     <ClCompile Include="src\r3-snake-Snake.cpp" />
+    <ClCompile Include="src\r3-snake-SplashMenu.cpp" />
+    <ClCompile Include="src\r3-snake-SplashMenuFactory.cpp" />
     <ClCompile Include="src\r3-snake-SplashSceneController.cpp" />
     <ClCompile Include="src\r3-snake-SplashSceneRenderer.cpp" />
     <ClCompile Include="src\r3-snake-utils.cpp" />

@@ -113,7 +113,7 @@ namespace r3 {
 			float result = 0.0f;
 
 			std::map<int, SplashMenuItemDefn> menuItemDefnMap = menu.getMenuItemDefnMap();
-			sf::Text menuItemText = this->createMenuItemText();
+			sf::Text menuItemText = this->createMenuItemText(false);
 
 			for (auto const& currMenuItemDefn : menuItemDefnMap) {
 				menuItemText.setString(currMenuItemDefn.second.displayText);
@@ -135,73 +135,93 @@ namespace r3 {
 		void SplashSceneRenderer::renderMenuItem(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
 			SplashMenuItemDefn menuItemDefn = menuItemRenderState.menu->getItemDefn(menuItemRenderState.menuItemId);
 
-			if (menuItemRenderState.menu->getCurrItemId() == menuItemRenderState.menuItemId) {
-				sf::RectangleShape backgroundShape(sf::Vector2f(menuItemRenderState.backgroundWidth, SPLASH_MENU_ITEM_BACKGROUND_HEIGHT));
-				backgroundShape.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (menuItemRenderState.backgroundWidth / 2.0f), menuItemRenderState.top);
-				backgroundShape.setFillColor(sf::Color(0, 0, 0, 64));
-				backgroundShape.setOutlineColor(sf::Color(16, 16, 128, 128));
-				backgroundShape.setOutlineThickness(2.0f);
-
-				renderTarget.draw(backgroundShape);
+			if (menuItemRenderState.isCurrItem()) {
+				this->renderFocusedMenuItemBackground(renderTarget, menuItemRenderState);
 			}
 
-			sf::Text menuItemText = this->createMenuItemText();
-			if (menuItemRenderState.menu->getCurrItemId() == menuItemRenderState.menuItemId) {
-				menuItemText.setFillColor(sf::Color::Yellow);
-				menuItemText.setOutlineColor(sf::Color::Yellow);
-			}
-			menuItemText.setString(menuItemDefn.displayText);
-			if (menuItemDefn.menuItemType == SplashMenuItemType::ACTION) {
-				FontUtils::setCenteredPosition(menuItemText, menuItemRenderState.top);
-			} else {
-				menuItemText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (menuItemRenderState.backgroundWidth / 2.0f) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN, menuItemRenderState.top);
-			}
-			renderTarget.draw(menuItemText);
-
+			this->renderMenuItemLabel(renderTarget, menuItemRenderState);
 			if (menuItemDefn.menuItemType == SplashMenuItemType::SLIDER) {
-				sf::FloatRect sliderBounds = this->resolveSliderRect(menuItemRenderState.backgroundWidth, menuItemRenderState.top);
-
-				sf::RectangleShape sliderShape(sf::Vector2f(sliderBounds.width, SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH));
-				sliderShape.setPosition(sliderBounds.left, sliderBounds.top + (sliderBounds.height / 2.0f) - (SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH / 2.0f));
-				sliderShape.setFillColor(menuItemText.getFillColor());
-				sliderShape.setOutlineColor(menuItemText.getOutlineColor());
-
-				renderTarget.draw(sliderShape);
-
-				int itemValue = menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId);
-				float widthPerSegment = SPLASH_MENU_ITEM_SLIDER_WIDTH / (menuItemDefn.sliderRange.maxValue - menuItemDefn.sliderRange.minValue + 1);
-				float handleXCenter = sliderBounds.left + (widthPerSegment * (itemValue * 2.0f + 1.0f - menuItemDefn.sliderRange.minValue * 2.0f)) / 2.0f;
-
-				sf::RectangleShape sliderHandleShape(sf::Vector2f(SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH, SPLASH_MENU_ITEM_SLIDER_HANDLE_HEIGHT));
-				sliderHandleShape.setPosition(handleXCenter - (SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH / 2.0f), sliderBounds.top);
-				sliderHandleShape.setFillColor(menuItemText.getFillColor());
-				sliderHandleShape.setOutlineColor(menuItemText.getOutlineColor());
-
-				renderTarget.draw(sliderHandleShape);
+				this->renderMenuItemSlider(renderTarget, menuItemRenderState);
 			}
 
-			if (menuItemRenderState.menu->getCurrItemId() == menuItemRenderState.menuItemId) {
+			if (menuItemRenderState.isCurrItem()) {
 				if (menuItemDefn.descriptiveText != nullptr) {
-					menuItemText.setString(menuItemDefn.descriptiveText);
-					FontUtils::setCenteredPosition(menuItemText, SPLASH_MENU_ITEM_DESCRIPTION_TOP);
-					renderTarget.draw(menuItemText);
+					this->renderMenuItemDescriptiveText(renderTarget, menuItemRenderState);
 				}
 
 				if (menuItemDefn.menuItemType == SplashMenuItemType::SLIDER) {
-					const wchar_t* itemValueDescriptiveText = menuItemRenderState.menu->getItemValueDescriptiveText(menuItemRenderState.menuItemId);
-
-					wchar_t itemValueDescriptiveString[100];
-					if (itemValueDescriptiveText == nullptr) {
-						swprintf_s(itemValueDescriptiveString, L"%d", menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId));
-					} else {
-						swprintf_s(itemValueDescriptiveString, L"%d - %s", menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId), itemValueDescriptiveText);
-					}
-
-					menuItemText.setString(itemValueDescriptiveString);
-					FontUtils::setCenteredPosition(menuItemText, SPLASH_MENU_ITEM_VALUE_DESCRIPTION_TOP);
-					renderTarget.draw(menuItemText);
+					this->renderMenuItemValueDescriptiveText(renderTarget, menuItemRenderState);
 				}
 			}
+		}
+
+		void SplashSceneRenderer::renderFocusedMenuItemBackground(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
+			sf::RectangleShape backgroundShape(sf::Vector2f(menuItemRenderState.backgroundWidth, SPLASH_MENU_ITEM_BACKGROUND_HEIGHT));
+			backgroundShape.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (menuItemRenderState.backgroundWidth / 2.0f), menuItemRenderState.top);
+			backgroundShape.setFillColor(sf::Color(0, 0, 0, 64));
+			backgroundShape.setOutlineColor(sf::Color(16, 16, 128, 128));
+			backgroundShape.setOutlineThickness(2.0f);
+
+			renderTarget.draw(backgroundShape);
+		}
+
+		void SplashSceneRenderer::renderMenuItemLabel(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
+			sf::Text menuItemText = this->createMenuItemText(menuItemRenderState.isCurrItem());
+			menuItemText.setString(menuItemRenderState.getMenuItemDefn().displayText);
+			if (menuItemRenderState.getMenuItemDefn().menuItemType == SplashMenuItemType::ACTION) {
+				FontUtils::setCenteredPosition(menuItemText, menuItemRenderState.top);
+			}
+			else {
+				menuItemText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (menuItemRenderState.backgroundWidth / 2.0f) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN, menuItemRenderState.top);
+			}
+
+			renderTarget.draw(menuItemText);
+		}
+
+		void SplashSceneRenderer::renderMenuItemSlider(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
+			sf::FloatRect sliderBounds = this->resolveSliderRect(menuItemRenderState.backgroundWidth, menuItemRenderState.top);
+
+			sf::RectangleShape sliderShape = this->createMenuItemSliderShape(menuItemRenderState.isCurrItem());
+			sliderShape.setSize(sf::Vector2f(sliderBounds.width, SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH));
+			sliderShape.setPosition(sliderBounds.left, sliderBounds.top + (sliderBounds.height / 2.0f) - (SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH / 2.0f));
+
+			renderTarget.draw(sliderShape);
+
+			int itemValue = menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId);
+			float widthPerSegment = SPLASH_MENU_ITEM_SLIDER_WIDTH / (menuItemRenderState.getMenuItemDefn().sliderRange.maxValue - menuItemRenderState.getMenuItemDefn().sliderRange.minValue + 1);
+			float handleXCenter = sliderBounds.left + (widthPerSegment * (itemValue * 2.0f + 1.0f - menuItemRenderState.getMenuItemDefn().sliderRange.minValue * 2.0f)) / 2.0f;
+
+			sf::RectangleShape sliderHandleShape = this->createMenuItemSliderShape(menuItemRenderState.isCurrItem());
+			sliderHandleShape.setSize(sf::Vector2f(SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH, SPLASH_MENU_ITEM_SLIDER_HANDLE_HEIGHT));
+			sliderHandleShape.setPosition(handleXCenter - (SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH / 2.0f), sliderBounds.top);
+
+			renderTarget.draw(sliderHandleShape);
+		}
+
+		void SplashSceneRenderer::renderMenuItemDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
+			sf::Text descriptionText = this->createMenuItemText(menuItemRenderState.isCurrItem());
+			descriptionText.setString(menuItemRenderState.getMenuItemDefn().descriptiveText);
+			FontUtils::setCenteredPosition(descriptionText, SPLASH_MENU_ITEM_DESCRIPTION_TOP);
+
+			renderTarget.draw(descriptionText);
+		}
+
+		void SplashSceneRenderer::renderMenuItemValueDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
+			const wchar_t* itemValueDescriptiveText = menuItemRenderState.menu->getItemValueDescriptiveText(menuItemRenderState.menuItemId);
+
+			wchar_t itemValueDescriptiveString[100];
+			if (itemValueDescriptiveText == nullptr) {
+				swprintf_s(itemValueDescriptiveString, L"%d", menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId));
+			}
+			else {
+				swprintf_s(itemValueDescriptiveString, L"%d - %s", menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId), itemValueDescriptiveText);
+			}
+
+			sf::Text descriptionText = this->createMenuItemText(menuItemRenderState.isCurrItem());
+			descriptionText.setString(itemValueDescriptiveString);
+			FontUtils::setCenteredPosition(descriptionText, SPLASH_MENU_ITEM_VALUE_DESCRIPTION_TOP);
+
+			renderTarget.draw(descriptionText);
 		}
 
 		sf::FloatRect SplashSceneRenderer::resolveSliderRect(float menuWidth, float menuItemTop) {
@@ -213,11 +233,26 @@ namespace r3 {
 			return result;
 		}
 
-		sf::Text SplashSceneRenderer::createMenuItemText() {
+		sf::Text SplashSceneRenderer::createMenuItemText(bool currItemFlag) {
 			sf::Text result;
 			result.setFont(*this->uiFont);
 			result.setCharacterSize(64);
 			result.setOutlineColor(sf::Color::White);
+			if (currItemFlag) {
+				result.setFillColor(sf::Color::Yellow);
+				result.setOutlineColor(sf::Color::Yellow);
+			}
+			return result;
+		}
+
+		sf::RectangleShape SplashSceneRenderer::createMenuItemSliderShape(bool currItemFlag) {
+			sf::RectangleShape result;
+			result.setOutlineColor(sf::Color::White);
+			result.setFillColor(sf::Color::White);
+			if (currItemFlag) {
+				result.setOutlineColor(sf::Color::Yellow);
+				result.setFillColor(sf::Color::Yellow);
+			}
 			return result;
 		}
 

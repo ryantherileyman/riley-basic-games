@@ -200,6 +200,15 @@ namespace r3 {
 			int menuItemId;
 			float top;
 			float backgroundWidth;
+			SplashMenuItemDefn getMenuItemDefn() const {
+				SplashMenuItemDefn result = menu->getItemDefn(menuItemId);
+				return result;
+			}
+			bool isCurrItem() const {
+				bool result = (menu->getCurrItemId() == menuItemId);
+				return result;
+			}
+
 		} SplashMenuItemRenderState;
 
 		class SplashSceneRenderer {
@@ -229,7 +238,15 @@ namespace r3 {
 
 		private:
 			void renderMenuItem(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
-			sf::Text createMenuItemText();
+			void renderFocusedMenuItemBackground(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
+			void renderMenuItemLabel(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
+			void renderMenuItemSlider(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
+			void renderMenuItemDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
+			void renderMenuItemValueDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
+
+		private:
+			sf::Text createMenuItemText(bool currItemFlag);
+			sf::RectangleShape createMenuItemSliderShape(bool currItemFlag);
 			sf::FloatRect resolveSliderRect(float menuWidth, float menuItemTop);
 
 		};

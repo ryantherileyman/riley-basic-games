@@ -66,12 +66,14 @@ namespace r3 {
 		namespace SplashQuickGameOptionsMenuId {
 			const int RETURN_TO_MAIN_MENU = 1;
 			const int SNAKE_SPEED = 2;
-			const int FIELD_WIDTH = 3;
-			const int FIELD_HEIGHT = 4;
+			const int SNAKE_GROWTH = 3;
+			const int FIELD_WIDTH = 4;
+			const int FIELD_HEIGHT = 5;
 		}
 
 		namespace SplashQuickGameOptionValues {
 			const SplashSliderRange SNAKE_SPEED(4, 30);
+			const SplashSliderRange SNAKE_GROWTH(1, 10);
 			const SplashSliderRange FIELD_WIDTH(12, 100);
 			const SplashSliderRange FIELD_HEIGHT(12, 100);
 		}

@@ -36,6 +36,21 @@ namespace r3 {
 			const SplashSliderRange SNAKE_SPEED_BLAZING_RANGE(25, 30);
 			const wchar_t* SNAKE_SPEED_BLAZING_DESCRIPTION = L"Blazing - Slithering like a cheetah!";
 
+			const wchar_t* SNAKE_GROWTH_LABEL = L"Growth Rate:";
+			const wchar_t* SNAKE_GROWTH_DESCRIPTION = L"How much will your snake grow when eating an apple?";
+
+			const SplashSliderRange SNAKE_GROWTH_SLOW_RANGE(1, 2);
+			const wchar_t* SNAKE_GROWTH_SLOW_DESCRIPTION = L"Slow - You'll need to eat a lot of apples...";
+
+			const SplashSliderRange SNAKE_GROWTH_NORMAL_RANGE(3, 4);
+			const wchar_t* SNAKE_GROWTH_NORMAL_DESCRIPTION = L"Normal";
+
+			const SplashSliderRange SNAKE_GROWTH_FAST_RANGE(5, 6);
+			const wchar_t* SNAKE_GROWTH_FAST_DESCRIPTION = L"Fast - Careful not to hit your tail!";
+
+			const SplashSliderRange SNAKE_GROWTH_EXTREME_RANGE(7, 10);
+			const wchar_t* SNAKE_GROWTH_EXTREME_DESCRIPTION = L"Extreme - These are some seriously beefy apples";
+
 			const wchar_t* FIELD_WIDTH_LABEL = L"Field Width:";
 			const wchar_t* FIELD_HEIGHT_LABEL = L"Field Height:";
 
@@ -131,11 +146,26 @@ namespace r3 {
 				return result;
 			}
 
+			SplashMenuItemDefn createSnakeGrowthMenuItem() {
+				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashQuickGameOptionsMenuId::SNAKE_GROWTH, SplashQuickGameOptionValues::SNAKE_GROWTH);
+
+				result.displayText = SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_LABEL;
+				result.descriptiveText = SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_DESCRIPTION;
+
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_SLOW_RANGE, SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_SLOW_DESCRIPTION));
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_NORMAL_RANGE, SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_NORMAL_DESCRIPTION));
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_FAST_RANGE, SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_FAST_DESCRIPTION));
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_EXTREME_RANGE, SplashQuickGameOptionsMenuLabels::SNAKE_GROWTH_EXTREME_DESCRIPTION));
+
+				return result;
+			}
+
 			std::map<int, SplashMenuItemDefn> createQuickGameOptionsMenuDefnMap() {
 				std::map<int, SplashMenuItemDefn> result;
 
 				result[SplashQuickGameOptionsMenuId::RETURN_TO_MAIN_MENU] = createActionMenuItem(SplashQuickGameOptionsMenuId::RETURN_TO_MAIN_MENU, SplashQuickGameOptionsMenuLabels::RETURN_TO_MAIN_MENU_LABEL, nullptr);
 				result[SplashQuickGameOptionsMenuId::SNAKE_SPEED] = createSnakeSpeedMenuItem();
+				result[SplashQuickGameOptionsMenuId::SNAKE_GROWTH] = createSnakeGrowthMenuItem();
 				result[SplashQuickGameOptionsMenuId::FIELD_WIDTH] = createFieldWidthMenuItem();
 				result[SplashQuickGameOptionsMenuId::FIELD_HEIGHT] = createFieldHeightMenuItem();
 

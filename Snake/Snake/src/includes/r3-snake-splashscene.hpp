@@ -169,14 +169,11 @@ namespace r3 {
 			~SplashSceneController();
 
 		public:
-			void start();
-			void finish();
-
-		public:
 			QuickGameOptionsDefn getQuickGameOptions() const;
 
 		public:
 			SplashSceneClientRequest processEvent(sf::Event& event);
+			void update();
 			void render();
 
 		private:
@@ -189,6 +186,13 @@ namespace r3 {
 
 		private:
 			SplashMenuKeypressResult processMenuKeypressEvent(sf::Event& event, SplashMenu& menu);
+
+		private:
+			void ensureMusicLoaded();
+			void freeMusic();
+
+		private:
+			void beginMusic();
 
 		private:
 			SplashMenu* getCurrentMenu();

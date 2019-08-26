@@ -36,26 +36,6 @@ namespace r3 {
 			delete this->quickGameOptionsMenu;
 		}
 
-		void SplashSceneController::start() {
-			if (!this->musicLoaded) {
-				if (this->music == nullptr) {
-					this->music = new sf::Music();
-				}
-				this->musicLoaded = this->music->openFromFile(SPLASH_MUSIC_PATH);
-			}
-
-			if (this->musicLoaded) {
-				this->music->play();
-				this->music->setLoop(true);
-			}
-		}
-
-		void SplashSceneController::finish() {
-			if (this->musicLoaded) {
-				this->music->stop();
-			}
-		}
-
 		QuickGameOptionsDefn SplashSceneController::getQuickGameOptions() const {
 			QuickGameOptionsDefn result;
 			result.snakeSpeedTilesPerSecond = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::SNAKE_SPEED);
@@ -67,6 +47,8 @@ namespace r3 {
 
 			if (event.type == sf::Event::Closed) {
 				result = SplashSceneClientRequest::EXIT_GAME;
+
+				this->freeMusic();
 			}
 			else if (event.type == sf::Event::Resized) {
 				this->window->setView(ViewUtils::createView(event.size.width, event.size.height));
@@ -126,6 +108,12 @@ namespace r3 {
 			return result;
 		}
 
+		void SplashSceneController::update() {
+			if (!this->musicLoaded) {
+				this->beginMusic();
+			}
+		}
+
 		void SplashSceneController::render() {
 			SplashMenu* currMenu = this->getCurrentMenu();
 			this->renderer->render(*this->window, *currMenu);
@@ -158,6 +146,7 @@ namespace r3 {
 			switch (menuItemId) {
 			case SplashMainMenuId::START_QUICK_GAME:
 				result = SplashSceneClientRequest::START_QUICK_GAME;
+				this->freeMusic();
 				break;
 			case SplashMainMenuId::QUICK_GAME_OPTIONS:
 				this->mode = SplashSceneMode::QUICK_GAME_OPTIONS_MENU;
@@ -165,6 +154,7 @@ namespace r3 {
 				break;
 			case SplashMainMenuId::EXIT_GAME:
 				result = SplashSceneClientRequest::EXIT_GAME;
+				this->freeMusic();
 				break;
 			}
 
@@ -218,6 +208,32 @@ namespace r3 {
 			}
 
 			return result;
+		}
+
+		void SplashSceneController::ensureMusicLoaded() {
+			if (!this->musicLoaded) {
+				if (this->music == nullptr) {
+					this->music = new sf::Music();
+				}
+				this->musicLoaded = this->music->openFromFile(SPLASH_MUSIC_PATH);
+			}
+		}
+
+		void SplashSceneController::freeMusic() {
+			if (this->musicLoaded) {
+				this->music->stop();
+
+				delete this->music;
+				this->music = nullptr;
+				this->musicLoaded = false;
+			}
+		}
+
+		void SplashSceneController::beginMusic() {
+			this->ensureMusicLoaded();
+
+			this->music->play();
+			this->music->setLoop(true);
 		}
 
 		SplashMenu* SplashSceneController::getCurrentMenu() {

@@ -24,8 +24,6 @@ namespace r3 {
 
 			this->splashSceneController = new SplashSceneController(this->window);
 			this->quickGameController = new QuickGameController(this->window);
-
-			this->splashSceneController->start();
 		}
 
 		GameClient::~GameClient() {
@@ -54,6 +52,7 @@ namespace r3 {
 				if (window.isOpen()) {
 					switch (this->mode) {
 					case ClientMode::SPLASH_SCREEN:
+						this->splashSceneController->update();
 						this->splashSceneController->render();
 						break;
 					case ClientMode::QUICK_GAME:
@@ -77,11 +76,9 @@ namespace r3 {
 
 			switch (request) {
 			case SplashSceneClientRequest::EXIT_GAME:
-				this->splashSceneController->finish();
 				window.close();
 				break;
 			case SplashSceneClientRequest::START_QUICK_GAME:
-				this->splashSceneController->finish();
 				this->quickGameController->setQuickGameOptions(this->splashSceneController->getQuickGameOptions());
 				this->mode = ClientMode::QUICK_GAME;
 				break;
@@ -97,7 +94,6 @@ namespace r3 {
 				break;
 			case QuickGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN:
 				this->mode = ClientMode::SPLASH_SCREEN;
-				this->splashSceneController->start();
 				break;
 			}
 

@@ -65,6 +65,7 @@ namespace r3 {
 
 		void QuickGameController::setQuickGameOptions(const QuickGameOptionsDefn& gameOptions) {
 			this->gameOptions = gameOptions;
+			this->startGame();
 		}
 
 		QuickGameSceneClientRequest QuickGameController::processEvent(sf::Event& event) {

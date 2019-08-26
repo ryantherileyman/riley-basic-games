@@ -36,6 +36,15 @@ namespace r3 {
 			const SplashSliderRange SNAKE_SPEED_BLAZING_RANGE(25, 30);
 			const wchar_t* SNAKE_SPEED_BLAZING_DESCRIPTION = L"Blazing - Slithering like a cheetah!";
 
+			const wchar_t* FIELD_WIDTH_LABEL = L"Field Width:";
+			const wchar_t* FIELD_HEIGHT_LABEL = L"Field Height:";
+
+			const SplashSliderRange FIELD_SIZE_TINY_RANGE(12, 19);
+			const wchar_t* FIELD_SIZE_TINY_DESCRIPTION = L"Not much room to move!";
+
+			const SplashSliderRange FIELD_SIZE_HUGE_RANGE(81, 100);
+			const wchar_t* FIELD_SIZE_HUGE_DESCRIPTION = L"You can almost go AFK getting to the next apple...";
+
 		}
 
 		namespace SplashMenuFactory {
@@ -100,11 +109,35 @@ namespace r3 {
 				return result;
 			}
 
+			SplashMenuItemDefn createFieldWidthMenuItem() {
+				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashQuickGameOptionsMenuId::FIELD_WIDTH, SplashQuickGameOptionValues::FIELD_WIDTH);
+
+				result.displayText = SplashQuickGameOptionsMenuLabels::FIELD_WIDTH_LABEL;
+
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::FIELD_SIZE_TINY_RANGE, SplashQuickGameOptionsMenuLabels::FIELD_SIZE_TINY_DESCRIPTION));
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::FIELD_SIZE_HUGE_RANGE, SplashQuickGameOptionsMenuLabels::FIELD_SIZE_HUGE_DESCRIPTION));
+
+				return result;
+			}
+
+			SplashMenuItemDefn createFieldHeightMenuItem() {
+				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashQuickGameOptionsMenuId::FIELD_HEIGHT, SplashQuickGameOptionValues::FIELD_HEIGHT);
+
+				result.displayText = SplashQuickGameOptionsMenuLabels::FIELD_HEIGHT_LABEL;
+
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::FIELD_SIZE_TINY_RANGE, SplashQuickGameOptionsMenuLabels::FIELD_SIZE_TINY_DESCRIPTION));
+				result.sliderRangeDescriptionDefnList.push_back(createSliderRangeDescription(SplashQuickGameOptionsMenuLabels::FIELD_SIZE_HUGE_RANGE, SplashQuickGameOptionsMenuLabels::FIELD_SIZE_HUGE_DESCRIPTION));
+
+				return result;
+			}
+
 			std::map<int, SplashMenuItemDefn> createQuickGameOptionsMenuDefnMap() {
 				std::map<int, SplashMenuItemDefn> result;
 
 				result[SplashQuickGameOptionsMenuId::RETURN_TO_MAIN_MENU] = createActionMenuItem(SplashQuickGameOptionsMenuId::RETURN_TO_MAIN_MENU, SplashQuickGameOptionsMenuLabels::RETURN_TO_MAIN_MENU_LABEL, nullptr);
 				result[SplashQuickGameOptionsMenuId::SNAKE_SPEED] = createSnakeSpeedMenuItem();
+				result[SplashQuickGameOptionsMenuId::FIELD_WIDTH] = createFieldWidthMenuItem();
+				result[SplashQuickGameOptionsMenuId::FIELD_HEIGHT] = createFieldHeightMenuItem();
 
 				return result;
 			}

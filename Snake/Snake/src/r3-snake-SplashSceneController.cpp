@@ -24,6 +24,8 @@ namespace r3 {
 			QuickGameOptionsDefn quickGameOptions;
 			this->quickGameOptionsMenu = new SplashMenu(SplashMenuFactory::createQuickGameOptionsMenuDefnMap());
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::SNAKE_SPEED, quickGameOptions.snakeSpeedTilesPerSecond);
+			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::FIELD_WIDTH, quickGameOptions.fieldSize.x);
+			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::FIELD_HEIGHT, quickGameOptions.fieldSize.y);
 		}
 
 		SplashSceneController::~SplashSceneController() {
@@ -39,6 +41,8 @@ namespace r3 {
 		QuickGameOptionsDefn SplashSceneController::getQuickGameOptions() const {
 			QuickGameOptionsDefn result;
 			result.snakeSpeedTilesPerSecond = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::SNAKE_SPEED);
+			result.fieldSize.x = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::FIELD_WIDTH);
+			result.fieldSize.y = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::FIELD_HEIGHT);
 			return result;
 		}
 

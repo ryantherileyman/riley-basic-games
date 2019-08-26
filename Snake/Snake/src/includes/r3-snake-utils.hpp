@@ -17,7 +17,8 @@ namespace r3 {
 
 		namespace FontUtils {
 
-			float resolveTextWidth(sf::Text& text);
+			extern float resolveTextWidth(sf::Text& text);
+			extern void setCenteredPosition(sf::Text& text, float top);
 
 		}
 

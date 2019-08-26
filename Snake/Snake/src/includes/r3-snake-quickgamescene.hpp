@@ -2,6 +2,7 @@
 #include <random>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "r3-snake-gameoptions.hpp"
 #include "r3-snake-gamestate.hpp"
 #pragma once
 
@@ -90,6 +91,7 @@ namespace r3 {
 
 		private:
 			QuickGameMode mode;
+			QuickGameOptionsDefn gameOptions;
 			QuickGame* game;
 
 		private:
@@ -120,6 +122,9 @@ namespace r3 {
 
 		public:
 			~QuickGameController();
+
+		public:
+			void setQuickGameOptions(const QuickGameOptionsDefn& gameOptions);
 
 		public:
 			QuickGameSceneClientRequest processEvent(sf::Event& event);

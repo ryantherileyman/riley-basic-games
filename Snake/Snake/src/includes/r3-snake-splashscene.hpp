@@ -4,6 +4,7 @@
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
+#include "r3-snake-gameoptions.hpp"
 #pragma once
 
 namespace r3 {
@@ -91,6 +92,8 @@ namespace r3 {
 		typedef struct Snake_SplashMenuMousePositionResult {
 			bool overMenuItemFlag;
 			int overMenuItemId;
+			bool overSliderFlag;
+			int overSliderValue;
 		} SplashMenuMouseCollisionResult;
 
 		typedef enum class Snake_SplashSceneClientRequest {
@@ -170,6 +173,9 @@ namespace r3 {
 			void finish();
 
 		public:
+			QuickGameOptionsDefn getQuickGameOptions() const;
+
+		public:
 			SplashSceneClientRequest processEvent(sf::Event& event);
 			void render();
 
@@ -224,6 +230,7 @@ namespace r3 {
 		private:
 			void renderMenuItem(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			sf::Text createMenuItemText();
+			sf::FloatRect resolveSliderRect(float menuWidth, float menuItemTop);
 
 		};
 

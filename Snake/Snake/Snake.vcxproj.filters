@@ -65,5 +65,8 @@
     <ClInclude Include="src\includes\r3-snake-gamestate.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\includes\r3-snake-gameoptions.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

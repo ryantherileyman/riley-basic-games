@@ -82,6 +82,7 @@ namespace r3 {
 				break;
 			case SplashSceneClientRequest::START_QUICK_GAME:
 				this->splashSceneController->finish();
+				this->quickGameController->setQuickGameOptions(this->splashSceneController->getQuickGameOptions());
 				this->mode = ClientMode::QUICK_GAME;
 				break;
 			}

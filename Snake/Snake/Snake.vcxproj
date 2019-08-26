@@ -145,6 +145,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp" />
+    <ClInclude Include="src\includes\r3-snake-gameoptions.hpp" />
     <ClInclude Include="src\includes\r3-snake-gamestate.hpp" />
     <ClInclude Include="src\includes\r3-snake-quickgamescene.hpp" />
     <ClInclude Include="src\includes\r3-snake-splashscene.hpp" />

@@ -20,7 +20,10 @@ namespace r3 {
 			this->musicLoaded = false;
 
 			this->mainMenu = new SplashMenu(SplashMenuFactory::createMainMenuDefnMap());
+
+			QuickGameOptionsDefn quickGameOptions;
 			this->quickGameOptionsMenu = new SplashMenu(SplashMenuFactory::createQuickGameOptionsMenuDefnMap());
+			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::SNAKE_SPEED, quickGameOptions.snakeSpeedTilesPerSecond);
 		}
 
 		SplashSceneController::~SplashSceneController() {
@@ -53,6 +56,12 @@ namespace r3 {
 			}
 		}
 
+		QuickGameOptionsDefn SplashSceneController::getQuickGameOptions() const {
+			QuickGameOptionsDefn result;
+			result.snakeSpeedTilesPerSecond = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::SNAKE_SPEED);
+			return result;
+		}
+
 		SplashSceneClientRequest SplashSceneController::processEvent(sf::Event& event) {
 			SplashSceneClientRequest result = SplashSceneClientRequest::NONE;
 
@@ -77,10 +86,14 @@ namespace r3 {
 
 				SplashMenu* currMenu = this->getCurrentMenu();
 
+				SplashMenuMouseCollisionResult mouseCollisionResult = this->renderer->resolveMenuMouseCollisionResult(*currMenu, mousePosition);
 				if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-					SplashMenuMouseCollisionResult mouseCollisionResult = this->renderer->resolveMenuMouseCollisionResult(*currMenu, mousePosition);
 					if (mouseCollisionResult.overMenuItemFlag) {
 						currMenu->setCurrItem(mouseCollisionResult.overMenuItemId);
+					}
+				} else {
+					if (mouseCollisionResult.overSliderFlag) {
+						currMenu->setItemValue(mouseCollisionResult.overMenuItemId, mouseCollisionResult.overSliderValue);
 					}
 				}
 			}
@@ -99,6 +112,11 @@ namespace r3 {
 							case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
 								this->performQuickGameOptionsMenuItemAction(mouseCollisionResult.overMenuItemId);
 								break;
+							}
+						}
+						if (currMenu->getItemDefn(mouseCollisionResult.overMenuItemId).menuItemType == SplashMenuItemType::SLIDER) {
+							if (mouseCollisionResult.overSliderFlag) {
+								currMenu->setItemValue(mouseCollisionResult.overMenuItemId, mouseCollisionResult.overSliderValue);
 							}
 						}
 					}
@@ -183,6 +201,18 @@ namespace r3 {
 
 			case sf::Keyboard::Key::Down:
 				menu.moveToNextItem();
+				break;
+
+			case sf::Keyboard::Key::Left:
+				if (menu.getCurrItemDefn().menuItemType == SplashMenuItemType::SLIDER) {
+					menu.decrementItemValue(menu.getCurrItemId());
+				}
+				break;
+
+			case sf::Keyboard::Key::Right:
+				if (menu.getCurrItemDefn().menuItemType == SplashMenuItemType::SLIDER) {
+					menu.incrementItemValue(menu.getCurrItemId());
+				}
 				break;
 
 			}

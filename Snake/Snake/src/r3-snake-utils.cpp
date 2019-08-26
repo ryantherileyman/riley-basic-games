@@ -37,6 +37,11 @@ namespace r3 {
 				return result;
 			}
 
+			void setCenteredPosition(sf::Text& text, float top) {
+				float width = resolveTextWidth(text);
+				text.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (width / 2.0f), top);
+			}
+
 		}
 
 	}

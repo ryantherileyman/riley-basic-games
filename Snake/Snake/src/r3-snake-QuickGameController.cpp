@@ -62,6 +62,10 @@ namespace r3 {
 			}
 		}
 
+		void QuickGameController::setQuickGameOptions(const QuickGameOptionsDefn& gameOptions) {
+			this->gameOptions = gameOptions;
+		}
+
 		QuickGameSceneClientRequest QuickGameController::processEvent(sf::Event& event) {
 			QuickGameSceneClientRequest result = QuickGameSceneClientRequest::NONE;
 
@@ -218,7 +222,7 @@ namespace r3 {
 		void QuickGameController::startGame() {
 			QuickGameDefn gameDefn;
 			gameDefn.fieldSize = sf::Vector2i(50, 25);
-			gameDefn.snakeSpeedTilesPerSecond = 10.0f;
+			gameDefn.snakeSpeedTilesPerSecond = (float)this->gameOptions.snakeSpeedTilesPerSecond;
 			gameDefn.snakeStartDefn.headPosition.x = 25;
 			gameDefn.snakeStartDefn.headPosition.y = 10;
 			gameDefn.snakeStartDefn.facingDirection = ObjectDirection::DOWN;

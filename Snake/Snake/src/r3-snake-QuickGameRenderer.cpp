@@ -11,9 +11,9 @@ namespace r3 {
 		const char* SNAKE_TILESET_TEXTURE_PATH = "resources/textures/snake-tileset.png";
 
 		const int SNAKE_TILE_PIXEL_SIZE = 75;
-		const float SNAKE_TILE_VIEWPORT_SIZE = 37.5f;
-		const sf::Vector2f FIELD_VIEWPORT_POSITION(22.0f, 108.0f); // TODO: configurable based on field size...  this is the furthest top-left position
-		const sf::Vector2i FIELD_SIZE(50, 25); // TODO: field size is part of the game state...
+		const sf::Vector2f FIELD_CENTER_VIEWPORT_POSITION(960.0f, 576.0f);
+		const float FIELD_HIGHEST_TOP_VIEWPORT_POSITION = 108.0f;
+		const float FIELD_MINIMUM_VIEWPORT_MARGIN = 20.0f;
 
 		const sf::Color QUICK_GAME_BACKGROUND_COLOR = sf::Color(0, 126, 3, 255);
 
@@ -26,10 +26,32 @@ namespace r3 {
 
 		namespace QuickGameRendererUtils {
 
+			float resolveViewportTileSize(const QuickGame& game) {
+				float maxFieldWidth = ViewUtils::VIEW_SIZE.x - (FIELD_MINIMUM_VIEWPORT_MARGIN * 2.0f);
+				float maxFieldHeight = ViewUtils::VIEW_SIZE.y - FIELD_HIGHEST_TOP_VIEWPORT_POSITION - FIELD_MINIMUM_VIEWPORT_MARGIN;
+
+				float unalignedTileSize = fminf(maxFieldWidth / game.getFieldSize().x, maxFieldHeight / game.getFieldSize().y);
+
+				float result = (float)SNAKE_TILE_PIXEL_SIZE;
+				if (unalignedTileSize < (float)SNAKE_TILE_PIXEL_SIZE) {
+					result = (float)SNAKE_TILE_PIXEL_SIZE / ceilf((float)SNAKE_TILE_PIXEL_SIZE / unalignedTileSize);
+				} else {
+					result = (float)SNAKE_TILE_PIXEL_SIZE * floorf(unalignedTileSize / (float)SNAKE_TILE_PIXEL_SIZE);
+				}
+
+				return result;
+			}
+
+			sf::Vector2f resolveViewportFieldTopLeftPosition(const QuickGame& game, float viewportTileSize) {
+				sf::Vector2f result;
+				result.x = FIELD_CENTER_VIEWPORT_POSITION.x - (viewportTileSize * game.getFieldSize().x * 0.5f);
+				result.y = FIELD_CENTER_VIEWPORT_POSITION.y - (viewportTileSize * game.getFieldSize().y * 0.5f);
+				return result;
+			}
+
 			void initSprite(sf::Sprite& sprite, const sf::Texture& sourceTexture, int pixelLeft, int pixelTop) {
 				sprite.setTexture(sourceTexture);
 				sprite.setTextureRect(sf::IntRect(pixelLeft, pixelTop, SNAKE_TILE_PIXEL_SIZE, SNAKE_TILE_PIXEL_SIZE));
-				sprite.setScale(0.5f, 0.5f);
 			}
 
 			void initSnakeHeadSprite(sf::Sprite& sprite, const sf::Texture& sourceTexture, ObjectDirection direction) {
@@ -48,7 +70,6 @@ namespace r3 {
 					sprite.setTextureRect(sf::IntRect(75, 75, SNAKE_TILE_PIXEL_SIZE, SNAKE_TILE_PIXEL_SIZE));
 					break;
 				}
-				sprite.setScale(0.5f, 0.5f);
 			}
 
 			void initSnakeTailSprite(sf::Sprite& sprite, const sf::Texture& sourceTexture, ObjectDirection direction) {
@@ -67,7 +88,6 @@ namespace r3 {
 					sprite.setTextureRect(sf::IntRect(225, 75, SNAKE_TILE_PIXEL_SIZE, SNAKE_TILE_PIXEL_SIZE));
 					break;
 				}
-				sprite.setScale(0.5f, 0.5f);
 			}
 
 			void initSnakeBodySprite(sf::Sprite& sprite, const sf::Texture& sourceTexture, ObjectDirection enterDirection, ObjectDirection exitDirection) {
@@ -130,7 +150,6 @@ namespace r3 {
 					}
 					break;
 				}
-				sprite.setScale(0.5f, 0.5f);
 			}
 
 		}
@@ -189,7 +208,7 @@ namespace r3 {
 
 		void QuickGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState) {
 			renderTarget.clear(QUICK_GAME_BACKGROUND_COLOR);
-			this->renderPlayingField(renderTarget);
+			this->renderPlayingField(renderTarget, *gameRenderState.game);
 			this->renderScoreUi(renderTarget, gameRenderState);
 			renderTarget.draw(startInstructionsText);
 			renderTarget.draw(exitInstructionsText);
@@ -197,7 +216,7 @@ namespace r3 {
 
 		void QuickGameRenderer::renderGameRunning(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState) {
 			renderTarget.clear(QUICK_GAME_BACKGROUND_COLOR);
-			this->renderPlayingField(renderTarget);
+			this->renderPlayingField(renderTarget, *gameRenderState.game);
 			this->renderApple(renderTarget, *gameRenderState.game);
 			this->renderSnake(renderTarget, *gameRenderState.game);
 			this->renderScoreUi(renderTarget, gameRenderState);
@@ -205,7 +224,7 @@ namespace r3 {
 
 		void QuickGameRenderer::renderGameDoneSummary(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState) {
 			renderTarget.clear(QUICK_GAME_BACKGROUND_COLOR);
-			this->renderPlayingField(renderTarget);
+			this->renderPlayingField(renderTarget, *gameRenderState.game);
 			this->renderSnake(renderTarget, *gameRenderState.game);
 			this->renderScoreUi(renderTarget, gameRenderState);
 			if (gameRenderState.lastGameBeatLongestSnakeLength) {
@@ -215,53 +234,71 @@ namespace r3 {
 			renderTarget.draw(exitInstructionsText);
 		}
 
-		void QuickGameRenderer::renderPlayingField(sf::RenderTarget& renderTarget) {
+		void QuickGameRenderer::renderPlayingField(sf::RenderTarget& renderTarget, const QuickGame& game) {
+			float tileSize = QuickGameRendererUtils::resolveViewportTileSize(game);
+			sf::Vector2f fieldPosition = QuickGameRendererUtils::resolveViewportFieldTopLeftPosition(game, tileSize);
+			float spriteScale = tileSize / (float)SNAKE_TILE_PIXEL_SIZE;
+
+			this->grassSprite.setScale(spriteScale, spriteScale);
+			this->shrubSprite.setScale(spriteScale, spriteScale);
+
 			// Draw grass tiles under entire playing field
-			for (int x = 0; x < FIELD_SIZE.x; x++) {
-				for (int y = 0; y < FIELD_SIZE.y; y++) {
-					this->grassSprite.setPosition(x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+			for (int x = 0; x < game.getFieldSize().x; x++) {
+				for (int y = 0; y < game.getFieldSize().y; y++) {
+					this->grassSprite.setPosition(x * tileSize + fieldPosition.x, y * tileSize + fieldPosition.y);
 					renderTarget.draw(this->grassSprite);
 				}
 			}
 
 			// Draw top and bottom rows of shrub barriers
-			for (int x = 0; x < FIELD_SIZE.x; x++) {
-				this->shrubSprite.setPosition(x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, FIELD_VIEWPORT_POSITION.y);
+			for (int x = 0; x < game.getFieldSize().x; x++) {
+				this->shrubSprite.setPosition(x * tileSize + fieldPosition.x, fieldPosition.y);
 				renderTarget.draw(this->shrubSprite);
 
-				this->shrubSprite.setPosition(x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, (FIELD_SIZE.y - 1) * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+				this->shrubSprite.setPosition(x * tileSize + fieldPosition.x, (game.getFieldSize().y - 1) * tileSize + fieldPosition.y);
 				renderTarget.draw(this->shrubSprite);
 			}
 
 			// Draw left and right columns of shrub barriers
-			for (int y = 1; y < FIELD_SIZE.y - 1; y++) {
-				this->shrubSprite.setPosition(FIELD_VIEWPORT_POSITION.x, y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+			for (int y = 1; y < game.getFieldSize().y - 1; y++) {
+				this->shrubSprite.setPosition(fieldPosition.x, y * tileSize + fieldPosition.y);
 				renderTarget.draw(this->shrubSprite);
 
-				this->shrubSprite.setPosition((FIELD_SIZE.x - 1) * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+				this->shrubSprite.setPosition((game.getFieldSize().x - 1) * tileSize + fieldPosition.x, y * tileSize + fieldPosition.y);
 				renderTarget.draw(this->shrubSprite);
 			}
 		}
 
 		void QuickGameRenderer::renderApple(sf::RenderTarget& renderTarget, const QuickGame& game) {
+			float tileSize = QuickGameRendererUtils::resolveViewportTileSize(game);
+			sf::Vector2f fieldPosition = QuickGameRendererUtils::resolveViewportFieldTopLeftPosition(game, tileSize);
+			float spriteScale = tileSize / (float)SNAKE_TILE_PIXEL_SIZE;
+
 			if (game.getAppleExists()) {
 				sf::Vector2i applePosition = game.getApplePosition();
-				this->appleSprite.setPosition(applePosition.x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, applePosition.y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+				this->appleSprite.setScale(spriteScale, spriteScale);
+				this->appleSprite.setPosition(applePosition.x * tileSize + fieldPosition.x, applePosition.y * tileSize + fieldPosition.y);
 				renderTarget.draw(this->appleSprite);
 			}
 		}
 
 		void QuickGameRenderer::renderSnake(sf::RenderTarget& renderTarget, const QuickGame& game) {
+			float tileSize = QuickGameRendererUtils::resolveViewportTileSize(game);
+			float spriteScale = tileSize / (float)SNAKE_TILE_PIXEL_SIZE;
+
 			sf::Sprite tailSprite = this->createSnakeTailSprite(game);
+			tailSprite.setScale(spriteScale, spriteScale);
 			renderTarget.draw(tailSprite);
 
 			int bodySegmentCount = game.getSnake()->getBodyLength();
 			for (int segmentIndex = bodySegmentCount - 1; segmentIndex >= 0; segmentIndex--) {
-				sf::Sprite currBodySprite = this->createSnakeBodySprite(game.getSnake()->getBody(segmentIndex));
+				sf::Sprite currBodySprite = this->createSnakeBodySprite(game, game.getSnake()->getBody(segmentIndex));
+				currBodySprite.setScale(spriteScale, spriteScale);
 				renderTarget.draw(currBodySprite);
 			}
 
 			sf::Sprite headSprite = this->createSnakeHeadSprite(game);
+			headSprite.setScale(spriteScale, spriteScale);
 			renderTarget.draw(headSprite);
 		}
 
@@ -294,48 +331,52 @@ namespace r3 {
 			gameWonText.setString(LAST_GAME_WON_STRING);
 			float gameWonWidth = FontUtils::resolveTextWidth(gameWonText);
 			float gameWonLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) - (gameWonWidth / 2.0f);
-			float gameWonTopPos = FIELD_VIEWPORT_POSITION.y + (SNAKE_TILE_VIEWPORT_SIZE * 2.0f);
+			float gameWonTopPos = 80.0f;
 			gameWonText.setPosition(gameWonLeftPos, gameWonTopPos);
 			renderTarget.draw(gameWonText);
 
 			this->appleSprite.setScale(1.2f, 1.2f);
 
-			this->appleSprite.setPosition(gameWonLeftPos - (SNAKE_TILE_VIEWPORT_SIZE * 3.0f), gameWonTopPos);
+			this->appleSprite.setPosition(gameWonLeftPos - 100.0f, gameWonTopPos);
 			renderTarget.draw(this->appleSprite);
 
-			this->appleSprite.setPosition(gameWonLeftPos  + gameWonWidth + SNAKE_TILE_VIEWPORT_SIZE, gameWonTopPos);
+			this->appleSprite.setPosition(gameWonLeftPos + gameWonWidth + 15.0f, gameWonTopPos);
 			renderTarget.draw(this->appleSprite);
-
-			this->appleSprite.setScale(0.5f, 0.5f);
 		}
 
 		sf::Sprite QuickGameRenderer::createSnakeHeadSprite(const QuickGame& game) {
-			sf::Sprite result;
-
 			SnakeSegment head = game.getSnake()->getHead();
 
+			float tileSize = QuickGameRendererUtils::resolveViewportTileSize(game);
+			sf::Vector2f fieldPosition = QuickGameRendererUtils::resolveViewportFieldTopLeftPosition(game, tileSize);
+
+			sf::Sprite result;
 			QuickGameRendererUtils::initSnakeHeadSprite(result, *this->snakeTilesetTexture, head.enterDirection);
-			result.setPosition(head.position.x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, head.position.y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+			result.setPosition(head.position.x * tileSize + fieldPosition.x, head.position.y * tileSize + fieldPosition.y);
 
 			return result;
 		}
 
 		sf::Sprite QuickGameRenderer::createSnakeTailSprite(const QuickGame& game) {
-			sf::Sprite result;
-
 			SnakeSegment tail = game.getSnake()->getTail();
 
+			float tileSize = QuickGameRendererUtils::resolveViewportTileSize(game);
+			sf::Vector2f fieldPosition = QuickGameRendererUtils::resolveViewportFieldTopLeftPosition(game, tileSize);
+
+			sf::Sprite result;
 			QuickGameRendererUtils::initSnakeTailSprite(result, *this->snakeTilesetTexture, tail.exitDirection);
-			result.setPosition(tail.position.x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, tail.position.y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+			result.setPosition(tail.position.x * tileSize + fieldPosition.x, tail.position.y * tileSize + fieldPosition.y);
 
 			return result;
 		}
 
-		sf::Sprite QuickGameRenderer::createSnakeBodySprite(const SnakeSegment& snakeSegment) {
-			sf::Sprite result;
+		sf::Sprite QuickGameRenderer::createSnakeBodySprite(const QuickGame& game, const SnakeSegment& snakeSegment) {
+			float tileSize = QuickGameRendererUtils::resolveViewportTileSize(game);
+			sf::Vector2f fieldPosition = QuickGameRendererUtils::resolveViewportFieldTopLeftPosition(game, tileSize);
 
+			sf::Sprite result;
 			QuickGameRendererUtils::initSnakeBodySprite(result, *this->snakeTilesetTexture, snakeSegment.enterDirection, snakeSegment.exitDirection);
-			result.setPosition(snakeSegment.position.x * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.x, snakeSegment.position.y * SNAKE_TILE_VIEWPORT_SIZE + FIELD_VIEWPORT_POSITION.y);
+			result.setPosition(snakeSegment.position.x * tileSize + fieldPosition.x, snakeSegment.position.y * tileSize + fieldPosition.y);
 
 			return result;
 		}

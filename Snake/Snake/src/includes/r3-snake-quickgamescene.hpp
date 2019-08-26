@@ -188,7 +188,7 @@ namespace r3 {
 			void renderGameDoneSummary(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState);
 
 		private:
-			void renderPlayingField(sf::RenderTarget& renderTarget);
+			void renderPlayingField(sf::RenderTarget& renderTarget, const QuickGame& game);
 			void renderApple(sf::RenderTarget& renderTarget, const QuickGame& game);
 			void renderSnake(sf::RenderTarget& renderTarget, const QuickGame& game);
 			void renderScoreUi(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState);
@@ -197,7 +197,7 @@ namespace r3 {
 		private:
 			sf::Sprite createSnakeHeadSprite(const QuickGame& game);
 			sf::Sprite createSnakeTailSprite(const QuickGame& game);
-			sf::Sprite createSnakeBodySprite(const SnakeSegment& snakeSegment);
+			sf::Sprite createSnakeBodySprite(const QuickGame& game, const SnakeSegment& snakeSegment);
 
 		};
 

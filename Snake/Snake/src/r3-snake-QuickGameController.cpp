@@ -18,7 +18,6 @@ namespace r3 {
 			this->renderer = new QuickGameRenderer();
 
 			this->mode = QuickGameMode::WAIT_TO_START;
-
 			this->game = nullptr;
 
 			this->eatAppleSoundBuffer = new sf::SoundBuffer();
@@ -43,6 +42,8 @@ namespace r3 {
 			}
 			this->eatAppleSound.setBuffer(*this->eatAppleSoundBuffer);
 			this->hitBarrierSound.setBuffer(*this->hitBarrierSoundBuffer);
+
+			this->startGame();
 		}
 
 		QuickGameController::~QuickGameController() {
@@ -172,10 +173,6 @@ namespace r3 {
 				this->freeGameDoneSummaryMusic();
 				break;
 			case sf::Keyboard::Key::Enter:
-				if (this->game != nullptr) {
-					delete this->game;
-				}
-
 				this->startGame();
 				this->mode = QuickGameMode::GAME_RUNNING;
 
@@ -192,10 +189,6 @@ namespace r3 {
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Escape:
 				this->mode = QuickGameMode::WAIT_TO_START;
-
-				delete this->game;
-				this->game = nullptr;
-
 				this->beginWaitToStartMusic();
 				break;
 			case sf::Keyboard::Key::W:
@@ -220,11 +213,15 @@ namespace r3 {
 		}
 
 		void QuickGameController::startGame() {
+			if (this->game != nullptr) {
+				delete this->game;
+			}
+
 			QuickGameDefn gameDefn;
-			gameDefn.fieldSize = sf::Vector2i(50, 25);
+			gameDefn.fieldSize = this->gameOptions.fieldSize;
 			gameDefn.snakeSpeedTilesPerSecond = (float)this->gameOptions.snakeSpeedTilesPerSecond;
-			gameDefn.snakeStartDefn.headPosition.x = 25;
-			gameDefn.snakeStartDefn.headPosition.y = 10;
+			gameDefn.snakeStartDefn.headPosition.x = this->gameOptions.fieldSize.x / 2;
+			gameDefn.snakeStartDefn.headPosition.y = this->gameOptions.fieldSize.y / 2 - 1;
 			gameDefn.snakeStartDefn.facingDirection = ObjectDirection::DOWN;
 			gameDefn.snakeStartDefn.length = 3;
 

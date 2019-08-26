@@ -177,8 +177,13 @@ namespace r3 {
 			void render();
 
 		private:
+			SplashSceneClientRequest processKeypressEvent(sf::Event& event);
 			SplashSceneClientRequest processMainMenuKeypressEvent(sf::Event& event);
 			void processQuickGameOptionsKeypressEvent(sf::Event& event);
+
+		private:
+			void processMouseMovedEvent(sf::Event& event);
+			SplashSceneClientRequest processLeftMouseButtonPressedEvent(sf::Event& event);
 
 		private:
 			SplashSceneClientRequest performMainMenuItemAction(int menuItemId);

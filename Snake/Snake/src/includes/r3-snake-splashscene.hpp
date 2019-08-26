@@ -94,7 +94,7 @@ namespace r3 {
 			int overMenuItemId;
 			bool overSliderFlag;
 			int overSliderValue;
-		} SplashMenuMouseCollisionResult;
+		} SplashMenuMousePositionResult;
 
 		typedef enum class Snake_SplashSceneClientRequest {
 			NONE,
@@ -239,7 +239,7 @@ namespace r3 {
 			void render(sf::RenderTarget& renderTarget, const SplashMenu& menu);
 
 		public:
-			SplashMenuMouseCollisionResult resolveMenuMouseCollisionResult(const SplashMenu& menu, sf::Vector2f cursorPosition);
+			SplashMenuMousePositionResult resolveMenuMousePositionResult(const SplashMenu& menu, sf::Vector2f cursorPosition);
 
 		private:
 			void renderMenu(sf::RenderTarget& renderTarget, const SplashMenu& menu);

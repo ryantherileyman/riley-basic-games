@@ -119,15 +119,15 @@ namespace r3 {
 
 			SplashMenu* currMenu = this->getCurrentMenu();
 
-			SplashMenuMouseCollisionResult mouseCollisionResult = this->renderer->resolveMenuMouseCollisionResult(*currMenu, mousePosition);
+			SplashMenuMousePositionResult mousePositionResult = this->renderer->resolveMenuMousePositionResult(*currMenu, mousePosition);
 			if (!sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
-				if (mouseCollisionResult.overMenuItemFlag) {
-					currMenu->setCurrItem(mouseCollisionResult.overMenuItemId);
+				if (mousePositionResult.overMenuItemFlag) {
+					currMenu->setCurrItem(mousePositionResult.overMenuItemId);
 				}
 			}
 			else {
-				if (mouseCollisionResult.overSliderFlag) {
-					currMenu->setItemValue(mouseCollisionResult.overMenuItemId, mouseCollisionResult.overSliderValue);
+				if (mousePositionResult.overSliderFlag) {
+					currMenu->setItemValue(mousePositionResult.overMenuItemId, mousePositionResult.overSliderValue);
 				}
 			}
 		}
@@ -137,24 +137,24 @@ namespace r3 {
 
 			sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Vector2i(event.mouseButton.x, event.mouseButton.y));
 			SplashMenu* currMenu = this->getCurrentMenu();
-			SplashMenuMouseCollisionResult mouseCollisionResult = this->renderer->resolveMenuMouseCollisionResult(*currMenu, mousePosition);
+			SplashMenuMousePositionResult mousePositionResult = this->renderer->resolveMenuMousePositionResult(*currMenu, mousePosition);
 
-			if (mouseCollisionResult.overMenuItemFlag) {
-				if (currMenu->getItemDefn(mouseCollisionResult.overMenuItemId).menuItemType == SplashMenuItemType::ACTION) {
+			if (mousePositionResult.overMenuItemFlag) {
+				if (currMenu->getItemDefn(mousePositionResult.overMenuItemId).menuItemType == SplashMenuItemType::ACTION) {
 					switch (this->mode) {
 					case SplashSceneMode::MAIN_MENU:
-						result = this->performMainMenuItemAction(mouseCollisionResult.overMenuItemId);
+						result = this->performMainMenuItemAction(mousePositionResult.overMenuItemId);
 						break;
 					case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
-						this->performQuickGameOptionsMenuItemAction(mouseCollisionResult.overMenuItemId);
+						this->performQuickGameOptionsMenuItemAction(mousePositionResult.overMenuItemId);
 						break;
 					}
 				}
 				if (
-					(currMenu->getItemDefn(mouseCollisionResult.overMenuItemId).menuItemType == SplashMenuItemType::SLIDER) &&
-					mouseCollisionResult.overSliderFlag
+					(currMenu->getItemDefn(mousePositionResult.overMenuItemId).menuItemType == SplashMenuItemType::SLIDER) &&
+					mousePositionResult.overSliderFlag
 				) {
-					currMenu->setItemValue(mouseCollisionResult.overMenuItemId, mouseCollisionResult.overSliderValue);
+					currMenu->setItemValue(mousePositionResult.overMenuItemId, mousePositionResult.overSliderValue);
 				}
 			}
 

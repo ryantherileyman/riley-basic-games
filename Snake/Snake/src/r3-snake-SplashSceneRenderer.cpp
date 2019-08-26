@@ -55,8 +55,8 @@ namespace r3 {
 			this->renderMenu(renderTarget, menu);
 		}
 
-		SplashMenuMouseCollisionResult SplashSceneRenderer::resolveMenuMouseCollisionResult(const SplashMenu& menu, sf::Vector2f cursorPosition) {
-			SplashMenuMouseCollisionResult result;
+		SplashMenuMousePositionResult SplashSceneRenderer::resolveMenuMousePositionResult(const SplashMenu& menu, sf::Vector2f cursorPosition) {
+			SplashMenuMousePositionResult result;
 			result.overMenuItemFlag = false;
 			result.overMenuItemId = 0;
 			result.overSliderFlag = false;

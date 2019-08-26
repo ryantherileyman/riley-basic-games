@@ -8,6 +8,7 @@ namespace r3 {
 		typedef struct Snake_QuickGameOptionsDefn {
 			sf::Vector2i fieldSize = sf::Vector2i(50, 25);
 			int snakeSpeedTilesPerSecond = 10;
+			int snakeGrowthPerApple = 3;
 		} QuickGameOptionsDefn;
 
 	}

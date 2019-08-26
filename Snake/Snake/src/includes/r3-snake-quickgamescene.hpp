@@ -13,6 +13,7 @@ namespace r3 {
 		typedef struct Snake_QuickGameDefn {
 			sf::Vector2i fieldSize;
 			float snakeSpeedTilesPerSecond;
+			int snakeGrowthPerApple;
 			SnakeStartDefn snakeStartDefn;
 		} QuickGameDefn;
 
@@ -51,6 +52,7 @@ namespace r3 {
 		private:
 			sf::Vector2i fieldSize;
 			float snakeSpeedTilesPerSecond;
+			int snakeGrowthPerApple;
 			Snake* snake;
 			
 		private:

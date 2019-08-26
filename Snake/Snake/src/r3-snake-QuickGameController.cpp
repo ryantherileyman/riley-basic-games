@@ -221,6 +221,7 @@ namespace r3 {
 			QuickGameDefn gameDefn;
 			gameDefn.fieldSize = this->gameOptions.fieldSize;
 			gameDefn.snakeSpeedTilesPerSecond = (float)this->gameOptions.snakeSpeedTilesPerSecond;
+			gameDefn.snakeGrowthPerApple = this->gameOptions.snakeGrowthPerApple;
 			gameDefn.snakeStartDefn.headPosition.x = this->gameOptions.fieldSize.x / 2;
 			gameDefn.snakeStartDefn.headPosition.y = this->gameOptions.fieldSize.y / 2 - 1;
 			gameDefn.snakeStartDefn.facingDirection = ObjectDirection::DOWN;

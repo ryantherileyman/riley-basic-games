@@ -11,6 +11,7 @@ namespace r3 {
 
 			this->fieldSize = quickGameDefn->fieldSize;
 			this->snakeSpeedTilesPerSecond = quickGameDefn->snakeSpeedTilesPerSecond;
+			this->snakeGrowthPerApple = quickGameDefn->snakeGrowthPerApple;
 
 			this->snake = new Snake(quickGameDefn->snakeStartDefn);
 
@@ -85,7 +86,7 @@ namespace r3 {
 						result.snakeAteAppleFlag = true;
 
 						this->appleExistsFlag = false;
-						this->queuedSnakeGrowth += 2;
+						this->queuedSnakeGrowth += this->snakeGrowthPerApple;
 					}
 				}
 

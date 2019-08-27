@@ -11,6 +11,10 @@ namespace r3 {
 			int snakeGrowthPerApple = 3;
 		} QuickGameOptionsDefn;
 
+		typedef struct Snake_SystemOptionsDefn {
+			int musicVolume = 100;
+		} SystemOptionsDefn;
+
 	}
 
 }

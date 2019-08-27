@@ -13,6 +13,9 @@ namespace r3 {
 			const wchar_t* QUICK_GAME_OPTIONS_LABEL = L"Game Options";
 			const wchar_t* QUICK_GAME_OPTIONS_DESCRIPTION = L"Customize your experience";
 
+			const wchar_t* SYSTEM_OPTIONS_LABEL = L"Video / Audio Options";
+			const wchar_t* SYSTEM_OPTIONS_DESCRIPTION = L"Toggle between fullscreen, or change audio volume";
+
 			const wchar_t* EXIT_GAME_LABEL = L"Exit Game";
 
 		}
@@ -62,6 +65,14 @@ namespace r3 {
 
 		}
 
+		namespace SplashSystemOptionsMenuLabels {
+
+			const wchar_t* RETURN_TO_MAIN_MENU_LABEL = L"Return to Main Menu";
+
+			const wchar_t* MUSIC_VOLUME_LABEL = L"Music Volume:";
+
+		}
+
 		namespace SplashMenuFactory {
 
 			SplashMenuItemDefn createEmptyMenuItem(int menuItemId, SplashMenuItemType menuItemType) {
@@ -105,6 +116,7 @@ namespace r3 {
 
 				result[SplashMainMenuId::START_QUICK_GAME] = createActionMenuItem(SplashMainMenuId::START_QUICK_GAME, SplashMainMenuLabels::START_QUICK_GAME_LABEL, SplashMainMenuLabels::START_QUICK_GAME_DESCRIPTION);
 				result[SplashMainMenuId::QUICK_GAME_OPTIONS] = createActionMenuItem(SplashMainMenuId::QUICK_GAME_OPTIONS, SplashMainMenuLabels::QUICK_GAME_OPTIONS_LABEL, SplashMainMenuLabels::QUICK_GAME_OPTIONS_DESCRIPTION);
+				result[SplashMainMenuId::SYSTEM_OPTIONS] = createActionMenuItem(SplashMainMenuId::SYSTEM_OPTIONS, SplashMainMenuLabels::SYSTEM_OPTIONS_LABEL, SplashMainMenuLabels::SYSTEM_OPTIONS_DESCRIPTION);
 				result[SplashMainMenuId::EXIT_GAME] = createActionMenuItem(SplashMainMenuId::EXIT_GAME, SplashMainMenuLabels::EXIT_GAME_LABEL, nullptr);
 
 				return result;
@@ -168,6 +180,21 @@ namespace r3 {
 				result[SplashQuickGameOptionsMenuId::SNAKE_GROWTH] = createSnakeGrowthMenuItem();
 				result[SplashQuickGameOptionsMenuId::FIELD_WIDTH] = createFieldWidthMenuItem();
 				result[SplashQuickGameOptionsMenuId::FIELD_HEIGHT] = createFieldHeightMenuItem();
+
+				return result;
+			}
+
+			SplashMenuItemDefn createMusicVolumeMenuItem() {
+				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU, SplashSystemOptionValues::MUSIC_VOLUME);
+				result.displayText = SplashSystemOptionsMenuLabels::MUSIC_VOLUME_LABEL;
+				return result;
+			}
+
+			extern std::map<int, SplashMenuItemDefn> createSystemOptionsMenuDefnMap() {
+				std::map<int, SplashMenuItemDefn> result;
+
+				result[SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU] = createActionMenuItem(SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU, SplashSystemOptionsMenuLabels::RETURN_TO_MAIN_MENU_LABEL, nullptr);
+				result[SplashSystemOptionsMenuId::MUSIC_VOLUME] = createMusicVolumeMenuItem();
 
 				return result;
 			}

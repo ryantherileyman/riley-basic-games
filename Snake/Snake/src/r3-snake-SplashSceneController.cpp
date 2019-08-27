@@ -27,6 +27,10 @@ namespace r3 {
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::SNAKE_GROWTH, quickGameOptions.snakeGrowthPerApple);
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::FIELD_WIDTH, quickGameOptions.fieldSize.x);
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::FIELD_HEIGHT, quickGameOptions.fieldSize.y);
+
+			SystemOptionsDefn systemOptions;
+			this->systemOptionsMenu = new SplashMenu(SplashMenuFactory::createSystemOptionsMenuDefnMap());
+			this->systemOptionsMenu->setItemValue(SplashSystemOptionsMenuId::MUSIC_VOLUME, systemOptions.musicVolume);
 		}
 
 		SplashSceneController::~SplashSceneController() {
@@ -37,6 +41,7 @@ namespace r3 {
 
 			delete this->mainMenu;
 			delete this->quickGameOptionsMenu;
+			delete this->systemOptionsMenu;
 		}
 
 		QuickGameOptionsDefn SplashSceneController::getQuickGameOptions() const {
@@ -45,6 +50,12 @@ namespace r3 {
 			result.snakeGrowthPerApple = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::SNAKE_GROWTH);
 			result.fieldSize.x = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::FIELD_WIDTH);
 			result.fieldSize.y = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::FIELD_HEIGHT);
+			return result;
+		}
+
+		SystemOptionsDefn SplashSceneController::getSystemOptions() const {
+			SystemOptionsDefn result;
+			result.musicVolume = this->systemOptionsMenu->getItemValue(SplashSystemOptionsMenuId::MUSIC_VOLUME);
 			return result;
 		}
 
@@ -95,6 +106,9 @@ namespace r3 {
 			case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
 				this->processQuickGameOptionsKeypressEvent(event);
 				break;
+			case SplashSceneMode::SYSTEM_OPTIONS_MENU:
+				this->processSystemOptionsKeypressEvent(event);
+				break;
 			}
 
 			return result;
@@ -120,6 +134,18 @@ namespace r3 {
 			}
 		}
 
+		void SplashSceneController::processSystemOptionsKeypressEvent(sf::Event& event) {
+			SplashMenuKeypressResult menuKeypressResult = this->processMenuKeypressEvent(event, *this->systemOptionsMenu);
+
+			if (menuKeypressResult.performedActionFlag) {
+				this->performSystemOptionsMenuItemAction(menuKeypressResult.actionMenuItemId);
+			}
+			
+			if (this->mode == SplashSceneMode::SYSTEM_OPTIONS_MENU) {
+				this->performSystemOptionsSliderChange();
+			}
+		}
+
 		void SplashSceneController::processMouseMovedEvent(sf::Event& event) {
 			sf::Vector2f mousePosition = this->window->mapPixelToCoords(sf::Vector2i(event.mouseMove.x, event.mouseMove.y));
 
@@ -134,6 +160,9 @@ namespace r3 {
 			else {
 				if (mousePositionResult.overSliderFlag) {
 					currMenu->setItemValue(mousePositionResult.overMenuItemId, mousePositionResult.overSliderValue);
+					if (this->mode == SplashSceneMode::SYSTEM_OPTIONS_MENU) {
+						this->performSystemOptionsSliderChange();
+					}
 				}
 			}
 		}
@@ -153,6 +182,9 @@ namespace r3 {
 						break;
 					case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
 						this->performQuickGameOptionsMenuItemAction(mousePositionResult.overMenuItemId);
+						break;
+					case SplashSceneMode::SYSTEM_OPTIONS_MENU:
+						this->performSystemOptionsMenuItemAction(mousePositionResult.overMenuItemId);
 						break;
 					}
 				}
@@ -179,6 +211,10 @@ namespace r3 {
 				this->mode = SplashSceneMode::QUICK_GAME_OPTIONS_MENU;
 				this->quickGameOptionsMenu->moveToFirstItem();
 				break;
+			case SplashMainMenuId::SYSTEM_OPTIONS:
+				this->mode = SplashSceneMode::SYSTEM_OPTIONS_MENU;
+				this->systemOptionsMenu->moveToFirstItem();
+				break;
 			case SplashMainMenuId::EXIT_GAME:
 				result = SplashSceneClientRequest::EXIT_GAME;
 				this->freeMusic();
@@ -195,6 +231,20 @@ namespace r3 {
 				this->mainMenu->moveToFirstItem();
 				break;
 			}
+		}
+
+		void SplashSceneController::performSystemOptionsMenuItemAction(int menuItemId) {
+			switch (menuItemId) {
+			case SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU:
+				this->mode = SplashSceneMode::MAIN_MENU;
+				this->mainMenu->moveToFirstItem();
+				break;
+			}
+		}
+
+		void SplashSceneController::performSystemOptionsSliderChange() {
+			SystemOptionsDefn systemOptions = this->getSystemOptions();
+			this->music->setVolume((float)systemOptions.musicVolume);
 		}
 
 		SplashMenuKeypressResult SplashSceneController::processMenuKeypressEvent(sf::Event& event, SplashMenu& menu) {
@@ -259,6 +309,7 @@ namespace r3 {
 		void SplashSceneController::beginMusic() {
 			this->ensureMusicLoaded();
 
+			this->music->setVolume((float)this->systemOptionsMenu->getItemValue(SplashSystemOptionsMenuId::MUSIC_VOLUME));
 			this->music->play();
 			this->music->setLoop(true);
 		}
@@ -272,6 +323,9 @@ namespace r3 {
 				break;
 			case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
 				result = this->quickGameOptionsMenu;
+				break;
+			case SplashSceneMode::SYSTEM_OPTIONS_MENU:
+				result = this->systemOptionsMenu;
 				break;
 			}
 

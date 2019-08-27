@@ -63,6 +63,10 @@ namespace r3 {
 			}
 		}
 
+		void QuickGameController::setSystemOptions(const SystemOptionsDefn& systemOptions) {
+			this->systemOptions = systemOptions;
+		}
+
 		void QuickGameController::setQuickGameOptions(const QuickGameOptionsDefn& gameOptions) {
 			this->gameOptions = gameOptions;
 			this->startGame();
@@ -278,6 +282,7 @@ namespace r3 {
 			this->gameRunningMusic->setLoopPoints(sf::Music::TimeSpan(sf::seconds(0.445f), sf::seconds(9.149f)));
 			this->gameRunningMusic->setLoop(true);
 
+			this->gameRunningMusic->setVolume((float)systemOptions.musicVolume);
 			this->gameRunningMusic->play();
 			this->gameRunningMusic->setLoop(true);
 		}
@@ -293,6 +298,7 @@ namespace r3 {
 			this->gameRunningMusic->setLoop(true);
 
 			if (this->gameRunningMusic->getStatus() != sf::SoundSource::Status::Playing) {
+				this->gameRunningMusic->setVolume((float)systemOptions.musicVolume);
 				this->gameRunningMusic->play();
 				this->gameRunningMusic->setLoop(true);
 			}
@@ -304,6 +310,7 @@ namespace r3 {
 			}
 
 			this->ensureGameDoneSummaryMusicLoaded();
+			this->gameDoneSummaryMusic->setVolume((float)systemOptions.musicVolume);
 			this->gameDoneSummaryMusic->play();
 		}
 

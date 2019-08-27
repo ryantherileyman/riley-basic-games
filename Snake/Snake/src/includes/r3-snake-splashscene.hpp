@@ -60,7 +60,8 @@ namespace r3 {
 		namespace SplashMainMenuId {
 			const int START_QUICK_GAME = 1;
 			const int QUICK_GAME_OPTIONS = 2;
-			const int EXIT_GAME = 3;
+			const int SYSTEM_OPTIONS = 3;
+			const int EXIT_GAME = 4;
 		}
 
 		namespace SplashQuickGameOptionsMenuId {
@@ -78,16 +79,27 @@ namespace r3 {
 			const SplashSliderRange FIELD_HEIGHT(12, 100);
 		}
 
+		namespace SplashSystemOptionsMenuId {
+			const int RETURN_TO_MAIN_MENU = 1;
+			const int MUSIC_VOLUME = 2;
+		}
+
+		namespace SplashSystemOptionValues {
+			const SplashSliderRange MUSIC_VOLUME(0, 100);
+		}
+
 		namespace SplashMenuFactory {
 
 			extern std::map<int, SplashMenuItemDefn> createMainMenuDefnMap();
 			extern std::map<int, SplashMenuItemDefn> createQuickGameOptionsMenuDefnMap();
+			extern std::map<int, SplashMenuItemDefn> createSystemOptionsMenuDefnMap();
 
 		}
 
 		typedef enum class Snake_SplashSceneMode {
 			MAIN_MENU,
 			QUICK_GAME_OPTIONS_MENU,
+			SYSTEM_OPTIONS_MENU,
 		} SplashSceneMode;
 
 		typedef struct Snake_SplashMenuKeypressResult {
@@ -167,6 +179,7 @@ namespace r3 {
 		private:
 			SplashMenu* mainMenu;
 			SplashMenu* quickGameOptionsMenu;
+			SplashMenu* systemOptionsMenu;
 
 		public:
 			SplashSceneController(sf::RenderWindow& window);
@@ -176,6 +189,7 @@ namespace r3 {
 
 		public:
 			QuickGameOptionsDefn getQuickGameOptions() const;
+			SystemOptionsDefn getSystemOptions() const;
 
 		public:
 			SplashSceneClientRequest processEvent(sf::Event& event);
@@ -186,6 +200,7 @@ namespace r3 {
 			SplashSceneClientRequest processKeypressEvent(sf::Event& event);
 			SplashSceneClientRequest processMainMenuKeypressEvent(sf::Event& event);
 			void processQuickGameOptionsKeypressEvent(sf::Event& event);
+			void processSystemOptionsKeypressEvent(sf::Event& event);
 
 		private:
 			void processMouseMovedEvent(sf::Event& event);
@@ -194,6 +209,8 @@ namespace r3 {
 		private:
 			SplashSceneClientRequest performMainMenuItemAction(int menuItemId);
 			void performQuickGameOptionsMenuItemAction(int menuItemId);
+			void performSystemOptionsMenuItemAction(int menuItemId);
+			void performSystemOptionsSliderChange();
 
 		private:
 			SplashMenuKeypressResult processMenuKeypressEvent(sf::Event& event, SplashMenu& menu);

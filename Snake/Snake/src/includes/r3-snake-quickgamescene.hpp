@@ -90,6 +90,7 @@ namespace r3 {
 		private:
 			sf::RenderWindow* window;
 			QuickGameRenderer* renderer;
+			SystemOptionsDefn systemOptions;
 
 		private:
 			QuickGameMode mode;
@@ -126,6 +127,7 @@ namespace r3 {
 			~QuickGameController();
 
 		public:
+			void setSystemOptions(const SystemOptionsDefn& systemOptions);
 			void setQuickGameOptions(const QuickGameOptionsDefn& gameOptions);
 
 		public:

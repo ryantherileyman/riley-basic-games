@@ -45,6 +45,10 @@ namespace r3 {
 			delete this->systemOptionsMenu;
 		}
 
+		void SplashSceneController::setWindow(sf::RenderWindow& window) {
+			this->window = &window;
+		}
+
 		QuickGameOptionsDefn SplashSceneController::getQuickGameOptions() const {
 			QuickGameOptionsDefn result;
 			result.snakeSpeedTilesPerSecond = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::SNAKE_SPEED);

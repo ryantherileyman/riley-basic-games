@@ -123,6 +123,9 @@ namespace r3 {
 				if (currMenuItemDefn.second.menuItemType == SplashMenuItemType::SLIDER) {
 					itemWidth += SPLASH_MENU_ITEM_BACKGROUND_MARGIN + SPLASH_MENU_ITEM_SLIDER_WIDTH;
 				}
+				else if (currMenuItemDefn.second.menuItemType == SplashMenuItemType::BUTTON_OPTIONS) {
+					itemWidth += SPLASH_MENU_ITEM_BACKGROUND_MARGIN + this->resolveButtonOptionsWidth(currMenuItemDefn.second);
+				}
 
 				if (itemWidth > result) {
 					result = itemWidth;
@@ -142,6 +145,9 @@ namespace r3 {
 			this->renderMenuItemLabel(renderTarget, menuItemRenderState);
 			if (menuItemDefn.menuItemType == SplashMenuItemType::SLIDER) {
 				this->renderMenuItemSlider(renderTarget, menuItemRenderState);
+			}
+			else if (menuItemDefn.menuItemType == SplashMenuItemType::BUTTON_OPTIONS) {
+				this->renderMenuItemButtonOptions(renderTarget, menuItemRenderState);
 			}
 
 			if (menuItemRenderState.isCurrItem()) {
@@ -198,6 +204,25 @@ namespace r3 {
 			renderTarget.draw(sliderHandleShape);
 		}
 
+		void SplashSceneRenderer::renderMenuItemButtonOptions(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
+			sf::Text menuItemText = this->createMenuItemText(false);
+			menuItemText.setString(menuItemRenderState.getMenuItemDefn().displayText);
+
+			float menuItemLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) - (menuItemRenderState.backgroundWidth / 2.0f) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
+			float currLeftPos = menuItemLeftPos + FontUtils::resolveTextWidth(menuItemText) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
+
+			sf::Text buttonOptionText = this->createMenuItemText(menuItemRenderState.isCurrItem());
+			
+			for (auto const& currButtonOption : menuItemRenderState.getMenuItemDefn().buttonOptionDefnMap) {
+				buttonOptionText.setString(currButtonOption.second.displayText);
+				buttonOptionText.setPosition(currLeftPos, menuItemRenderState.top);
+
+				renderTarget.draw(buttonOptionText);
+
+				currLeftPos += FontUtils::resolveTextWidth(buttonOptionText) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
+			}
+		}
+
 		void SplashSceneRenderer::renderMenuItemDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
 			sf::Text descriptionText = this->createMenuItemText(menuItemRenderState.isCurrItem());
 			descriptionText.setString(menuItemRenderState.getMenuItemDefn().descriptiveText);
@@ -230,6 +255,26 @@ namespace r3 {
 			result.top = menuItemTop + (SPLASH_MENU_ITEM_BACKGROUND_HEIGHT / 2.0f) - (SPLASH_MENU_ITEM_SLIDER_HANDLE_HEIGHT / 2.0f);
 			result.width = SPLASH_MENU_ITEM_SLIDER_WIDTH;
 			result.height = SPLASH_MENU_ITEM_SLIDER_HANDLE_HEIGHT;
+			return result;
+		}
+
+		float SplashSceneRenderer::resolveButtonOptionsWidth(const SplashMenuItemDefn& menuItemDefn) {
+			float result = 0.0f;
+
+			bool isFirstButtonOption = true;
+			sf::Text buttonOptionText = createMenuItemText(false);
+
+			for (auto const& currButtonOptionDefn : menuItemDefn.buttonOptionDefnMap) {
+				if (!isFirstButtonOption) {
+					result += SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
+				}
+
+				buttonOptionText.setString(currButtonOptionDefn.second.descriptiveText);
+				result += FontUtils::resolveTextWidth(buttonOptionText);
+
+				isFirstButtonOption = false;
+			}
+
 			return result;
 		}
 

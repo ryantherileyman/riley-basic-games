@@ -63,6 +63,10 @@ namespace r3 {
 			}
 		}
 
+		void QuickGameController::setWindow(sf::RenderWindow& window) {
+			this->window = &window;
+		}
+
 		void QuickGameController::setSystemOptions(const SystemOptionsDefn& systemOptions) {
 			this->systemOptions = systemOptions;
 		}
@@ -112,12 +116,12 @@ namespace r3 {
 
 				QuickGameUpdateResult updateResult = this->game->update(&inputRequest);
 				if (updateResult.snakeAteAppleFlag) {
-					this->eatAppleSound.setVolume(systemOptions.soundEffectsVolume);
+					this->eatAppleSound.setVolume((float)systemOptions.soundEffectsVolume);
 					this->eatAppleSound.play();
 				}
 
 				if (updateResult.snakeHitBarrierFlag) {
-					this->hitBarrierSound.setVolume(systemOptions.soundEffectsVolume);
+					this->hitBarrierSound.setVolume((float)systemOptions.soundEffectsVolume);
 					this->hitBarrierSound.play();
 
 					this->mode = QuickGameMode::GAME_DONE_SUMMARY;

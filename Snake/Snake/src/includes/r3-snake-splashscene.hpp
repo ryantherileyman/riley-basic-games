@@ -81,11 +81,14 @@ namespace r3 {
 
 		namespace SplashSystemOptionsMenuId {
 			const int RETURN_TO_MAIN_MENU = 1;
-			const int MUSIC_VOLUME = 2;
-			const int SOUND_EFFECTS_VOLUME = 3;
+			const int VIDEO_MODE = 2;
+			const int MUSIC_VOLUME = 3;
+			const int SOUND_EFFECTS_VOLUME = 4;
 		}
 
 		namespace SplashSystemOptionValues {
+			const int VIDEO_MODE_WINDOW = 1;
+			const int VIDEO_MODE_FULLSCREEN = 2;
 			const SplashSliderRange MUSIC_VOLUME(0, 100);
 			const SplashSliderRange SOUND_EFFECTS_VOLUME(0, 100);
 		}
@@ -120,6 +123,8 @@ namespace r3 {
 			NONE,
 			EXIT_GAME,
 			START_QUICK_GAME,
+			SWITCH_TO_FULLSCREEN,
+			SWITCH_TO_WINDOW,
 		} SplashSceneClientRequest;
 
 		class SplashMenu;
@@ -188,6 +193,9 @@ namespace r3 {
 
 		public:
 			~SplashSceneController();
+
+		public:
+			void setWindow(sf::RenderWindow& window);
 
 		public:
 			QuickGameOptionsDefn getQuickGameOptions() const;
@@ -275,6 +283,7 @@ namespace r3 {
 			void renderFocusedMenuItemBackground(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemLabel(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemSlider(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
+			void renderMenuItemButtonOptions(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemValueDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 
@@ -282,6 +291,7 @@ namespace r3 {
 			sf::Text createMenuItemText(bool currItemFlag);
 			sf::RectangleShape createMenuItemSliderShape(bool currItemFlag);
 			sf::FloatRect resolveSliderRect(float menuWidth, float menuItemTop);
+			float resolveButtonOptionsWidth(const SplashMenuItemDefn& menuItemDefn);
 
 		};
 

@@ -127,6 +127,9 @@ namespace r3 {
 			~QuickGameController();
 
 		public:
+			void setWindow(sf::RenderWindow& window);
+
+		public:
 			void setSystemOptions(const SystemOptionsDefn& systemOptions);
 			void setQuickGameOptions(const QuickGameOptionsDefn& gameOptions);
 

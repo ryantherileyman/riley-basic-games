@@ -69,7 +69,12 @@ namespace r3 {
 
 			const wchar_t* RETURN_TO_MAIN_MENU_LABEL = L"Return to Main Menu";
 
+			const wchar_t* VIDEO_MODE_LABEL = L"Video Mode:";
+			const wchar_t* VIDEO_MODE_WINDOW_OPTION = L"Window";
+			const wchar_t* VIDEO_MODE_FULLSCREEN_OPTION = L"Fullscreen";
+
 			const wchar_t* MUSIC_VOLUME_LABEL = L"Music Volume:";
+
 			const wchar_t* SOUND_EFFECTS_VOLUME_LABEL = L"Sound Effects Volume:";
 
 		}
@@ -107,6 +112,14 @@ namespace r3 {
 
 			SplashMenuItemDefn createEmptyButtonOptionsMenuItem(int menuItemId, const wchar_t* displayText, const wchar_t* descriptiveText) {
 				SplashMenuItemDefn result = createEmptyMenuItem(menuItemId, SplashMenuItemType::BUTTON_OPTIONS);
+				result.displayText = displayText;
+				result.descriptiveText = descriptiveText;
+				return result;
+			}
+
+			SplashButtonOptionDefn createButtonOption(int buttonOptionId, const wchar_t* displayText, const wchar_t* descriptiveText) {
+				SplashButtonOptionDefn result;
+				result.buttonOptionId = buttonOptionId;
 				result.displayText = displayText;
 				result.descriptiveText = descriptiveText;
 				return result;
@@ -185,6 +198,15 @@ namespace r3 {
 				return result;
 			}
 
+			SplashMenuItemDefn createVideoModeMenuItem() {
+				SplashMenuItemDefn result = createEmptyButtonOptionsMenuItem(SplashSystemOptionsMenuId::VIDEO_MODE, SplashSystemOptionsMenuLabels::VIDEO_MODE_LABEL, nullptr);
+
+				result.buttonOptionDefnMap[SplashSystemOptionValues::VIDEO_MODE_WINDOW] = createButtonOption(SplashSystemOptionValues::VIDEO_MODE_WINDOW, SplashSystemOptionsMenuLabels::VIDEO_MODE_WINDOW_OPTION, nullptr);
+				result.buttonOptionDefnMap[SplashSystemOptionValues::VIDEO_MODE_FULLSCREEN] = createButtonOption(SplashSystemOptionValues::VIDEO_MODE_FULLSCREEN, SplashSystemOptionsMenuLabels::VIDEO_MODE_FULLSCREEN_OPTION, nullptr);
+
+				return result;
+			}
+
 			SplashMenuItemDefn createMusicVolumeMenuItem() {
 				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashSystemOptionsMenuId::MUSIC_VOLUME, SplashSystemOptionValues::MUSIC_VOLUME);
 				result.displayText = SplashSystemOptionsMenuLabels::MUSIC_VOLUME_LABEL;
@@ -201,6 +223,7 @@ namespace r3 {
 				std::map<int, SplashMenuItemDefn> result;
 
 				result[SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU] = createActionMenuItem(SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU, SplashSystemOptionsMenuLabels::RETURN_TO_MAIN_MENU_LABEL, nullptr);
+				result[SplashSystemOptionsMenuId::VIDEO_MODE] = createVideoModeMenuItem();
 				result[SplashSystemOptionsMenuId::MUSIC_VOLUME] = createMusicVolumeMenuItem();
 				result[SplashSystemOptionsMenuId::SOUND_EFFECTS_VOLUME] = createSoundEffectsVolumeMenuItem();
 

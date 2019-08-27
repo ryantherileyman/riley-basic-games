@@ -13,6 +13,7 @@ namespace r3 {
 
 		typedef struct Snake_SystemOptionsDefn {
 			int musicVolume = 100;
+			int soundEffectsVolume = 100;
 		} SystemOptionsDefn;
 
 	}

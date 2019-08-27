@@ -70,6 +70,7 @@ namespace r3 {
 			const wchar_t* RETURN_TO_MAIN_MENU_LABEL = L"Return to Main Menu";
 
 			const wchar_t* MUSIC_VOLUME_LABEL = L"Music Volume:";
+			const wchar_t* SOUND_EFFECTS_VOLUME_LABEL = L"Sound Effects Volume:";
 
 		}
 
@@ -185,8 +186,14 @@ namespace r3 {
 			}
 
 			SplashMenuItemDefn createMusicVolumeMenuItem() {
-				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU, SplashSystemOptionValues::MUSIC_VOLUME);
+				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashSystemOptionsMenuId::MUSIC_VOLUME, SplashSystemOptionValues::MUSIC_VOLUME);
 				result.displayText = SplashSystemOptionsMenuLabels::MUSIC_VOLUME_LABEL;
+				return result;
+			}
+
+			SplashMenuItemDefn createSoundEffectsVolumeMenuItem() {
+				SplashMenuItemDefn result = createEmptySliderMenuItem(SplashSystemOptionsMenuId::SOUND_EFFECTS_VOLUME, SplashSystemOptionValues::SOUND_EFFECTS_VOLUME);
+				result.displayText = SplashSystemOptionsMenuLabels::SOUND_EFFECTS_VOLUME_LABEL;
 				return result;
 			}
 
@@ -195,6 +202,7 @@ namespace r3 {
 
 				result[SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU] = createActionMenuItem(SplashSystemOptionsMenuId::RETURN_TO_MAIN_MENU, SplashSystemOptionsMenuLabels::RETURN_TO_MAIN_MENU_LABEL, nullptr);
 				result[SplashSystemOptionsMenuId::MUSIC_VOLUME] = createMusicVolumeMenuItem();
+				result[SplashSystemOptionsMenuId::SOUND_EFFECTS_VOLUME] = createSoundEffectsVolumeMenuItem();
 
 				return result;
 			}

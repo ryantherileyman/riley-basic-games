@@ -112,10 +112,12 @@ namespace r3 {
 
 				QuickGameUpdateResult updateResult = this->game->update(&inputRequest);
 				if (updateResult.snakeAteAppleFlag) {
+					this->eatAppleSound.setVolume(systemOptions.soundEffectsVolume);
 					this->eatAppleSound.play();
 				}
 
 				if (updateResult.snakeHitBarrierFlag) {
+					this->hitBarrierSound.setVolume(systemOptions.soundEffectsVolume);
 					this->hitBarrierSound.play();
 
 					this->mode = QuickGameMode::GAME_DONE_SUMMARY;

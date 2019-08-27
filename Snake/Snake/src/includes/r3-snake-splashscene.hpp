@@ -82,10 +82,12 @@ namespace r3 {
 		namespace SplashSystemOptionsMenuId {
 			const int RETURN_TO_MAIN_MENU = 1;
 			const int MUSIC_VOLUME = 2;
+			const int SOUND_EFFECTS_VOLUME = 3;
 		}
 
 		namespace SplashSystemOptionValues {
 			const SplashSliderRange MUSIC_VOLUME(0, 100);
+			const SplashSliderRange SOUND_EFFECTS_VOLUME(0, 100);
 		}
 
 		namespace SplashMenuFactory {

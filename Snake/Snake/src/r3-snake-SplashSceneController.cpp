@@ -31,6 +31,7 @@ namespace r3 {
 			SystemOptionsDefn systemOptions;
 			this->systemOptionsMenu = new SplashMenu(SplashMenuFactory::createSystemOptionsMenuDefnMap());
 			this->systemOptionsMenu->setItemValue(SplashSystemOptionsMenuId::MUSIC_VOLUME, systemOptions.musicVolume);
+			this->systemOptionsMenu->setItemValue(SplashSystemOptionsMenuId::SOUND_EFFECTS_VOLUME, systemOptions.soundEffectsVolume);
 		}
 
 		SplashSceneController::~SplashSceneController() {
@@ -56,6 +57,7 @@ namespace r3 {
 		SystemOptionsDefn SplashSceneController::getSystemOptions() const {
 			SystemOptionsDefn result;
 			result.musicVolume = this->systemOptionsMenu->getItemValue(SplashSystemOptionsMenuId::MUSIC_VOLUME);
+			result.soundEffectsVolume = this->systemOptionsMenu->getItemValue(SplashSystemOptionsMenuId::SOUND_EFFECTS_VOLUME);
 			return result;
 		}
 

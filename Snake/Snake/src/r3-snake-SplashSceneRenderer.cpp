@@ -19,6 +19,7 @@ namespace r3 {
 		const float SPLASH_MENU_ITEM_SLIDER_WIDTH = 300.0f;
 		const float SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH = 5.0f;
 		const float SPLASH_MENU_ITEM_SLIDER_HANDLE_HEIGHT = 50.0f;
+		const float SPLASH_MENU_BUTTON_OPTION_MARGIN = 8.0f;
 		const float SPLASH_MENU_ITEM_DESCRIPTION_TOP = 900.0f;
 		const float SPLASH_MENU_ITEM_VALUE_DESCRIPTION_TOP = 980.0f;
 
@@ -61,6 +62,8 @@ namespace r3 {
 			result.overMenuItemId = 0;
 			result.overSliderFlag = false;
 			result.overSliderValue = 0;
+			result.overButtonOptionFlag = false;
+			result.overButtonOptionId = 0;
 
 			float highestMenuItemWidth = this->resolveHighestMenuItemWidth(menu);
 			float menuWidth = highestMenuItemWidth + (SPLASH_MENU_ITEM_BACKGROUND_MARGIN * 2.0f);
@@ -84,6 +87,30 @@ namespace r3 {
 
 						result.overSliderFlag = true;
 						result.overSliderValue = currMenuItemDefn.second.sliderRange.minValue + (int)floorf(sliderPercent * possibleValuesCount);
+					}
+				}
+
+				if (currMenuItemDefn.second.menuItemType == SplashMenuItemType::BUTTON_OPTIONS) {
+					float buttonOptionsWidth = this->resolveButtonOptionsWidth(currMenuItemDefn.second);
+					float currButtonOptionLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) + (menuWidth / 2.0f) - buttonOptionsWidth - SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
+
+					for (auto const& currButtonOption : currMenuItemDefn.second.buttonOptionDefnMap) {
+						sf::Text buttonOptionText = this->createMenuItemText(false);
+						buttonOptionText.setCharacterSize(48);
+						buttonOptionText.setString(currButtonOption.second.displayText);
+
+						sf::FloatRect buttonOptionBounds;
+						buttonOptionBounds.left = currButtonOptionLeftPos;
+						buttonOptionBounds.top = currTop + (SPLASH_MENU_BUTTON_OPTION_MARGIN / 2.0f);
+						buttonOptionBounds.width = FontUtils::resolveTextWidth(buttonOptionText) + (SPLASH_MENU_BUTTON_OPTION_MARGIN * 2.0f);
+						buttonOptionBounds.height = SPLASH_MENU_ITEM_HEIGHT - SPLASH_MENU_BUTTON_OPTION_MARGIN;
+
+						if (buttonOptionBounds.contains(cursorPosition)) {
+							result.overButtonOptionFlag = true;
+							result.overButtonOptionId = currButtonOption.first;
+						}
+
+						currButtonOptionLeftPos += FontUtils::resolveTextWidth(buttonOptionText) + (SPLASH_MENU_ITEM_BACKGROUND_MARGIN * 2.0f);
 					}
 				}
 
@@ -208,18 +235,27 @@ namespace r3 {
 			sf::Text menuItemText = this->createMenuItemText(false);
 			menuItemText.setString(menuItemRenderState.getMenuItemDefn().displayText);
 
-			float menuItemLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) - (menuItemRenderState.backgroundWidth / 2.0f) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
-			float currLeftPos = menuItemLeftPos + FontUtils::resolveTextWidth(menuItemText) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
+			float buttonOptionsWidth = this->resolveButtonOptionsWidth(menuItemRenderState.getMenuItemDefn());
+			float currLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) + (menuItemRenderState.backgroundWidth / 2.0f) - buttonOptionsWidth - SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
 
-			sf::Text buttonOptionText = this->createMenuItemText(menuItemRenderState.isCurrItem());
-			
+			int itemValue = menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId);
+
 			for (auto const& currButtonOption : menuItemRenderState.getMenuItemDefn().buttonOptionDefnMap) {
+				sf::Text buttonOptionText = this->createMenuItemText(currButtonOption.first == itemValue);
+				buttonOptionText.setCharacterSize(48);
 				buttonOptionText.setString(currButtonOption.second.displayText);
-				buttonOptionText.setPosition(currLeftPos, menuItemRenderState.top);
+				buttonOptionText.setPosition(currLeftPos + SPLASH_MENU_BUTTON_OPTION_MARGIN, menuItemRenderState.top + SPLASH_MENU_BUTTON_OPTION_MARGIN);
 
+				sf::RectangleShape buttonBorderShape(sf::Vector2f(FontUtils::resolveTextWidth(buttonOptionText) + (SPLASH_MENU_BUTTON_OPTION_MARGIN * 2.0f), SPLASH_MENU_ITEM_HEIGHT - SPLASH_MENU_BUTTON_OPTION_MARGIN));
+				buttonBorderShape.setPosition(sf::Vector2f(currLeftPos, menuItemRenderState.top + (SPLASH_MENU_BUTTON_OPTION_MARGIN / 2.0f)));
+				buttonBorderShape.setFillColor(sf::Color(0, 32, 0, 64));
+				buttonBorderShape.setOutlineColor(sf::Color(16, 16, 128, 128));
+				buttonBorderShape.setOutlineThickness(1.0f);
+
+				renderTarget.draw(buttonBorderShape);
 				renderTarget.draw(buttonOptionText);
 
-				currLeftPos += FontUtils::resolveTextWidth(buttonOptionText) + SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
+				currLeftPos += FontUtils::resolveTextWidth(buttonOptionText) + (SPLASH_MENU_ITEM_BACKGROUND_MARGIN * 2.0f);
 			}
 		}
 
@@ -262,15 +298,17 @@ namespace r3 {
 			float result = 0.0f;
 
 			bool isFirstButtonOption = true;
+
 			sf::Text buttonOptionText = createMenuItemText(false);
+			buttonOptionText.setCharacterSize(48);
 
 			for (auto const& currButtonOptionDefn : menuItemDefn.buttonOptionDefnMap) {
 				if (!isFirstButtonOption) {
 					result += SPLASH_MENU_ITEM_BACKGROUND_MARGIN;
 				}
 
-				buttonOptionText.setString(currButtonOptionDefn.second.descriptiveText);
-				result += FontUtils::resolveTextWidth(buttonOptionText);
+				buttonOptionText.setString(currButtonOptionDefn.second.displayText);
+				result += FontUtils::resolveTextWidth(buttonOptionText) + (SPLASH_MENU_BUTTON_OPTION_MARGIN * 2.0f);
 
 				isFirstButtonOption = false;
 			}

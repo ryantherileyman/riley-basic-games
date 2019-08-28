@@ -30,6 +30,7 @@ namespace r3 {
 
 			SystemOptionsDefn systemOptions;
 			this->systemOptionsMenu = new SplashMenu(SplashMenuFactory::createSystemOptionsMenuDefnMap());
+			this->systemOptionsMenu->setItemValue(SplashSystemOptionsMenuId::VIDEO_MODE, SplashSystemOptionValues::VIDEO_MODE_WINDOW);
 			this->systemOptionsMenu->setItemValue(SplashSystemOptionsMenuId::MUSIC_VOLUME, systemOptions.musicVolume);
 			this->systemOptionsMenu->setItemValue(SplashSystemOptionsMenuId::SOUND_EFFECTS_VOLUME, systemOptions.soundEffectsVolume);
 		}
@@ -43,10 +44,6 @@ namespace r3 {
 			delete this->mainMenu;
 			delete this->quickGameOptionsMenu;
 			delete this->systemOptionsMenu;
-		}
-
-		void SplashSceneController::setWindow(sf::RenderWindow& window) {
-			this->window = &window;
 		}
 
 		QuickGameOptionsDefn SplashSceneController::getQuickGameOptions() const {
@@ -194,11 +191,30 @@ namespace r3 {
 						break;
 					}
 				}
+
 				if (
 					(currMenu->getItemDefn(mousePositionResult.overMenuItemId).menuItemType == SplashMenuItemType::SLIDER) &&
 					mousePositionResult.overSliderFlag
 				) {
 					currMenu->setItemValue(mousePositionResult.overMenuItemId, mousePositionResult.overSliderValue);
+				}
+
+				if (
+					(currMenu->getItemDefn(mousePositionResult.overMenuItemId).menuItemType == SplashMenuItemType::BUTTON_OPTIONS) &&
+					mousePositionResult.overButtonOptionFlag
+				) {
+					int prevItemValue = currMenu->getItemValue(mousePositionResult.overMenuItemId);
+					currMenu->setItemValue(mousePositionResult.overMenuItemId, mousePositionResult.overButtonOptionId);
+					if (prevItemValue != mousePositionResult.overButtonOptionId) {
+						switch (mousePositionResult.overButtonOptionId) {
+						case SplashSystemOptionValues::VIDEO_MODE_WINDOW:
+							result = SplashSceneClientRequest::SWITCH_TO_WINDOW;
+							break;
+						case SplashSystemOptionValues::VIDEO_MODE_FULLSCREEN:
+							result = SplashSceneClientRequest::SWITCH_TO_FULLSCREEN;
+							break;
+						}
+					}
 				}
 			}
 

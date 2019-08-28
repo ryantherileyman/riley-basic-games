@@ -4,6 +4,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "includes/r3-snake-client.hpp"
+#include "includes/r3-snake-utils.hpp"
 #include "includes/r3-snake-splashscene.hpp"
 #include "includes/r3-snake-quickgamescene.hpp"
 
@@ -82,6 +83,18 @@ namespace r3 {
 				this->quickGameController->setQuickGameOptions(this->splashSceneController->getQuickGameOptions());
 				this->quickGameController->setSystemOptions(this->splashSceneController->getSystemOptions());
 				this->mode = ClientMode::QUICK_GAME;
+				break;
+			case SplashSceneClientRequest::SWITCH_TO_WINDOW:
+				this->window.close();
+				this->window.create(sf::VideoMode(WINDOW_INITIAL_WIDTH, WINDOW_INITIAL_HEIGHT), WINDOW_TITLE);
+				this->window.setView(ViewUtils::createView(WINDOW_INITIAL_WIDTH, WINDOW_INITIAL_HEIGHT));
+				break;
+			case SplashSceneClientRequest::SWITCH_TO_FULLSCREEN:
+				sf::VideoMode fullScreenVideoMode = sf::VideoMode::getDesktopMode();
+
+				this->window.close();
+				this->window.create(fullScreenVideoMode, WINDOW_TITLE, sf::Style::Fullscreen);
+				this->window.setView(ViewUtils::createView(fullScreenVideoMode.width, fullScreenVideoMode.height));
 				break;
 			}
 		}

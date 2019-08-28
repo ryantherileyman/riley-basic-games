@@ -63,10 +63,6 @@ namespace r3 {
 			}
 		}
 
-		void QuickGameController::setWindow(sf::RenderWindow& window) {
-			this->window = &window;
-		}
-
 		void QuickGameController::setSystemOptions(const SystemOptionsDefn& systemOptions) {
 			this->systemOptions = systemOptions;
 		}

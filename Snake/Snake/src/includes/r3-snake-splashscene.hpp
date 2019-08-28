@@ -117,6 +117,8 @@ namespace r3 {
 			int overMenuItemId;
 			bool overSliderFlag;
 			int overSliderValue;
+			bool overButtonOptionFlag;
+			int overButtonOptionId;
 		} SplashMenuMousePositionResult;
 
 		typedef enum class Snake_SplashSceneClientRequest {
@@ -193,9 +195,6 @@ namespace r3 {
 
 		public:
 			~SplashSceneController();
-
-		public:
-			void setWindow(sf::RenderWindow& window);
 
 		public:
 			QuickGameOptionsDefn getQuickGameOptions() const;

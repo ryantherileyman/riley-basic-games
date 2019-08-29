@@ -249,8 +249,12 @@ namespace r3 {
 				bool result = (menu->getCurrItemId() == menuItemId);
 				return result;
 			}
-
 		} SplashMenuItemRenderState;
+
+		typedef struct Snake_SplashButtonOptionBoundsResult {
+			float fullWidth;
+			std::unordered_map<int, sf::FloatRect> buttonOptionBoundsMap;
+		} SplashButtonOptionBoundsResult;
 
 		class SplashSceneRenderer {
 
@@ -287,10 +291,13 @@ namespace r3 {
 			void renderMenuItemValueDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 
 		private:
-			sf::Text createMenuItemText(bool currItemFlag);
-			sf::RectangleShape createMenuItemSliderShape(bool currItemFlag);
 			sf::FloatRect resolveSliderRect(float menuWidth, float menuItemTop);
-			float resolveButtonOptionsWidth(const SplashMenuItemDefn& menuItemDefn);
+			SplashButtonOptionBoundsResult resolveButtonOptionBounds(const SplashMenuItemDefn& menuItemDefn);
+
+		private:
+			sf::Text createMenuItemText(bool currItemFlag);
+			sf::Text createButtonOptionText(bool currOptionFlag);
+			sf::RectangleShape createMenuItemSliderShape(bool currItemFlag);
 
 		};
 

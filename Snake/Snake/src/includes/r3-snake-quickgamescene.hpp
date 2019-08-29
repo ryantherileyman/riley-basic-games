@@ -1,5 +1,6 @@
 
 #include <random>
+#include <queue>
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "r3-snake-gameoptions.hpp"
@@ -61,7 +62,7 @@ namespace r3 {
 
 		private:
 			int framesSinceSnakeMoved;
-			ObjectDirection queuedSnakeInput;
+			std::queue<ObjectDirection> snakeInputQueue;
 			int queuedSnakeGrowth;
 
 		public:

@@ -19,7 +19,6 @@ namespace r3 {
 			this->applePosition = sf::Vector2i(0, 0);
 
 			this->framesSinceSnakeMoved = 0;
-			this->queuedSnakeInput = ObjectDirection::NONE;
 			this->queuedSnakeGrowth = 0;
 		}
 
@@ -58,11 +57,31 @@ namespace r3 {
 			this->framesSinceSnakeMoved++;
 
 			if (this->snake->isValidMovementDirection(input->snakeMovementInput)) {
-				this->queuedSnakeInput = input->snakeMovementInput;
+				this->snakeInputQueue.push(input->snakeMovementInput);
 			}
 
 			if (this->framesSinceSnakeMoved >= (60.0f / this->snakeSpeedTilesPerSecond)) {
-				ObjectDirection directionToMoveSnake = this->queuedSnakeInput;
+				ObjectDirection directionToMoveSnake = ObjectDirection::NONE;
+
+				// First pop all queued inputs that are going the same direction that the snake is already going
+				// This is necessary in the case that the user held down an arrow key
+				bool allSameDirectionPoppedFlag = false;
+				while (!allSameDirectionPoppedFlag) {
+					allSameDirectionPoppedFlag = this->snakeInputQueue.empty();
+					if (!this->snakeInputQueue.empty()) {
+						allSameDirectionPoppedFlag = (this->snakeInputQueue.front() != this->snake->getHead().enterDirection);
+						if (!allSameDirectionPoppedFlag) {
+							this->snakeInputQueue.pop();
+						}
+					}
+				}
+
+				// Now pull off the next element for an actual change in direction
+				if (!this->snakeInputQueue.empty()) {
+					directionToMoveSnake = this->snakeInputQueue.front();
+					this->snakeInputQueue.pop();
+				}
+
 				if (directionToMoveSnake == ObjectDirection::NONE) {
 					directionToMoveSnake = this->snake->getHead().enterDirection;
 				}

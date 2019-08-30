@@ -49,57 +49,25 @@ namespace r3 {
 			result.snakeAteAppleFlag = false;
 			result.snakeGrewFlag = false;
 
-			if (!this->appleExistsFlag) {
-				this->applePosition = this->resolveNewApplePosition();
-				this->appleExistsFlag = true;
-			}
-
-			this->framesSinceSnakeMoved++;
+			this->ensureAppleExists();
 
 			if (this->snake->isValidMovementDirection(input->snakeMovementInput)) {
 				this->snakeInputQueue.push(input->snakeMovementInput);
 			}
 
+			this->framesSinceSnakeMoved++;
 			if (this->framesSinceSnakeMoved >= (60.0f / this->snakeSpeedTilesPerSecond)) {
-				ObjectDirection directionToMoveSnake = ObjectDirection::NONE;
-
 				// First pop all queued inputs that are going the same direction that the snake is already going
 				// This is necessary in the case that the user held down an arrow key
-				bool allSameDirectionPoppedFlag = false;
-				while (!allSameDirectionPoppedFlag) {
-					allSameDirectionPoppedFlag = this->snakeInputQueue.empty();
-					if (!this->snakeInputQueue.empty()) {
-						allSameDirectionPoppedFlag = (this->snakeInputQueue.front() != this->snake->getHead().enterDirection);
-						if (!allSameDirectionPoppedFlag) {
-							this->snakeInputQueue.pop();
-						}
-					}
-				}
+				this->consumeAllSnakeInputsInSameDirection();
 
-				// Now pull off the next element for an actual change in direction
-				if (!this->snakeInputQueue.empty()) {
-					directionToMoveSnake = this->snakeInputQueue.front();
-					this->snakeInputQueue.pop();
-				}
-
-				if (directionToMoveSnake == ObjectDirection::NONE) {
-					directionToMoveSnake = this->snake->getHead().enterDirection;
-				}
+				ObjectDirection directionToMoveSnake = this->resolveDirectionToMoveSnake();
 
 				if (this->snakeWouldHitBarrier(directionToMoveSnake)) {
 					result.snakeHitBarrierFlag = true;
 				} else {
-					if (this->queuedSnakeGrowth > 0) {
-						this->snake->growForward(directionToMoveSnake);
-						this->queuedSnakeGrowth--;
-
-						result.snakeGrewFlag = true;
-					}
-					else {
-						this->snake->moveForward(directionToMoveSnake);
-					}
-
 					result.snakeMovementResult = directionToMoveSnake;
+					result.snakeGrewFlag = this->moveSnakeForward(directionToMoveSnake);
 
 					if (this->snake->getHead().position == this->applePosition) {
 						result.snakeAteAppleFlag = true;
@@ -113,6 +81,13 @@ namespace r3 {
 			}
 
 			return result;
+		}
+
+		void QuickGame::ensureAppleExists() {
+			if (!this->appleExistsFlag) {
+				this->applePosition = this->resolveNewApplePosition();
+				this->appleExistsFlag = true;
+			}
 		}
 
 		sf::Vector2i QuickGame::resolveNewApplePosition() {
@@ -132,6 +107,34 @@ namespace r3 {
 			return result;
 		}
 
+		void QuickGame::consumeAllSnakeInputsInSameDirection() {
+			bool allSameDirectionPoppedFlag = false;
+			while (!allSameDirectionPoppedFlag) {
+				allSameDirectionPoppedFlag = this->snakeInputQueue.empty();
+				if (!this->snakeInputQueue.empty()) {
+					allSameDirectionPoppedFlag = (this->snakeInputQueue.front() != this->snake->getHead().enterDirection);
+					if (!allSameDirectionPoppedFlag) {
+						this->snakeInputQueue.pop();
+					}
+				}
+			}
+		}
+
+		ObjectDirection QuickGame::resolveDirectionToMoveSnake() {
+			ObjectDirection result = ObjectDirection::NONE;
+
+			if (!this->snakeInputQueue.empty()) {
+				result = this->snakeInputQueue.front();
+				this->snakeInputQueue.pop();
+			}
+
+			if (result == ObjectDirection::NONE) {
+				result = this->snake->getHead().enterDirection;
+			}
+
+			return result;
+		}
+
 		bool QuickGame::snakeWouldHitBarrier(ObjectDirection direction) {
 			sf::Vector2i newHeadPosition = this->snake->getHead().position + SnakeUtils::directionToVector(direction);
 
@@ -141,6 +144,22 @@ namespace r3 {
 				(newHeadPosition.y <= 0) ||
 				(newHeadPosition.y >= (this->fieldSize.y - 1)) ||
 				this->snake->bodyOccupiesPosition(newHeadPosition);
+			return result;
+		}
+
+		bool QuickGame::moveSnakeForward(ObjectDirection directionToMoveSnake) {
+			bool result = false;
+
+			if (this->queuedSnakeGrowth > 0) {
+				this->snake->growForward(directionToMoveSnake);
+				this->queuedSnakeGrowth--;
+
+				result = true;
+			}
+			else {
+				this->snake->moveForward(directionToMoveSnake);
+			}
+
 			return result;
 		}
 

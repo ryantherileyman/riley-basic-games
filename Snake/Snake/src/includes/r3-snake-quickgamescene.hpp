@@ -81,8 +81,14 @@ namespace r3 {
 			QuickGameUpdateResult update(const QuickGameInputRequest* input);
 
 		private:
+			void ensureAppleExists();
 			sf::Vector2i resolveNewApplePosition();
+
+		private:
+			void consumeAllSnakeInputsInSameDirection();
+			ObjectDirection resolveDirectionToMoveSnake();
 			bool snakeWouldHitBarrier(ObjectDirection direction);
+			bool moveSnakeForward(ObjectDirection directionToMoveSnake);
 
 		};
 

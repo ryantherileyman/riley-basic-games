@@ -169,6 +169,8 @@ namespace r3 {
 		private:
 			sf::Font* uiFont;
 			sf::Texture* snakeTilesetTexture;
+			sf::Texture* grassTexture;
+			sf::Texture* shrubTexture;
 
 		private:
 			sf::Text snakeLengthText;

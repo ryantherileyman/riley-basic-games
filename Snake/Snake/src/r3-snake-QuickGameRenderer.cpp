@@ -9,8 +9,12 @@ namespace r3 {
 
 		const char* QUICK_GAME_UI_FONT_PATH = "resources/fonts/SourceSansPro-Regular.otf";
 		const char* SNAKE_TILESET_TEXTURE_PATH = "resources/textures/snake-tileset.png";
+		const char* GRASS_TEXTURE_PATH = "resources/textures/grass.png";
+		const char* SHRUB_TEXTURE_PATH = "resources/textures/shrub.png";
 
 		const int SNAKE_TILE_PIXEL_SIZE = 75;
+		const int GRASS_PIXEL_SIZE = 256;
+		const int SHRUB_PIXEL_SIZE = 256;
 		const sf::Vector2f FIELD_CENTER_VIEWPORT_POSITION(960.0f, 576.0f);
 		const float FIELD_HIGHEST_TOP_VIEWPORT_POSITION = 108.0f;
 		const float FIELD_MINIMUM_VIEWPORT_MARGIN = 20.0f;
@@ -46,6 +50,12 @@ namespace r3 {
 				sf::Vector2f result;
 				result.x = FIELD_CENTER_VIEWPORT_POSITION.x - (viewportTileSize * game.getFieldSize().x * 0.5f);
 				result.y = FIELD_CENTER_VIEWPORT_POSITION.y - (viewportTileSize * game.getFieldSize().y * 0.5f);
+				return result;
+			}
+
+			sf::Sprite createSpriteWithTexture(const sf::Texture& sourceTexture) {
+				sf::Sprite result;
+				result.setTexture(sourceTexture, true);
 				return result;
 			}
 
@@ -168,6 +178,18 @@ namespace r3 {
 				throw "Could not load game texture";
 			}
 
+			this->grassTexture = new sf::Texture();
+			if (!this->grassTexture->loadFromFile(GRASS_TEXTURE_PATH)) {
+				throw "Could not load grass texture";
+			}
+			this->grassTexture->setRepeated(true);
+
+			this->shrubTexture = new sf::Texture();
+			if (!this->shrubTexture->loadFromFile(SHRUB_TEXTURE_PATH)) {
+				throw "Could not load shrub texture";
+			}
+			this->shrubTexture->setRepeated(true);
+
 			this->snakeLengthText.setFont(*this->uiFont);
 			this->snakeLengthText.setCharacterSize(48);
 			this->snakeLengthText.setOutlineColor(sf::Color::White);
@@ -192,8 +214,8 @@ namespace r3 {
 			float exitInstructionsWidth = FontUtils::resolveTextWidth(exitInstructionsText);
 			this->exitInstructionsText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (exitInstructionsWidth / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) + 35.0f);
 
-			QuickGameRendererUtils::initSprite(this->grassSprite, *this->snakeTilesetTexture, 0, 375);
-			QuickGameRendererUtils::initSprite(this->shrubSprite, *this->snakeTilesetTexture, 75, 375);
+			this->grassSprite = QuickGameRendererUtils::createSpriteWithTexture(*this->grassTexture);
+			this->shrubSprite = QuickGameRendererUtils::createSpriteWithTexture(*this->shrubTexture);
 			QuickGameRendererUtils::initSprite(this->appleSprite, *this->snakeTilesetTexture, 150, 375);
 		}
 
@@ -237,36 +259,35 @@ namespace r3 {
 		void QuickGameRenderer::renderPlayingField(sf::RenderTarget& renderTarget, const QuickGame& game) {
 			float tileSize = QuickGameRendererUtils::resolveViewportTileSize(game);
 			sf::Vector2f fieldPosition = QuickGameRendererUtils::resolveViewportFieldTopLeftPosition(game, tileSize);
-			float spriteScale = tileSize / (float)SNAKE_TILE_PIXEL_SIZE;
-
-			this->grassSprite.setScale(spriteScale, spriteScale);
-			this->shrubSprite.setScale(spriteScale, spriteScale);
 
 			// Draw grass tiles under entire playing field
-			for (int x = 0; x < game.getFieldSize().x; x++) {
-				for (int y = 0; y < game.getFieldSize().y; y++) {
-					this->grassSprite.setPosition(x * tileSize + fieldPosition.x, y * tileSize + fieldPosition.y);
-					renderTarget.draw(this->grassSprite);
-				}
-			}
+			this->grassSprite.setScale(tileSize / (float)GRASS_PIXEL_SIZE, tileSize / (float)GRASS_PIXEL_SIZE);
+			this->grassSprite.setPosition(fieldPosition.x, fieldPosition.y);
+			this->grassSprite.setTextureRect(sf::IntRect(0, 0, game.getFieldSize().x * GRASS_PIXEL_SIZE, game.getFieldSize().y * GRASS_PIXEL_SIZE));
+			renderTarget.draw(this->grassSprite);
 
-			// Draw top and bottom rows of shrub barriers
-			for (int x = 0; x < game.getFieldSize().x; x++) {
-				this->shrubSprite.setPosition(x * tileSize + fieldPosition.x, fieldPosition.y);
-				renderTarget.draw(this->shrubSprite);
+			// Set scale for shrub sprite
+			this->shrubSprite.setScale(tileSize / (float)SHRUB_PIXEL_SIZE, tileSize / (float)SHRUB_PIXEL_SIZE);
 
-				this->shrubSprite.setPosition(x * tileSize + fieldPosition.x, (game.getFieldSize().y - 1) * tileSize + fieldPosition.y);
-				renderTarget.draw(this->shrubSprite);
-			}
+			// Draw top row of shrub barriers
+			this->shrubSprite.setPosition(fieldPosition.x, fieldPosition.y);
+			this->shrubSprite.setTextureRect(sf::IntRect(0, 0, game.getFieldSize().x * SHRUB_PIXEL_SIZE, SHRUB_PIXEL_SIZE));
+			renderTarget.draw(this->shrubSprite);
 
-			// Draw left and right columns of shrub barriers
-			for (int y = 1; y < game.getFieldSize().y - 1; y++) {
-				this->shrubSprite.setPosition(fieldPosition.x, y * tileSize + fieldPosition.y);
-				renderTarget.draw(this->shrubSprite);
+			// Draw bottom row of shrub barriers
+			this->shrubSprite.setPosition(fieldPosition.x, fieldPosition.y + (game.getFieldSize().y - 1) * tileSize);
+			this->shrubSprite.setTextureRect(sf::IntRect(0, 0, game.getFieldSize().x * SHRUB_PIXEL_SIZE, SHRUB_PIXEL_SIZE));
+			renderTarget.draw(this->shrubSprite);
 
-				this->shrubSprite.setPosition((game.getFieldSize().x - 1) * tileSize + fieldPosition.x, y * tileSize + fieldPosition.y);
-				renderTarget.draw(this->shrubSprite);
-			}
+			// Draw left column of shrub barriers
+			this->shrubSprite.setPosition(fieldPosition.x, fieldPosition.y + tileSize);
+			this->shrubSprite.setTextureRect(sf::IntRect(0, 0, SHRUB_PIXEL_SIZE, (game.getFieldSize().y - 2) * SHRUB_PIXEL_SIZE));
+			renderTarget.draw(this->shrubSprite);
+
+			// Draw right column of shrub barriers
+			this->shrubSprite.setPosition(fieldPosition.x + (game.getFieldSize().x - 1) * tileSize, fieldPosition.y + tileSize);
+			this->shrubSprite.setTextureRect(sf::IntRect(0, 0, SHRUB_PIXEL_SIZE, (game.getFieldSize().y - 2) * SHRUB_PIXEL_SIZE));
+			renderTarget.draw(this->shrubSprite);
 		}
 
 		void QuickGameRenderer::renderApple(sf::RenderTarget& renderTarget, const QuickGame& game) {

@@ -202,14 +202,16 @@ namespace r3 {
 
 			this->startInstructionsText.setFont(*this->uiFont);
 			this->startInstructionsText.setCharacterSize(64);
-			this->startInstructionsText.setOutlineColor(sf::Color::White);
+			this->startInstructionsText.setOutlineColor(QUICK_GAME_BACKGROUND_COLOR);
+			this->startInstructionsText.setOutlineThickness(2.0f);
 			this->startInstructionsText.setString(START_INSTRUCTIONS);
 			float startInstructionsWidth = FontUtils::resolveTextWidth(startInstructionsText);
 			this->startInstructionsText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (startInstructionsWidth / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) - 35.0f);
 
 			this->exitInstructionsText.setFont(*this->uiFont);
 			this->exitInstructionsText.setCharacterSize(64);
-			this->exitInstructionsText.setOutlineColor(sf::Color::White);
+			this->exitInstructionsText.setOutlineColor(QUICK_GAME_BACKGROUND_COLOR);
+			this->exitInstructionsText.setOutlineThickness(2.0f);
 			this->exitInstructionsText.setString(EXIT_INSTRUCTIONS);
 			float exitInstructionsWidth = FontUtils::resolveTextWidth(exitInstructionsText);
 			this->exitInstructionsText.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (exitInstructionsWidth / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) + 35.0f);
@@ -348,7 +350,8 @@ namespace r3 {
 			sf::Text gameWonText;
 			gameWonText.setFont(*this->uiFont);
 			gameWonText.setCharacterSize(64);
-			gameWonText.setOutlineColor(sf::Color::White);
+			gameWonText.setOutlineColor(QUICK_GAME_BACKGROUND_COLOR);
+			gameWonText.setOutlineThickness(2.0f);
 			gameWonText.setString(LAST_GAME_WON_STRING);
 			float gameWonWidth = FontUtils::resolveTextWidth(gameWonText);
 			float gameWonLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) - (gameWonWidth / 2.0f);

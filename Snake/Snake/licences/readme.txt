@@ -9,6 +9,18 @@ https://www.sfml-dev.org/license.php
 https://opensource.org/licenses/Zlib
 
 
+Development Tools
+
+Microsoft Visual Studio Community 2019
+https://visualstudio.microsoft.com/vs/
+
+Greenfish Icon Editor Pro
+http://greenfishsoftware.org/
+
+Inno Setup
+http://www.jrsoftware.org/isinfo.php
+
+
 Licence Information for referenced artwork
 
 Music from https://filmmusic.io

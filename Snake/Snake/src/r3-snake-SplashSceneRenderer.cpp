@@ -20,6 +20,7 @@ namespace r3 {
 		const float SPLASH_MENU_ITEM_SLIDER_HANDLE_WIDTH = 5.0f;
 		const float SPLASH_MENU_ITEM_SLIDER_HANDLE_HEIGHT = 50.0f;
 		const float SPLASH_MENU_BUTTON_OPTION_MARGIN = 8.0f;
+		const float SPLASH_MENU_NAVIGABLE_OPTION_DIAMETER = 32.0f;
 		const float SPLASH_MENU_ITEM_DESCRIPTION_TOP = 900.0f;
 		const float SPLASH_MENU_ITEM_VALUE_DESCRIPTION_TOP = 980.0f;
 
@@ -64,6 +65,8 @@ namespace r3 {
 			result.overSliderValue = 0;
 			result.overButtonOptionFlag = false;
 			result.overButtonOptionId = 0;
+			result.overNavigableLeftArrowFlag = false;
+			result.overNavigableRightArrowFlag = false;
 
 			float highestMenuItemWidth = this->resolveHighestMenuItemWidth(menu);
 			float menuWidth = highestMenuItemWidth + (SPLASH_MENU_ITEM_BACKGROUND_MARGIN * 2.0f);
@@ -106,6 +109,23 @@ namespace r3 {
 					}
 				}
 
+				if (currMenuItemDefn.second.menuItemType == SplashMenuItemType::NAVIGABLE_OPTIONS) {
+					SplashNavigableOptionBoundsResult navigableOptionBoundsResult = this->resolveNavigableOptionBounds(currMenuItemDefn.second);
+
+					float navigableOptionsLeftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) + (menuWidth / 2.0f) - navigableOptionBoundsResult.fullWidth;
+
+					sf::FloatRect leftArrowBounds = navigableOptionBoundsResult.leftArrowBounds;
+					leftArrowBounds.left += navigableOptionsLeftPos;
+					leftArrowBounds.top += currTop;
+
+					sf::FloatRect rightArrowBounds = navigableOptionBoundsResult.rightArrowBounds;
+					rightArrowBounds.left += navigableOptionsLeftPos;
+					rightArrowBounds.top += currTop;
+
+					result.overNavigableLeftArrowFlag = leftArrowBounds.contains(cursorPosition);
+					result.overNavigableRightArrowFlag = rightArrowBounds.contains(cursorPosition);
+				}
+
 				currTop += SPLASH_MENU_ITEM_BACKGROUND_HEIGHT;
 			}
 
@@ -146,6 +166,10 @@ namespace r3 {
 					SplashButtonOptionBoundsResult buttonOptionBoundsResult = this->resolveButtonOptionBounds(currMenuItemDefn.second);
 					itemWidth += SPLASH_MENU_ITEM_BACKGROUND_MARGIN + buttonOptionBoundsResult.fullWidth;
 				}
+				else if (currMenuItemDefn.second.menuItemType == SplashMenuItemType::NAVIGABLE_OPTIONS) {
+					SplashNavigableOptionBoundsResult navigableOptionBoundsResult = this->resolveNavigableOptionBounds(currMenuItemDefn.second);
+					itemWidth += SPLASH_MENU_ITEM_BACKGROUND_MARGIN + navigableOptionBoundsResult.fullWidth;
+				}
 
 				if (itemWidth > result) {
 					result = itemWidth;
@@ -169,14 +193,20 @@ namespace r3 {
 			else if (menuItemDefn.menuItemType == SplashMenuItemType::BUTTON_OPTIONS) {
 				this->renderMenuItemButtonOptions(renderTarget, menuItemRenderState);
 			}
+			else if (menuItemDefn.menuItemType == SplashMenuItemType::NAVIGABLE_OPTIONS) {
+				this->renderMenuItemNavigableOptions(renderTarget, menuItemRenderState);
+			}
 
 			if (menuItemRenderState.isCurrItem()) {
 				if (menuItemDefn.descriptiveText != nullptr) {
 					this->renderMenuItemDescriptiveText(renderTarget, menuItemRenderState);
 				}
 
-				if (menuItemDefn.menuItemType == SplashMenuItemType::SLIDER) {
+				switch (menuItemDefn.menuItemType) {
+				case SplashMenuItemType::SLIDER:
+				case SplashMenuItemType::NAVIGABLE_OPTIONS:
 					this->renderMenuItemValueDescriptiveText(renderTarget, menuItemRenderState);
+					break;
 				}
 			}
 		}
@@ -248,6 +278,31 @@ namespace r3 {
 			}
 		}
 
+		void SplashSceneRenderer::renderMenuItemNavigableOptions(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
+			int itemValue = menuItemRenderState.menu->getItemValue(menuItemRenderState.menuItemId);
+			SplashButtonOptionDefn buttonOption = menuItemRenderState.getMenuItemDefn().buttonOptionDefnMap.at(itemValue);
+			
+			SplashNavigableOptionBoundsResult optionBoundsResult = this->resolveNavigableOptionBounds(menuItemRenderState.getMenuItemDefn());
+			float leftPos = (ViewUtils::VIEW_SIZE.x / 2.0f) + (menuItemRenderState.backgroundWidth / 2.0f) - optionBoundsResult.fullWidth;
+
+			sf::Text buttonOptionText = this->createButtonOptionText(menuItemRenderState.isCurrItem());
+			buttonOptionText.setString(buttonOption.displayText);
+			float buttonOptionWidth = FontUtils::resolveTextWidth(buttonOptionText);
+			buttonOptionText.setPosition(leftPos + (optionBoundsResult.fullWidth / 2.0f) - (buttonOptionWidth / 2.0f), menuItemRenderState.top + SPLASH_MENU_BUTTON_OPTION_MARGIN);
+
+			sf::CircleShape leftArrowShape = this->createNavigableOptionArrowShape(menuItemRenderState.isCurrItem());
+			leftArrowShape.setRotation(-90.0f);
+			leftArrowShape.setPosition(leftPos, menuItemRenderState.top + SPLASH_MENU_BUTTON_OPTION_MARGIN + (SPLASH_MENU_NAVIGABLE_OPTION_DIAMETER * 1.5f));
+			
+			sf::CircleShape rightArrowShape = this->createNavigableOptionArrowShape(menuItemRenderState.isCurrItem());
+			rightArrowShape.setRotation(90.0f);
+			rightArrowShape.setPosition(leftPos + optionBoundsResult.fullWidth, menuItemRenderState.top + SPLASH_MENU_BUTTON_OPTION_MARGIN + (SPLASH_MENU_NAVIGABLE_OPTION_DIAMETER * 0.5f));
+
+			renderTarget.draw(buttonOptionText);
+			renderTarget.draw(leftArrowShape);
+			renderTarget.draw(rightArrowShape);
+		}
+
 		void SplashSceneRenderer::renderMenuItemDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState) {
 			sf::Text descriptionText = this->createMenuItemText(menuItemRenderState.isCurrItem());
 			descriptionText.setString(menuItemRenderState.getMenuItemDefn().descriptiveText);
@@ -314,6 +369,34 @@ namespace r3 {
 			return result;
 		}
 
+		SplashNavigableOptionBoundsResult SplashSceneRenderer::resolveNavigableOptionBounds(const SplashMenuItemDefn& menuItemDefn) {
+			SplashNavigableOptionBoundsResult result;
+
+			result.fullWidth = this->resolveHighestNavigableOptionWidth(menuItemDefn) + (SPLASH_MENU_NAVIGABLE_OPTION_DIAMETER * 2.0f) + (SPLASH_MENU_BUTTON_OPTION_MARGIN * 2.0f);
+			result.leftArrowBounds = sf::FloatRect(0.0f, SPLASH_MENU_BUTTON_OPTION_MARGIN / 2.0f, 32.0f, SPLASH_MENU_ITEM_HEIGHT - SPLASH_MENU_BUTTON_OPTION_MARGIN);
+			result.rightArrowBounds = sf::FloatRect(result.fullWidth - 32.0f, SPLASH_MENU_BUTTON_OPTION_MARGIN / 2.0f, 32.0f, SPLASH_MENU_ITEM_HEIGHT - SPLASH_MENU_BUTTON_OPTION_MARGIN);
+
+			return result;
+		}
+
+		float SplashSceneRenderer::resolveHighestNavigableOptionWidth(const SplashMenuItemDefn& menuItemDefn) {
+			float result = 0.0f;
+
+			sf::Text buttonOptionText = createButtonOptionText(false);
+
+			for (auto const& currButtonOptionDefn : menuItemDefn.buttonOptionDefnMap) {
+				buttonOptionText.setString(currButtonOptionDefn.second.displayText);
+
+				float currWidth = FontUtils::resolveTextWidth(buttonOptionText);
+
+				if (currWidth > result) {
+					result = currWidth;
+				}
+			}
+
+			return result;
+		}
+
 		sf::Text SplashSceneRenderer::createMenuItemText(bool currItemFlag) {
 			sf::Text result;
 			result.setFont(*this->uiFont);
@@ -334,6 +417,17 @@ namespace r3 {
 
 		sf::RectangleShape SplashSceneRenderer::createMenuItemSliderShape(bool currItemFlag) {
 			sf::RectangleShape result;
+			result.setOutlineColor(sf::Color::White);
+			result.setFillColor(sf::Color::White);
+			if (currItemFlag) {
+				result.setOutlineColor(sf::Color::Yellow);
+				result.setFillColor(sf::Color::Yellow);
+			}
+			return result;
+		}
+
+		sf::CircleShape SplashSceneRenderer::createNavigableOptionArrowShape(bool currItemFlag) {
+			sf::CircleShape result(SPLASH_MENU_NAVIGABLE_OPTION_DIAMETER / 2.0f, 3);
 			result.setOutlineColor(sf::Color::White);
 			result.setFillColor(sf::Color::White);
 			if (currItemFlag) {

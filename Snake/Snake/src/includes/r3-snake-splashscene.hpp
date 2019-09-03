@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "r3-snake-gameoptions.hpp"
+#include "r3-snake-storydefn.hpp"
 #pragma once
 
 namespace r3 {
@@ -15,6 +16,7 @@ namespace r3 {
 			ACTION,
 			SLIDER,
 			BUTTON_OPTIONS,
+			NAVIGABLE_OPTIONS,
 		} SplashMenuItemType;
 
 		typedef struct Snake_SplashSliderRange {
@@ -60,8 +62,9 @@ namespace r3 {
 		namespace SplashMainMenuId {
 			const int START_QUICK_GAME = 1;
 			const int QUICK_GAME_OPTIONS = 2;
-			const int SYSTEM_OPTIONS = 3;
-			const int EXIT_GAME = 4;
+			const int STORY_GAME_OPTIONS = 3;
+			const int SYSTEM_OPTIONS = 4;
+			const int EXIT_GAME = 5;
 		}
 
 		namespace SplashQuickGameOptionsMenuId {
@@ -77,6 +80,11 @@ namespace r3 {
 			const SplashSliderRange SNAKE_GROWTH(1, 10);
 			const SplashSliderRange FIELD_WIDTH(12, 100);
 			const SplashSliderRange FIELD_HEIGHT(12, 100);
+		}
+
+		namespace SplashStoryGameOptionsMenuId {
+			const int RETURN_TO_MAIN_MENU = 1;
+			const int CAMPAIGN_CHOICE = 2;
 		}
 
 		namespace SplashSystemOptionsMenuId {
@@ -97,6 +105,7 @@ namespace r3 {
 
 			extern std::map<int, SplashMenuItemDefn> createMainMenuDefnMap();
 			extern std::map<int, SplashMenuItemDefn> createQuickGameOptionsMenuDefnMap();
+			extern std::map<int, SplashMenuItemDefn> createStoryGameOptionsMenuDefnMap(const r3::snake::LoadCampaignListResult& campaignList);
 			extern std::map<int, SplashMenuItemDefn> createSystemOptionsMenuDefnMap();
 
 		}
@@ -104,6 +113,7 @@ namespace r3 {
 		typedef enum class Snake_SplashSceneMode {
 			MAIN_MENU,
 			QUICK_GAME_OPTIONS_MENU,
+			STORY_GAME_OPTIONS_MENU,
 			SYSTEM_OPTIONS_MENU,
 		} SplashSceneMode;
 
@@ -119,6 +129,8 @@ namespace r3 {
 			int overSliderValue;
 			bool overButtonOptionFlag;
 			int overButtonOptionId;
+			bool overNavigableLeftArrowFlag;
+			bool overNavigableRightArrowFlag;
 		} SplashMenuMousePositionResult;
 
 		typedef enum class Snake_SplashSceneClientRequest {
@@ -186,8 +198,12 @@ namespace r3 {
 			bool musicLoaded;
 
 		private:
+			LoadCampaignListResult campaignList;
+
+		private:
 			SplashMenu* mainMenu;
 			SplashMenu* quickGameOptionsMenu;
+			SplashMenu* storyGameOptionsMenu;
 			SplashMenu* systemOptionsMenu;
 
 		public:
@@ -198,6 +214,7 @@ namespace r3 {
 
 		public:
 			QuickGameOptionsDefn getQuickGameOptions() const;
+			StoryGameOptionsDefn getStoryGameOptions() const;
 			SystemOptionsDefn getSystemOptions() const;
 
 		public:
@@ -209,6 +226,7 @@ namespace r3 {
 			SplashSceneClientRequest processKeypressEvent(sf::Event& event);
 			SplashSceneClientRequest processMainMenuKeypressEvent(sf::Event& event);
 			void processQuickGameOptionsKeypressEvent(sf::Event& event);
+			void processStoryGameOptionsKeypressEvent(sf::Event& event);
 			void processSystemOptionsKeypressEvent(sf::Event& event);
 
 		private:
@@ -218,6 +236,7 @@ namespace r3 {
 		private:
 			SplashSceneClientRequest performMainMenuItemAction(int menuItemId);
 			void performQuickGameOptionsMenuItemAction(int menuItemId);
+			void performStoryGameOptionsMenuItemAction(int menuItemId);
 			void performSystemOptionsMenuItemAction(int menuItemId);
 			void performSystemOptionsSliderChange();
 
@@ -256,6 +275,12 @@ namespace r3 {
 			std::unordered_map<int, sf::FloatRect> buttonOptionBoundsMap;
 		} SplashButtonOptionBoundsResult;
 
+		typedef struct Snake_SplashNavigableOptionBoundsResult {
+			float fullWidth;
+			sf::FloatRect leftArrowBounds;
+			sf::FloatRect rightArrowBounds;
+		} SplashNavigableOptionBoundsResult;
+
 		class SplashSceneRenderer {
 
 		private:
@@ -287,17 +312,21 @@ namespace r3 {
 			void renderMenuItemLabel(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemSlider(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemButtonOptions(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
+			void renderMenuItemNavigableOptions(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 			void renderMenuItemValueDescriptiveText(sf::RenderTarget& renderTarget, const SplashMenuItemRenderState menuItemRenderState);
 
 		private:
 			sf::FloatRect resolveSliderRect(float menuWidth, float menuItemTop);
 			SplashButtonOptionBoundsResult resolveButtonOptionBounds(const SplashMenuItemDefn& menuItemDefn);
+			SplashNavigableOptionBoundsResult resolveNavigableOptionBounds(const SplashMenuItemDefn& menuItemDefn);
+			float resolveHighestNavigableOptionWidth(const SplashMenuItemDefn& menuItemDefn);
 
 		private:
 			sf::Text createMenuItemText(bool currItemFlag);
 			sf::Text createButtonOptionText(bool currOptionFlag);
 			sf::RectangleShape createMenuItemSliderShape(bool currItemFlag);
+			sf::CircleShape createNavigableOptionArrowShape(bool currItemFlag);
 
 		};
 

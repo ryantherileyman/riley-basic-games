@@ -1,5 +1,6 @@
 
 #include "includes/r3-snake-utils.hpp"
+#include "includes/r3-snake-storyloader.hpp"
 #include "includes/r3-snake-splashscene.hpp"
 
 namespace r3 {
@@ -19,6 +20,16 @@ namespace r3 {
 			this->music = { nullptr };
 			this->musicLoaded = false;
 
+			this->campaignList = StoryLoaderUtils::retrieveCampaignList();
+
+			int firstValidCampaignIndex = 0;
+			for (auto const& currCampaign : this->campaignList.campaignOptionList) {
+				if (currCampaign.valid()) {
+					firstValidCampaignIndex = currCampaign.index;
+					break;
+				}
+			}
+
 			this->mainMenu = new SplashMenu(SplashMenuFactory::createMainMenuDefnMap());
 
 			QuickGameOptionsDefn quickGameOptions;
@@ -27,6 +38,9 @@ namespace r3 {
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::SNAKE_GROWTH, quickGameOptions.snakeGrowthPerApple);
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::FIELD_WIDTH, quickGameOptions.fieldSize.x);
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::FIELD_HEIGHT, quickGameOptions.fieldSize.y);
+
+			this->storyGameOptionsMenu = new SplashMenu(SplashMenuFactory::createStoryGameOptionsMenuDefnMap(this->campaignList));
+			this->storyGameOptionsMenu->setItemValue(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE, firstValidCampaignIndex);
 
 			SystemOptionsDefn systemOptions;
 			this->systemOptionsMenu = new SplashMenu(SplashMenuFactory::createSystemOptionsMenuDefnMap());
@@ -52,6 +66,12 @@ namespace r3 {
 			result.snakeGrowthPerApple = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::SNAKE_GROWTH);
 			result.fieldSize.x = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::FIELD_WIDTH);
 			result.fieldSize.y = this->quickGameOptionsMenu->getItemValue(SplashQuickGameOptionsMenuId::FIELD_HEIGHT);
+			return result;
+		}
+
+		StoryGameOptionsDefn SplashSceneController::getStoryGameOptions() const {
+			StoryGameOptionsDefn result;
+			result.campaignIndex = this->storyGameOptionsMenu->getItemValue(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE);
 			return result;
 		}
 
@@ -109,6 +129,9 @@ namespace r3 {
 			case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
 				this->processQuickGameOptionsKeypressEvent(event);
 				break;
+			case SplashSceneMode::STORY_GAME_OPTIONS_MENU:
+				this->processStoryGameOptionsKeypressEvent(event);
+				break;
 			case SplashSceneMode::SYSTEM_OPTIONS_MENU:
 				this->processSystemOptionsKeypressEvent(event);
 				break;
@@ -134,6 +157,14 @@ namespace r3 {
 
 			if (menuKeypressResult.performedActionFlag) {
 				this->performQuickGameOptionsMenuItemAction(menuKeypressResult.actionMenuItemId);
+			}
+		}
+
+		void SplashSceneController::processStoryGameOptionsKeypressEvent(sf::Event& event) {
+			SplashMenuKeypressResult menuKeypressResult = this->processMenuKeypressEvent(event, *this->storyGameOptionsMenu);
+
+			if (menuKeypressResult.performedActionFlag) {
+				this->performStoryGameOptionsMenuItemAction(menuKeypressResult.actionMenuItemId);
 			}
 		}
 
@@ -186,6 +217,9 @@ namespace r3 {
 					case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
 						this->performQuickGameOptionsMenuItemAction(mousePositionResult.overMenuItemId);
 						break;
+					case SplashSceneMode::STORY_GAME_OPTIONS_MENU:
+						this->performStoryGameOptionsMenuItemAction(mousePositionResult.overMenuItemId);
+						break;
 					case SplashSceneMode::SYSTEM_OPTIONS_MENU:
 						this->performSystemOptionsMenuItemAction(mousePositionResult.overMenuItemId);
 						break;
@@ -216,6 +250,15 @@ namespace r3 {
 						}
 					}
 				}
+
+				if (currMenu->getItemDefn(mousePositionResult.overMenuItemId).menuItemType == SplashMenuItemType::NAVIGABLE_OPTIONS) {
+					if (mousePositionResult.overNavigableLeftArrowFlag) {
+						currMenu->decrementItemValue(mousePositionResult.overMenuItemId);
+					}
+					if (mousePositionResult.overNavigableRightArrowFlag) {
+						currMenu->incrementItemValue(mousePositionResult.overMenuItemId);
+					}
+				}
 			}
 
 			return result;
@@ -233,6 +276,10 @@ namespace r3 {
 				this->mode = SplashSceneMode::QUICK_GAME_OPTIONS_MENU;
 				this->quickGameOptionsMenu->moveToFirstItem();
 				break;
+			case SplashMainMenuId::STORY_GAME_OPTIONS:
+				this->mode = SplashSceneMode::STORY_GAME_OPTIONS_MENU;
+				this->storyGameOptionsMenu->moveToFirstItem();
+				break;
 			case SplashMainMenuId::SYSTEM_OPTIONS:
 				this->mode = SplashSceneMode::SYSTEM_OPTIONS_MENU;
 				this->systemOptionsMenu->moveToFirstItem();
@@ -249,6 +296,15 @@ namespace r3 {
 		void SplashSceneController::performQuickGameOptionsMenuItemAction(int menuItemId) {
 			switch (menuItemId) {
 			case SplashQuickGameOptionsMenuId::RETURN_TO_MAIN_MENU:
+				this->mode = SplashSceneMode::MAIN_MENU;
+				this->mainMenu->moveToFirstItem();
+				break;
+			}
+		}
+
+		void SplashSceneController::performStoryGameOptionsMenuItemAction(int menuItemId) {
+			switch (menuItemId) {
+			case SplashStoryGameOptionsMenuId::RETURN_TO_MAIN_MENU:
 				this->mode = SplashSceneMode::MAIN_MENU;
 				this->mainMenu->moveToFirstItem();
 				break;
@@ -293,14 +349,20 @@ namespace r3 {
 				break;
 
 			case sf::Keyboard::Key::Left:
-				if (menu.getCurrItemDefn().menuItemType == SplashMenuItemType::SLIDER) {
+				switch (menu.getCurrItemDefn().menuItemType) {
+				case SplashMenuItemType::SLIDER:
+				case SplashMenuItemType::NAVIGABLE_OPTIONS:
 					menu.decrementItemValue(menu.getCurrItemId());
+					break;
 				}
 				break;
 
 			case sf::Keyboard::Key::Right:
-				if (menu.getCurrItemDefn().menuItemType == SplashMenuItemType::SLIDER) {
+				switch (menu.getCurrItemDefn().menuItemType) {
+				case SplashMenuItemType::SLIDER:
+				case SplashMenuItemType::NAVIGABLE_OPTIONS:
 					menu.incrementItemValue(menu.getCurrItemId());
+					break;
 				}
 				break;
 
@@ -345,6 +407,9 @@ namespace r3 {
 				break;
 			case SplashSceneMode::QUICK_GAME_OPTIONS_MENU:
 				result = this->quickGameOptionsMenu;
+				break;
+			case SplashSceneMode::STORY_GAME_OPTIONS_MENU:
+				result = this->storyGameOptionsMenu;
 				break;
 			case SplashSceneMode::SYSTEM_OPTIONS_MENU:
 				result = this->systemOptionsMenu;

@@ -17,6 +17,7 @@ namespace r3 {
 					this->chosenValueMap[currMenuItemDefn.first] = currMenuItemDefn.second.sliderRange.minValue;
 					break;
 				case SplashMenuItemType::BUTTON_OPTIONS:
+				case SplashMenuItemType::NAVIGABLE_OPTIONS:
 					this->chosenValueMap[currMenuItemDefn.first] = currMenuItemDefn.second.buttonOptionDefnMap.begin()->first;
 					break;
 				}
@@ -99,6 +100,7 @@ namespace r3 {
 			}
 				break;
 			case SplashMenuItemType::BUTTON_OPTIONS:
+			case SplashMenuItemType::NAVIGABLE_OPTIONS:
 			{
 				int value = this->chosenValueMap.at(menuItemId);
 				SplashButtonOptionDefn buttonOptionDefn = menuItemDefn.buttonOptionDefnMap.at(value);
@@ -119,7 +121,8 @@ namespace r3 {
 				assert(value <= menuItemDefn.sliderRange.maxValue);
 				break;
 			case SplashMenuItemType::BUTTON_OPTIONS:
-				assert(menuItemDefn.buttonOptionDefnMap.count(menuItemId) == 1);
+			case SplashMenuItemType::NAVIGABLE_OPTIONS:
+				assert(menuItemDefn.buttonOptionDefnMap.count(value) == 1);
 				break;
 			}
 
@@ -144,6 +147,7 @@ namespace r3 {
 			}
 				break;
 			case SplashMenuItemType::BUTTON_OPTIONS:
+			case SplashMenuItemType::NAVIGABLE_OPTIONS:
 			{
 				int currValue = this->chosenValueMap.at(menuItemId);
 
@@ -152,8 +156,10 @@ namespace r3 {
 				result = currValue;
 				if (nextButtonOptionDefnIterator != menuItemDefn.buttonOptionDefnMap.end()) {
 					result = nextButtonOptionDefnIterator->first;
-					this->chosenValueMap[menuItemId] = result;
+				} else {
+					result = menuItemDefn.buttonOptionDefnMap.begin()->first;
 				}
+				this->chosenValueMap[menuItemId] = result;
 			}
 				break;
 			}
@@ -179,6 +185,7 @@ namespace r3 {
 			}
 			break;
 			case SplashMenuItemType::BUTTON_OPTIONS:
+			case SplashMenuItemType::NAVIGABLE_OPTIONS:
 			{
 				int currValue = this->chosenValueMap.at(menuItemId);
 
@@ -187,8 +194,10 @@ namespace r3 {
 				result = currValue;
 				if (prevButtonOptionDefnIterator != menuItemDefn.buttonOptionDefnMap.end()) {
 					result = prevButtonOptionDefnIterator->first;
-					this->chosenValueMap[menuItemId] = result;
+				} else {
+					result = (--menuItemDefn.buttonOptionDefnMap.end())->first;
 				}
+				this->chosenValueMap[menuItemId] = result;
 			}
 			break;
 			}
@@ -199,9 +208,7 @@ namespace r3 {
 		SplashMenuItemDefn SplashMenu::assertMenuItemAllowsValue(int menuItemId) const {
 			SplashMenuItemDefn menuItemDefn = this->menuItemDefnMap.at(menuItemId);
 
-			bool menuItemHasValue =
-				(menuItemDefn.menuItemType == SplashMenuItemType::SLIDER) ||
-				(menuItemDefn.menuItemType == SplashMenuItemType::BUTTON_OPTIONS);
+			bool menuItemHasValue = (menuItemDefn.menuItemType != SplashMenuItemType::ACTION);
 			assert(menuItemHasValue);
 
 			return menuItemDefn;

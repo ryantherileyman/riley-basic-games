@@ -8,6 +8,9 @@ SFML Libraries are distributed under the zlib/png licence.
 https://www.sfml-dev.org/license.php
 https://opensource.org/licenses/Zlib
 
+JsonCpp Library is distributed under the MIT licence.
+http://en.wikipedia.org/wiki/MIT_License
+
 
 Development Tools
 

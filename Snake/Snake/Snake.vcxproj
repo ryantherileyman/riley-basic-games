@@ -80,7 +80,7 @@
       <PreprocessorDefinitions>SFML_STATIC;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>E:\Riley\DevData\cpp\SFML\SFML-2.5.1\lib</AdditionalLibraryDirectories>
       <AdditionalDependencies>sfml-graphics-s-d.lib;sfml-audio-s-d.lib;sfml-window-s-d.lib;sfml-system-s-d.lib;sfml-main-d.lib;opengl32.lib;winmm.lib;freetype.lib;openal32.lib;flac.lib;vorbisenc.lib;vorbisfile.lib;vorbis.lib;ogg.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
@@ -131,6 +131,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\jsoncpp\jsoncpp.cpp" />
     <ClCompile Include="src\r3-snake-GameClient.cpp" />
     <ClCompile Include="src\r3-snake-QuickGame.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameController.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="src\r3-snake-SplashSceneRenderer.cpp" />
     <ClCompile Include="src\r3-snake-utils.cpp" />
     <ClCompile Include="src\snake-main.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-StoryLoaderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -150,6 +152,8 @@
     <ClInclude Include="src\includes\r3-snake-gamestate.hpp" />
     <ClInclude Include="src\includes\r3-snake-quickgamescene.hpp" />
     <ClInclude Include="src\includes\r3-snake-splashscene.hpp" />
+    <ClInclude Include="src\includes\r3-snake-storydefn.hpp" />
+    <ClInclude Include="src\includes\r3-snake-storyloader.hpp" />
     <ClInclude Include="src\includes\r3-snake-utils.hpp" />
   </ItemGroup>
   <ItemGroup>

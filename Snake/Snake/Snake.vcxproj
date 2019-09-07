@@ -132,6 +132,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\jsoncpp\jsoncpp.cpp" />
+    <ClCompile Include="src\r3-json-ValidationUtils.cpp" />
     <ClCompile Include="src\r3-snake-GameClient.cpp" />
     <ClCompile Include="src\r3-snake-QuickGame.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameController.cpp" />
@@ -143,10 +144,13 @@
     <ClCompile Include="src\r3-snake-SplashSceneRenderer.cpp" />
     <ClCompile Include="src\r3-snake-utils.cpp" />
     <ClCompile Include="src\snake-main.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-LoadAssetValidation.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-LoadStoryMapValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryLoaderUtils.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
+    <ClInclude Include="src\includes\r3-json-JsonValidationUtils.hpp" />
     <ClInclude Include="src\includes\r3-snake-client.hpp" />
     <ClInclude Include="src\includes\r3-snake-gameoptions.hpp" />
     <ClInclude Include="src\includes\r3-snake-gamestate.hpp" />

@@ -1,6 +1,8 @@
 
 #include <string>
 #include <vector>
+#include <unordered_map>
+#include <SFML/Graphics.hpp>
 #pragma once
 
 namespace r3 {
@@ -39,6 +41,19 @@ namespace r3 {
 				return result;
 			}
 		} LoadCampaignListResult;
+
+		typedef struct Snake_StoryMapTileDefn {
+			int tileId;
+			std::string filename;
+		} StoryMapTileDefn;
+
+		typedef struct Snake_StoryMapDefn {
+			sf::Vector2i fieldSize;
+			std::unordered_map<int, StoryMapTileDefn> floorDefnMap;
+			std::unordered_map<int, StoryMapTileDefn> barrierDefnMap;
+			std::vector<std::vector<int>> floorGrid;
+			std::vector<std::vector<int>> barrierGrid;
+		} StoryMapDefn;
 
 	}
 

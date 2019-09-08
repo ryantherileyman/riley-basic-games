@@ -1,5 +1,6 @@
 
 #include <SFML/Graphics.hpp>
+#include <SFML/Audio.hpp>
 #include "../includes/r3-snake-storyloader.hpp"
 
 namespace r3 {
@@ -17,6 +18,14 @@ namespace r3 {
 					// Don't like that we'll be loading assets twice, but this does work...
 					sf::Image image;
 					bool result = image.loadFromFile(imageFilePath);
+					return result;
+				}
+
+				bool soundFileValid(const std::string& campaignFolderName, const std::string& soundFilename) {
+					std::string soundFilePath = "";
+
+					sf::InputSoundFile soundFile;
+					bool result = soundFile.openFromFile(soundFilename);
 					return result;
 				}
 

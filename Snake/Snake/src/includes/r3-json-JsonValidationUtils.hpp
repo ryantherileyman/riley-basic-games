@@ -12,6 +12,11 @@ namespace r3 {
 			bool optionalString(const Json::Value& jsonValue, const char* propertyName);
 
 			bool requiredInt(const Json::Value& jsonValue, const char* propertyName);
+			bool requiredInt(const Json::Value& jsonValue, const char* propertyName, int minValue);
+
+			bool requiredFloat(const Json::Value& jsonValue, const char* propertyName);
+
+			bool requiredObject(const Json::Value& jsonValue, const char* propertyName);
 
 			bool requiredArray(const Json::Value& jsonValue, const char* propertyName);
 

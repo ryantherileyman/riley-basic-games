@@ -1,4 +1,29 @@
 {
     "menuLabel": "Adam's Revenge",
-    "menuDescription": "Adam has trapped you in his diabolical gauntlet!"
+    "menuDescription": "Adam has trapped you in his diabolical gauntlet!",
+    "levelList": [
+        {
+            "map": "map-test",
+            "snakeStart": {
+                "position": { "x": 10, "y": 12 },
+                "direction": "right",
+                "length": 5
+            },
+            "snakeSpeed": 10,
+            "winCondition": {
+                "conditionType": "onLengthReached",
+                "snakeLength": 100
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 1,
+                    "maxSpawnCount": 10,
+                    "growthRate": 2,
+                    "floorIdRange": { "minId": 0, "maxId": 1 }
+                }
+            ]
+        }
+    ]
 }

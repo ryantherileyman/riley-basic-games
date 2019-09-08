@@ -145,6 +145,7 @@
     <ClCompile Include="src\r3-snake-utils.cpp" />
     <ClCompile Include="src\snake-main.cpp" />
     <ClCompile Include="src\storymode\r3-snake-LoadAssetValidation.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-LoadStoryLevelValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-LoadStoryMapValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryLoaderUtils.cpp" />
   </ItemGroup>

@@ -47,13 +47,8 @@ namespace r3 {
 
 					if (jsonValue.isObject()) {
 						result =
-							r3::json::ValidationUtils::requiredInt(jsonValue, StoryMapProperties::TILE_ID) &&
+							r3::json::ValidationUtils::requiredInt(jsonValue, StoryMapProperties::TILE_ID, minTileId) &&
 							r3::json::ValidationUtils::requiredString(jsonValue, StoryMapProperties::TILE_FILENAME);
-
-						if (result) {
-							int tileId = jsonValue[StoryMapProperties::TILE_ID].asInt();
-							result = (tileId >= minTileId);
-						}
 					}
 
 					return result;
@@ -131,14 +126,14 @@ namespace r3 {
 				std::string buildFloorFilenameErrorMessage(const std::string& filename) {
 					std::string result("Floor texture <");
 					result.append(filename);
-					result.append("> could not be loaded from the campaign's textures folder.");
+					result.append("> could not be loaded from the campaign's \"textures\" folder.");
 					return result;
 				}
 
 				std::string buildBarrierFilenameErrorMessage(const std::string& filename) {
 					std::string result("Barrier texture <");
 					result.append(filename);
-					result.append("> could not be loaded from the campaign's textures folder.");
+					result.append("> could not be loaded from the campaign's \"textures\" folder.");
 					return result;
 				}
 

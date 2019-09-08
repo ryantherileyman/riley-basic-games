@@ -29,6 +29,29 @@ namespace r3 {
 				return result;
 			}
 
+			bool requiredInt(const Json::Value& jsonValue, const char* propertyName, int minValue) {
+				bool result = requiredInt(jsonValue, propertyName);
+				if (result) {
+					int value = jsonValue[propertyName].asInt();
+					result = (value >= minValue);
+				}
+				return result;
+			}
+
+			bool requiredFloat(const Json::Value& jsonValue, const char* propertyName) {
+				bool result =
+					jsonValue.isMember(propertyName) &&
+					jsonValue[propertyName].isDouble();
+				return result;
+			}
+
+			bool requiredObject(const Json::Value& jsonValue, const char* propertyName) {
+				bool result =
+					jsonValue.isMember(propertyName) &&
+					jsonValue[propertyName].isObject();
+				return result;
+			}
+
 			bool requiredArray(const Json::Value& jsonValue, const char* propertyName) {
 				bool result =
 					jsonValue.isMember(propertyName) &&

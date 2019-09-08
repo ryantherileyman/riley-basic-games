@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include <SFML/Graphics.hpp>
+#include "r3-snake-gamestate.hpp"
 #pragma once
 
 namespace r3 {
@@ -54,6 +55,51 @@ namespace r3 {
 			std::vector<std::vector<int>> floorGrid;
 			std::vector<std::vector<int>> barrierGrid;
 		} StoryMapDefn;
+
+		typedef enum class Snake_StoryFoodType {
+			APPLE,
+		} StoryFoodType;
+
+		typedef enum class Snake_StoryWinConditionType {
+			ON_FOOD_EATEN,
+			ON_LENGTH_REACHED,
+			ON_TIME_SURVIVED,
+		} StoryWinConditionType;
+
+		typedef struct Snake_StoryWinCondition {
+			StoryWinConditionType conditionType;
+			StoryFoodType foodType;
+			int foodCount;
+			int snakeLength;
+			int timePassed;
+		} StoryWinCondition;
+
+		typedef enum class Snake_StoryObjectSpawnType {
+			ON_DESPAWN,
+			ON_TIMER,
+			ON_LENGTH_REACHED,
+		} StoryObjectSpawnType;
+
+		typedef struct Snake_StoryFoodDefn {
+			StoryFoodType foodType;
+			StoryObjectSpawnType spawnType;
+			float chancePct;
+			int maxSpawnCount;
+			int growthRate;
+			int lengthReached;
+			int timePassed;
+			int minFloorId;
+			int maxFloorId;
+		} StoryFoodDefn;
+
+		typedef struct Snake_StoryLevelDefn {
+			std::string musicFilename;
+			std::string mapFilename;
+			SnakeStartDefn snakeStart;
+			int snakeSpeedTilesPerSecond;
+			StoryWinCondition winCondition;
+			std::vector<StoryFoodDefn> foodDefnList;
+		} StoryLevelDefn;
 
 	}
 

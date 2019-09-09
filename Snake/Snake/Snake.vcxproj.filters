@@ -66,6 +66,12 @@
     <ClCompile Include="src\storymode\r3-snake-LoadStoryLevelValidation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\storymode\r3-snake-StoryGameController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\storymode\r3-snake-StoryGameRenderer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp">
@@ -96,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\includes\r3-json-JsonValidationUtils.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\includes\r3-snake-storymodescene.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

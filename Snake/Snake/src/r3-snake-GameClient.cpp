@@ -7,6 +7,7 @@
 #include "includes/r3-snake-utils.hpp"
 #include "includes/r3-snake-splashscene.hpp"
 #include "includes/r3-snake-quickgamescene.hpp"
+#include "includes/r3-snake-storymodescene.hpp"
 
 namespace r3 {
 
@@ -194,11 +195,13 @@ namespace r3 {
 
 			this->splashSceneController = new SplashSceneController(this->window);
 			this->quickGameController = new QuickGameController(this->window);
+			this->storyGameController = new StoryGameController(this->window);
 		}
 
 		GameClient::~GameClient() {
 			delete this->splashSceneController;
 			delete this->quickGameController;
+			delete this->storyGameController;
 		}
 
 		void GameClient::run() {
@@ -216,6 +219,9 @@ namespace r3 {
 					case ClientMode::QUICK_GAME:
 						this->processQuickGameEvent(event);
 						break;
+					case ClientMode::STORY_GAME:
+						this->processStoryGameEvent(event);
+						break;
 					}
 				}
 
@@ -228,6 +234,10 @@ namespace r3 {
 					case ClientMode::QUICK_GAME:
 						this->quickGameController->update();
 						this->quickGameController->render();
+						break;
+					case ClientMode::STORY_GAME:
+						this->storyGameController->update();
+						this->storyGameController->render();
 						break;
 					}
 
@@ -252,6 +262,10 @@ namespace r3 {
 				this->quickGameController->setQuickGameOptions(this->splashSceneController->getQuickGameOptions());
 				this->quickGameController->setSystemOptions(this->splashSceneController->getSystemOptions());
 				this->mode = ClientMode::QUICK_GAME;
+				break;
+			case SplashSceneClientRequest::START_STORY_GAME:
+				this->storyGameController->setSystemOptions(this->splashSceneController->getSystemOptions());
+				this->mode = ClientMode::STORY_GAME;
 				break;
 			case SplashSceneClientRequest::SWITCH_TO_WINDOW:
 				this->window.close();
@@ -280,7 +294,19 @@ namespace r3 {
 				this->mode = ClientMode::SPLASH_SCREEN;
 				break;
 			}
+		}
 
+		void GameClient::processStoryGameEvent(sf::Event& event) {
+			StoryGameSceneClientRequest request = this->storyGameController->processEvent(event);
+
+			switch (request) {
+			case StoryGameSceneClientRequest::EXIT_GAME:
+				window.close();
+				break;
+			case StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN:
+				this->mode = ClientMode::SPLASH_SCREEN;
+				break;
+			}
 		}
 
 	}

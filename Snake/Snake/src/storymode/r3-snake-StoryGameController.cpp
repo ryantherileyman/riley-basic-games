@@ -30,6 +30,13 @@ namespace r3 {
 			else if (event.type == sf::Event::Resized) {
 				this->window->setView(ViewUtils::createView(event.size.width, event.size.height));
 			}
+			else if (event.type == sf::Event::KeyPressed) {
+				switch (this->mode) {
+				case StoryGameMode::WAIT_TO_START:
+					result = this->processWaitToStartKeyEvent(event);
+					break;
+				}
+			}
 
 			return result;
 		}
@@ -39,7 +46,20 @@ namespace r3 {
 		}
 
 		void StoryGameController::render() {
-			// TODO
+			this->renderer->renderWaitToStart(*this->window);
+			this->window->display();
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processWaitToStartKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
+				break;
+			}
+
+			return result;
 		}
 
 	}

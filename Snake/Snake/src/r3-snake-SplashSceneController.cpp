@@ -57,6 +57,7 @@ namespace r3 {
 
 			delete this->mainMenu;
 			delete this->quickGameOptionsMenu;
+			delete this->storyGameOptionsMenu;
 			delete this->systemOptionsMenu;
 		}
 
@@ -71,7 +72,15 @@ namespace r3 {
 
 		StoryGameOptionsDefn SplashSceneController::getStoryGameOptions() const {
 			StoryGameOptionsDefn result;
+
 			result.campaignIndex = this->storyGameOptionsMenu->getItemValue(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE);
+			for (auto const& currCampaignOption : this->campaignList.campaignOptionList) {
+				if (result.campaignIndex == currCampaignOption.index) {
+					result.campaignFolder = currCampaignOption.folderName;
+					break;
+				}
+			}
+
 			return result;
 		}
 
@@ -160,12 +169,16 @@ namespace r3 {
 			}
 		}
 
-		void SplashSceneController::processStoryGameOptionsKeypressEvent(sf::Event& event) {
+		SplashSceneClientRequest SplashSceneController::processStoryGameOptionsKeypressEvent(sf::Event& event) {
+			SplashSceneClientRequest result = SplashSceneClientRequest::NONE;
+
 			SplashMenuKeypressResult menuKeypressResult = this->processMenuKeypressEvent(event, *this->storyGameOptionsMenu);
 
 			if (menuKeypressResult.performedActionFlag) {
-				this->performStoryGameOptionsMenuItemAction(menuKeypressResult.actionMenuItemId);
+				result = this->performStoryGameOptionsMenuItemAction(menuKeypressResult.actionMenuItemId);
 			}
+
+			return result;
 		}
 
 		void SplashSceneController::processSystemOptionsKeypressEvent(sf::Event& event) {
@@ -218,7 +231,7 @@ namespace r3 {
 						this->performQuickGameOptionsMenuItemAction(mousePositionResult.overMenuItemId);
 						break;
 					case SplashSceneMode::STORY_GAME_OPTIONS_MENU:
-						this->performStoryGameOptionsMenuItemAction(mousePositionResult.overMenuItemId);
+						result = this->performStoryGameOptionsMenuItemAction(mousePositionResult.overMenuItemId);
 						break;
 					case SplashSceneMode::SYSTEM_OPTIONS_MENU:
 						this->performSystemOptionsMenuItemAction(mousePositionResult.overMenuItemId);
@@ -302,13 +315,21 @@ namespace r3 {
 			}
 		}
 
-		void SplashSceneController::performStoryGameOptionsMenuItemAction(int menuItemId) {
+		SplashSceneClientRequest SplashSceneController::performStoryGameOptionsMenuItemAction(int menuItemId) {
+			SplashSceneClientRequest result = SplashSceneClientRequest::NONE;
+
 			switch (menuItemId) {
 			case SplashStoryGameOptionsMenuId::RETURN_TO_MAIN_MENU:
 				this->mode = SplashSceneMode::MAIN_MENU;
 				this->mainMenu->moveToFirstItem();
 				break;
+			case SplashStoryGameOptionsMenuId::START_CAMPAIGN:
+				result = SplashSceneClientRequest::START_STORY_GAME;
+				this->freeMusic();
+				break;
 			}
+
+			return result;
 		}
 
 		void SplashSceneController::performSystemOptionsMenuItemAction(int menuItemId) {

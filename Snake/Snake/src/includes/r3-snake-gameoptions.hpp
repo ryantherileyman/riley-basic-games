@@ -13,6 +13,7 @@ namespace r3 {
 
 		typedef struct Snake_StoryGameOptionsDefn {
 			int campaignIndex;
+			std::string campaignFolder;
 		} StoryGameOptionsDefn;
 
 		typedef struct Snake_SystemOptionsDefn {

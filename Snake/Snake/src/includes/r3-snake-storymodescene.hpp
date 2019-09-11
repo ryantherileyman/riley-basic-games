@@ -44,12 +44,29 @@ namespace r3 {
 			void update();
 			void render();
 
+		private:
+			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
+
 		};
 
 		class StoryGameRenderer {
 
+		private:
+			sf::Font* uiFont;
+			sf::Texture* healthBarTexture;
+
+		public:
+			StoryGameRenderer();
+
+		public:
+			~StoryGameRenderer();
+
 		public:
 			void renderWaitToStart(sf::RenderTarget& renderTarget);
+
+		private:
+			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
+			void renderGameRunningUi(sf::RenderTarget& renderTarget);
 
 		};
 

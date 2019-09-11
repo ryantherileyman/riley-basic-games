@@ -9,10 +9,12 @@ namespace r3 {
 		typedef enum Snake_ClientMode {
 			SPLASH_SCREEN,
 			QUICK_GAME,
+			STORY_GAME,
 		} ClientMode;
 
 		class SplashSceneController;
 		class QuickGameController;
+		class StoryGameController;
 		class GameClient;
 
 		class GameClient {
@@ -24,6 +26,7 @@ namespace r3 {
 		private:
 			SplashSceneController* splashSceneController;
 			QuickGameController* quickGameController;
+			StoryGameController* storyGameController;
 
 		public:
 			GameClient();
@@ -37,6 +40,7 @@ namespace r3 {
 		private:
 			void processSplashScreenEvent(sf::Event& event);
 			void processQuickGameEvent(sf::Event& event);
+			void processStoryGameEvent(sf::Event& event);
 
 		};
 

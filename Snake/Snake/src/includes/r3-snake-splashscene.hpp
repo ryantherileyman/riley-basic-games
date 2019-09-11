@@ -85,6 +85,7 @@ namespace r3 {
 		namespace SplashStoryGameOptionsMenuId {
 			const int RETURN_TO_MAIN_MENU = 1;
 			const int CAMPAIGN_CHOICE = 2;
+			const int START_CAMPAIGN = 3;
 		}
 
 		namespace SplashSystemOptionsMenuId {
@@ -137,6 +138,7 @@ namespace r3 {
 			NONE,
 			EXIT_GAME,
 			START_QUICK_GAME,
+			START_STORY_GAME,
 			SWITCH_TO_FULLSCREEN,
 			SWITCH_TO_WINDOW,
 		} SplashSceneClientRequest;
@@ -226,7 +228,7 @@ namespace r3 {
 			SplashSceneClientRequest processKeypressEvent(sf::Event& event);
 			SplashSceneClientRequest processMainMenuKeypressEvent(sf::Event& event);
 			void processQuickGameOptionsKeypressEvent(sf::Event& event);
-			void processStoryGameOptionsKeypressEvent(sf::Event& event);
+			SplashSceneClientRequest processStoryGameOptionsKeypressEvent(sf::Event& event);
 			void processSystemOptionsKeypressEvent(sf::Event& event);
 
 		private:
@@ -236,7 +238,7 @@ namespace r3 {
 		private:
 			SplashSceneClientRequest performMainMenuItemAction(int menuItemId);
 			void performQuickGameOptionsMenuItemAction(int menuItemId);
-			void performStoryGameOptionsMenuItemAction(int menuItemId);
+			SplashSceneClientRequest performStoryGameOptionsMenuItemAction(int menuItemId);
 			void performSystemOptionsMenuItemAction(int menuItemId);
 			void performSystemOptionsSliderChange();
 

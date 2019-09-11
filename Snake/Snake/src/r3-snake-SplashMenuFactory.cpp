@@ -74,6 +74,8 @@ namespace r3 {
 
 			const wchar_t* CAMPAIGN_CHOICE_LABEL = L"Campaign:";
 
+			const wchar_t* START_CAMPAIGN_LABEL = L"Start New Campaign";
+
 		}
 
 		namespace SplashSystemOptionsMenuLabels {
@@ -235,6 +237,7 @@ namespace r3 {
 
 				result[SplashStoryGameOptionsMenuId::RETURN_TO_MAIN_MENU] = createActionMenuItem(SplashStoryGameOptionsMenuId::RETURN_TO_MAIN_MENU, SplashStoryGameOptionsMenuLabels::RETURN_TO_MAIN_MENU_LABEL, nullptr);
 				result[SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE] = createCampaignChoiceMenuItem(campaignList);
+				result[SplashStoryGameOptionsMenuId::START_CAMPAIGN] = createActionMenuItem(SplashStoryGameOptionsMenuId::START_CAMPAIGN, SplashStoryGameOptionsMenuLabels::START_CAMPAIGN_LABEL, nullptr);
 
 				return result;
 			}

@@ -4,6 +4,7 @@
     "levelList": [
         {
             "map": "map-test",
+            "music": "Artifact.ogg",
             "snakeStart": {
                 "position": { "x": 10, "y": 12 },
                 "direction": "right",

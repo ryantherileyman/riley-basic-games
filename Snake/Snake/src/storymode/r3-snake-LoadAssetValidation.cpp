@@ -21,11 +21,11 @@ namespace r3 {
 					return result;
 				}
 
-				bool soundFileValid(const std::string& campaignFolderName, const std::string& soundFilename) {
-					std::string soundFilePath = "";
+				bool musicFileValid(const std::string& campaignFolderName, const std::string& musicFilename) {
+					std::string soundFilePath = resolveMusicFilePath(campaignFolderName, musicFilename);
 
 					sf::InputSoundFile soundFile;
-					bool result = soundFile.openFromFile(soundFilename);
+					bool result = soundFile.openFromFile(soundFilePath);
 					return result;
 				}
 

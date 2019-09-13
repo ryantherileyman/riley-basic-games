@@ -30,6 +30,7 @@ Music from https://filmmusic.io
 "At The Shore" by Kevin MacLeod (https://incompetech.com)
 "Whimsey Groove" by Kevin MacLeod (https://incompetech.com)
 "AngloZulu" by Kevin MacLeod (https://incompetech.com)
+"Artifact" by Kevin MacLeod (https://incompetech.com)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 
 Sound Effects from https://www.zapsplat.com/

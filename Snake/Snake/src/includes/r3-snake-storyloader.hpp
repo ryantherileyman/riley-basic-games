@@ -148,7 +148,7 @@ namespace r3 {
 
 				bool imageFileValid(const std::string& campaignFolderName, const std::string& imageFilename);
 
-				bool soundFileValid(const std::string& campaignFolderName, const std::string& soundFilename);
+				bool musicFileValid(const std::string& campaignFolderName, const std::string& musicFilename);
 
 			}
 
@@ -272,7 +272,9 @@ namespace r3 {
 
 			}
 
-			std::string resolveImageFilePath(const std::string& campaignFolderName, const std::string imageFilename);
+			std::string resolveImageFilePath(const std::string& campaignFolderName, const std::string& imageFilename);
+
+			std::string resolveMusicFilePath(const std::string& campaignFolderName, const std::string& musicFilename);
 
 			LoadCampaignListResult retrieveCampaignList();
 

@@ -99,6 +99,7 @@ namespace r3 {
 			const char* EXT_JSON = ".json";
 			const char* PATH_CAMPAIGNS = "resources/campaigns/";
 			const char* PATH_TEXTURES = "textures";
+			const char* PATH_MUSIC = "music";
 			const char* CAMPAIGN_FILENAME = "campaign.json";
 
 			typedef struct Json_LoadJsonFromFileResult {
@@ -137,13 +138,23 @@ namespace r3 {
 				return result;
 			}
 
-			std::string resolveImageFilePath(const std::string& campaignFolderName, const std::string imageFilename) {
+			std::string resolveImageFilePath(const std::string& campaignFolderName, const std::string& imageFilename) {
 				std::string result(PATH_CAMPAIGNS);
 				result.append(campaignFolderName);
 				result.append(PATH_SLASH);
 				result.append(PATH_TEXTURES);
 				result.append(PATH_SLASH);
 				result.append(imageFilename);
+				return result;
+			}
+
+			std::string resolveMusicFilePath(const std::string& campaignFolderName, const std::string& musicFilename) {
+				std::string result(PATH_CAMPAIGNS);
+				result.append(campaignFolderName);
+				result.append(PATH_SLASH);
+				result.append(PATH_MUSIC);
+				result.append(PATH_SLASH);
+				result.append(musicFilename);
 				return result;
 			}
 
@@ -480,7 +491,7 @@ namespace r3 {
 					std::string musicStr = jsonValue[StoryLevelProperties::MUSIC_FILENAME].asString();
 					if (
 						(!musicStr.empty()) &&
-						!LoadAssetValidation::soundFileValid(campaignFolderName, musicStr)
+						!LoadAssetValidation::musicFileValid(campaignFolderName, musicStr)
 					) {
 						result.validationResult.musicFileInvalidList.push_back(musicStr);
 					}

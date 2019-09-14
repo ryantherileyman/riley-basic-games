@@ -140,6 +140,18 @@ namespace r3 {
 			bool levelListValid = false;
 
 			std::vector<LoadStoryLevelResult> levelResultList;
+
+			bool valid() const {
+				bool allLevelEntriesValid = true;
+				for (auto const& currLevelResult : levelResultList) {
+					allLevelEntriesValid = allLevelEntriesValid && currLevelResult.validationResult.valid();
+				}
+
+				bool result =
+					levelListValid &&
+					allLevelEntriesValid;
+				return result;
+			}
 		} LoadStoryCampaignResult;
 
 		namespace StoryLoaderUtils {

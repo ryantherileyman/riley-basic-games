@@ -1,4 +1,6 @@
 
+#include <fstream>
+#include <codecvt>
 #include "../includes/r3-snake-utils.hpp"
 #include "../includes/r3-snake-storymodescene.hpp"
 
@@ -16,6 +18,12 @@ namespace r3 {
 			const wchar_t* HUD_FOOD_LEFT = L"%s Left: %d";
 			const wchar_t* HUD_SNAKE_LENGTH = L"Snake Length: %d / %d";
 			const wchar_t* HUD_TIME_REMAINING = L"Time Left: %02d:%02d";
+
+			const wchar_t* CAMPAIGN_ERROR_MESSAGE = L"An error occurred attempting to load the campaign.";
+			const wchar_t* LEVEL_ERROR_MESSAGE = L"An error occurred attempting to load the assets for the next level.";
+			const wchar_t* SEE_LOG_MESSAGE = L"See log.txt in the game folder for more information.";
+
+			const wchar_t* LOAD_LEVEL_PCT_FORMAT_STRING = L"Loading assets...  (%.0f%%)";
 
 			const wchar_t* START_INSTRUCTIONS = L"Press ENTER to start game";
 			const wchar_t* EXIT_INSTRUCTIONS = L"Press ESC to return to the main menu";
@@ -42,6 +50,49 @@ namespace r3 {
 			delete this->healthBarTexture;
 		}
 
+		void StoryGameRenderer::renderLoadCampaignError(sf::RenderTarget& renderTarget) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+
+			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
+			renderTarget.draw(instructionsBackgroundShape);
+
+			sf::Text errorText = this->createInstructionsText(StoryGameRenderConstants::CAMPAIGN_ERROR_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 150.0f);
+			renderTarget.draw(errorText);
+
+			sf::Text seeLogText = this->createInstructionsText(StoryGameRenderConstants::SEE_LOG_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
+			renderTarget.draw(seeLogText);
+		}
+
+		void StoryGameRenderer::renderLoadLevelStatus(sf::RenderTarget& renderTarget, const StoryLevelAssetLoadingStatus& assetLoadingStatus) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+
+			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
+			renderTarget.draw(instructionsBackgroundShape);
+
+			wchar_t loadLevelPctString[40];
+			swprintf_s(loadLevelPctString, StoryGameRenderConstants::LOAD_LEVEL_PCT_FORMAT_STRING, (double)100.0f * assetLoadingStatus.loadedPct);
+			sf::Text loadLevelPctText = this->createInstructionsText(loadLevelPctString, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
+			renderTarget.draw(loadLevelPctText);
+
+			std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> stringConverter;
+			std::wstring loadFilenameString = stringConverter.from_bytes(assetLoadingStatus.currFilename);
+			sf::Text loadFilenameText = this->createInstructionsText(loadFilenameString.c_str(), (ViewUtils::VIEW_SIZE.y / 2.0f) + 50.0f);
+			renderTarget.draw(loadFilenameText);
+		}
+
+		void StoryGameRenderer::renderLoadLevelError(sf::RenderTarget& renderTarget) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+
+			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
+			renderTarget.draw(instructionsBackgroundShape);
+
+			sf::Text errorText = this->createInstructionsText(StoryGameRenderConstants::LEVEL_ERROR_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 150.0f);
+			renderTarget.draw(errorText);
+
+			sf::Text seeLogText = this->createInstructionsText(StoryGameRenderConstants::SEE_LOG_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
+			renderTarget.draw(seeLogText);
+		}
+
 		void StoryGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 			this->renderGameRunningUi(renderTarget);
@@ -49,25 +100,13 @@ namespace r3 {
 		}
 
 		void StoryGameRenderer::renderWaitToStartInstructions(sf::RenderTarget& renderTarget) {
-			sf::RectangleShape instructionsBackgroundShape(sf::Vector2f(1260.0f, 400.0f));
-			instructionsBackgroundShape.setPosition(330.0f, 390.0f);
-			instructionsBackgroundShape.setFillColor(sf::Color(0, 0, 0, 64));
+			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
 			renderTarget.draw(instructionsBackgroundShape);
 
-			sf::Text startInstructionsText;
-			startInstructionsText.setFont(*this->uiFont);
-			startInstructionsText.setCharacterSize(72);
-			startInstructionsText.setOutlineThickness(2.0f);
-			startInstructionsText.setString(StoryGameRenderConstants::START_INSTRUCTIONS);
-			FontUtils::setCenteredPosition(startInstructionsText, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
+			sf::Text startInstructionsText = this->createInstructionsText(StoryGameRenderConstants::START_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
 			renderTarget.draw(startInstructionsText);
 
-			sf::Text exitInstructionsText;
-			exitInstructionsText.setFont(*this->uiFont);
-			exitInstructionsText.setCharacterSize(72);
-			exitInstructionsText.setOutlineThickness(2.0f);
-			exitInstructionsText.setString(StoryGameRenderConstants::EXIT_INSTRUCTIONS);
-			FontUtils::setCenteredPosition(exitInstructionsText, (ViewUtils::VIEW_SIZE.y / 2.0f) + 50.0f);
+			sf::Text exitInstructionsText = this->createInstructionsText(StoryGameRenderConstants::EXIT_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) + 50.0f);
 			renderTarget.draw(exitInstructionsText);
 		}
 
@@ -113,6 +152,25 @@ namespace r3 {
 			healthBarSprite.setTexture(*this->healthBarTexture);
 			healthBarSprite.setPosition(620.0f, 70.0f);
 			renderTarget.draw(healthBarSprite);
+		}
+
+		sf::RectangleShape StoryGameRenderer::createTextBackgroundShape(float width, float height) {
+			sf::RectangleShape result(sf::Vector2f(width, height));
+			result.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (width / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) - (height / 2.0f));
+			result.setFillColor(sf::Color(0, 0, 0, 64));
+			
+			return result;
+		}
+
+		sf::Text StoryGameRenderer::createInstructionsText(const wchar_t* textString, float y) {
+			sf::Text result;
+			result.setFont(*this->uiFont);
+			result.setCharacterSize(72);
+			result.setOutlineThickness(2.0f);
+			result.setString(textString);
+			FontUtils::setCenteredPosition(result, y);
+
+			return result;
 		}
 
 	}

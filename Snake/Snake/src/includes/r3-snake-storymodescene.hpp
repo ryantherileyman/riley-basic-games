@@ -1,5 +1,7 @@
 
 #include <SFML/Graphics.hpp>
+#include "r3-snake-storydefn.hpp"
+#include "r3-snake-storyassets.hpp"
 #include "r3-snake-gameoptions.hpp"
 #pragma once
 
@@ -8,6 +10,10 @@ namespace r3 {
 	namespace snake {
 
 		typedef enum class Snake_StoryGameMode {
+			LOAD_CAMPAIGN,
+			LOAD_CAMPAIGN_ERROR,
+			LOAD_LEVEL,
+			LOAD_LEVEL_ERROR,
 			WAIT_TO_START,
 		} StoryGameMode;
 
@@ -29,6 +35,10 @@ namespace r3 {
 
 		private:
 			StoryGameMode mode;
+			std::string campaignFolder;
+			int currLevelIndex;
+			std::vector<StoryLevelDefn> levelDefnList;
+			StoryLevelAssetBundle* levelAssetBundle;
 
 		public:
 			StoryGameController(sf::RenderWindow& window);
@@ -37,12 +47,18 @@ namespace r3 {
 			~StoryGameController();
 
 		public:
+			void setCampaignFolder(const std::string& campaignFolder);
 			void setSystemOptions(const SystemOptionsDefn& systemOptions);
 
 		public:
 			StoryGameSceneClientRequest processEvent(sf::Event& event);
 			void update();
 			void render();
+
+		private:
+			void loadCampaign();
+			void initiateLoadLevel();
+			void updateBasedOnLoadLevelStatus();
 
 		private:
 			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
@@ -62,11 +78,18 @@ namespace r3 {
 			~StoryGameRenderer();
 
 		public:
+			void renderLoadCampaignError(sf::RenderTarget& renderTarget);
+			void renderLoadLevelStatus(sf::RenderTarget& renderTarget, const StoryLevelAssetLoadingStatus& assetLoadingStatus);
+			void renderLoadLevelError(sf::RenderTarget& renderTarget);
 			void renderWaitToStart(sf::RenderTarget& renderTarget);
 
 		private:
 			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 			void renderGameRunningUi(sf::RenderTarget& renderTarget);
+
+		private:
+			sf::RectangleShape createTextBackgroundShape(float width, float height);
+			sf::Text createInstructionsText(const wchar_t* textString, float y);
 
 		};
 

@@ -154,10 +154,9 @@ namespace r3 {
 			for (auto const& currFloorDefnPair : mapDefn.floorDefnMap) {
 				this->indicateLoadingFilename(currFloorDefnPair.second.filename);
 
-				sf::Texture currFloorTexture;
-				if (currFloorTexture.loadFromFile(r3::snake::StoryLoaderUtils::resolveImageFilePath(this->campaignFolderName, currFloorDefnPair.second.filename))) {
-					currFloorTexture.setRepeated(true);
-					this->floorTextureMap[currFloorDefnPair.first] = currFloorTexture;
+				this->floorTextureMap[currFloorDefnPair.first] = sf::Texture();
+				if (this->floorTextureMap[currFloorDefnPair.first].loadFromFile(r3::snake::StoryLoaderUtils::resolveImageFilePath(this->campaignFolderName, currFloorDefnPair.second.filename))) {
+					this->floorTextureMap[currFloorDefnPair.first].setRepeated(true);
 					this->incrementLoadedAssetCount();
 				}
 				else {
@@ -170,10 +169,9 @@ namespace r3 {
 			for (auto const& currBarrierDefnPair : mapDefn.barrierDefnMap) {
 				this->indicateLoadingFilename(currBarrierDefnPair.second.filename);
 
-				sf::Texture currBarrierTexture;
-				if (currBarrierTexture.loadFromFile(r3::snake::StoryLoaderUtils::resolveImageFilePath(this->campaignFolderName, currBarrierDefnPair.second.filename))) {
-					currBarrierTexture.setRepeated(true);
-					this->barrierTextureMap[currBarrierDefnPair.first] = currBarrierTexture;
+				this->barrierTextureMap[currBarrierDefnPair.first] = sf::Texture();
+				if (this->barrierTextureMap[currBarrierDefnPair.first].loadFromFile(r3::snake::StoryLoaderUtils::resolveImageFilePath(this->campaignFolderName, currBarrierDefnPair.second.filename))) {
+					this->barrierTextureMap[currBarrierDefnPair.first].setRepeated(true);
 					this->incrementLoadedAssetCount();
 				}
 				else {

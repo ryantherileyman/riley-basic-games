@@ -70,13 +70,13 @@ namespace r3 {
 			return result;
 		}
 
-		StoryGameOptionsDefn SplashSceneController::getStoryGameOptions() const {
-			StoryGameOptionsDefn result;
+		std::string SplashSceneController::getStoryCampaignFolder() const {
+			std::string result;
 
-			result.campaignIndex = this->storyGameOptionsMenu->getItemValue(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE);
+			int campaignIndex = this->storyGameOptionsMenu->getItemValue(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE);
 			for (auto const& currCampaignOption : this->campaignList.campaignOptionList) {
-				if (result.campaignIndex == currCampaignOption.index) {
-					result.campaignFolder = currCampaignOption.folderName;
+				if (currCampaignOption.index == campaignIndex) {
+					result = currCampaignOption.folderName;
 					break;
 				}
 			}

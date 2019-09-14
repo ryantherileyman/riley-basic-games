@@ -264,6 +264,7 @@ namespace r3 {
 				this->mode = ClientMode::QUICK_GAME;
 				break;
 			case SplashSceneClientRequest::START_STORY_GAME:
+				this->storyGameController->setCampaignFolder(this->splashSceneController->getStoryCampaignFolder());
 				this->storyGameController->setSystemOptions(this->splashSceneController->getSystemOptions());
 				this->mode = ClientMode::STORY_GAME;
 				break;

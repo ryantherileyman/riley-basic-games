@@ -11,11 +11,6 @@ namespace r3 {
 			int snakeGrowthPerApple = 3;
 		} QuickGameOptionsDefn;
 
-		typedef struct Snake_StoryGameOptionsDefn {
-			int campaignIndex;
-			std::string campaignFolder;
-		} StoryGameOptionsDefn;
-
 		typedef struct Snake_SystemOptionsDefn {
 			int musicVolume = 100;
 			int soundEffectsVolume = 100;

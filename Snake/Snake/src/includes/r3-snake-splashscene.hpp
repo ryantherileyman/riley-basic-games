@@ -216,7 +216,7 @@ namespace r3 {
 
 		public:
 			QuickGameOptionsDefn getQuickGameOptions() const;
-			StoryGameOptionsDefn getStoryGameOptions() const;
+			std::string getStoryCampaignFolder() const;
 			SystemOptionsDefn getSystemOptions() const;
 
 		public:

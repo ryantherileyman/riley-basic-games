@@ -75,6 +75,15 @@
     <ClCompile Include="src\storymode\r3-snake-StoryLevelAssetBundle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\storymode\r3-snake-StoryMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\storymode\r3-snake-StoryLevel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\r3-snake-RenderUtils.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp">
@@ -111,6 +120,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="src\includes\r3-snake-storyassets.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\includes\r3-snake-RenderUtils.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

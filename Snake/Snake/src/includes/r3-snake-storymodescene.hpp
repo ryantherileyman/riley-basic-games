@@ -23,6 +23,11 @@ namespace r3 {
 			RETURN_TO_SPLASH_SCREEN,
 		} StoryGameSceneClientRequest;
 
+		typedef struct Snake_StoryGameRenderState {
+			const StoryLevelAssetBundle* levelAssetBundle;
+			const StoryLevel* level;
+		} StoryGameRenderState;
+
 		class StoryGameController;
 		class StoryGameRenderer;
 
@@ -39,6 +44,7 @@ namespace r3 {
 			int currLevelIndex;
 			std::vector<StoryLevelDefn> levelDefnList;
 			StoryLevelAssetBundle* levelAssetBundle;
+			StoryLevel* level;
 
 		public:
 			StoryGameController(sf::RenderWindow& window);
@@ -81,11 +87,12 @@ namespace r3 {
 			void renderLoadCampaignError(sf::RenderTarget& renderTarget);
 			void renderLoadLevelStatus(sf::RenderTarget& renderTarget, const StoryLevelAssetLoadingStatus& assetLoadingStatus);
 			void renderLoadLevelError(sf::RenderTarget& renderTarget);
-			void renderWaitToStart(sf::RenderTarget& renderTarget);
+			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 
 		private:
-			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 			void renderGameRunningUi(sf::RenderTarget& renderTarget);
+			void renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 
 		private:
 			sf::RectangleShape createTextBackgroundShape(float width, float height);

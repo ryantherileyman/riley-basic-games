@@ -101,6 +101,52 @@ namespace r3 {
 			std::vector<StoryFoodDefn> foodDefnList;
 		} StoryLevelDefn;
 
+		class StoryMap;
+		class StoryLevel;
+
+		class StoryMap {
+
+		private:
+			sf::Vector2i fieldSize;
+
+			int* allocatedFloorArray;
+			int** floorGrid;
+
+			int* allocatedBarrierArray;
+			int** barrierGrid;
+
+		public:
+			StoryMap(const StoryMapDefn& mapDefn);
+
+		public:
+			~StoryMap();
+
+		public:
+			sf::Vector2i getFieldSize() const;
+			int getFloorId(int x, int y) const;
+			int getBarrierId(int x, int y) const;
+			bool barrierAt(int x, int y) const;
+
+		};
+
+		class StoryLevel {
+
+		private:
+			StoryMap* map;
+			Snake* snake;
+
+		public:
+			StoryLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn);
+
+		public:
+			~StoryLevel();
+
+		public:
+			StoryMap* getMap() const;
+			Snake* getSnake() const;
+
+		};
+
 	}
 
 }

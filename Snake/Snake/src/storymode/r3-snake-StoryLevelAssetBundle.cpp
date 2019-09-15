@@ -60,46 +60,46 @@ namespace r3 {
 			return result;
 		}
 
-		std::vector<std::string> StoryLevelAssetBundle::getFailedFilenameList() {
+		std::vector<std::string> StoryLevelAssetBundle::getFailedFilenameList() const {
 			std::vector<std::string> result = this->failedFilenameList;
 			return result;
 		}
 
-		const StoryMapDefn& StoryLevelAssetBundle::getMapDefn() {
+		const StoryMapDefn& StoryLevelAssetBundle::getMapDefn() const {
 			return this->mapDefn;
 		}
 
-		const sf::Texture& StoryLevelAssetBundle::getSnakeTexture() {
+		const sf::Texture& StoryLevelAssetBundle::getSnakeTexture() const {
 			return this->snakeTexture;
 		}
 
-		const sf::Texture& StoryLevelAssetBundle::getFoodTexture() {
+		const sf::Texture& StoryLevelAssetBundle::getFoodTexture() const {
 			return this->foodTexture;
 		}
 
-		const sf::Texture& StoryLevelAssetBundle::getFloorTexture(int floorId) {
+		const sf::Texture& StoryLevelAssetBundle::getFloorTexture(int floorId) const {
 			assert( this->floorTextureMap.count(floorId) == 1 );
 
 			const sf::Texture& result = this->floorTextureMap.at(floorId);
 			return result;
 		}
 
-		const sf::Texture& StoryLevelAssetBundle::getBarrierTexture(int barrierId) {
+		const sf::Texture& StoryLevelAssetBundle::getBarrierTexture(int barrierId) const {
 			assert( this->barrierTextureMap.count(barrierId) == 1 );
 
 			const sf::Texture& result = this->barrierTextureMap.at(barrierId);
 			return result;
 		}
 
-		const sf::Music& StoryLevelAssetBundle::getMusic() {
+		const sf::Music& StoryLevelAssetBundle::getMusic() const {
 			return this->music;
 		}
 
-		const sf::SoundBuffer& StoryLevelAssetBundle::getEatFoodSoundBuffer() {
+		const sf::SoundBuffer& StoryLevelAssetBundle::getEatFoodSoundBuffer() const {
 			return this->eatFoodSoundBuffer;
 		}
 
-		const sf::SoundBuffer& StoryLevelAssetBundle::getHitBarrierSoundBuffer() {
+		const sf::SoundBuffer& StoryLevelAssetBundle::getHitBarrierSoundBuffer() const {
 			return this->hitBarrierSoundBuffer;
 		}
 

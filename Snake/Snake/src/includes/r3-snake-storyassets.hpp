@@ -62,19 +62,19 @@ namespace r3 {
 			StoryLevelAssetLoadingStatus getLoadingStatus();
 
 		public:
-			std::vector<std::string> getFailedFilenameList();
+			std::vector<std::string> getFailedFilenameList() const;
 
 		public:
-			const StoryMapDefn& getMapDefn();
-			const sf::Texture& getSnakeTexture();
-			const sf::Texture& getFoodTexture();
-			const sf::Texture& getFloorTexture(int floorId);
-			const sf::Texture& getBarrierTexture(int barrierId);
+			const StoryMapDefn& getMapDefn() const;
+			const sf::Texture& getSnakeTexture() const;
+			const sf::Texture& getFoodTexture() const;
+			const sf::Texture& getFloorTexture(int floorId) const;
+			const sf::Texture& getBarrierTexture(int barrierId) const;
 
 		public:
-			const sf::Music& getMusic();
-			const sf::SoundBuffer& getEatFoodSoundBuffer();
-			const sf::SoundBuffer& getHitBarrierSoundBuffer();
+			const sf::Music& getMusic() const;
+			const sf::SoundBuffer& getEatFoodSoundBuffer() const;
+			const sf::SoundBuffer& getHitBarrierSoundBuffer() const;
 
 		private:
 			void loadLevel();

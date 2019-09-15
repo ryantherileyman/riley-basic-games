@@ -14,6 +14,7 @@ namespace r3 {
 			this->mode = StoryGameMode::LOAD_CAMPAIGN;
 			this->currLevelIndex = 0;
 			this->levelAssetBundle = nullptr;
+			this->level = nullptr;
 		}
 
 		StoryGameController::~StoryGameController() {
@@ -21,6 +22,9 @@ namespace r3 {
 
 			if (this->levelAssetBundle != nullptr) {
 				delete this->levelAssetBundle;
+			}
+			if (this->level != nullptr) {
+				delete this->level;
 			}
 		}
 
@@ -78,7 +82,11 @@ namespace r3 {
 				this->window->display();
 				break;
 			case StoryGameMode::WAIT_TO_START:
-				this->renderer->renderWaitToStart(*this->window);
+				StoryGameRenderState renderState;
+				renderState.levelAssetBundle = this->levelAssetBundle;
+				renderState.level = this->level;
+
+				this->renderer->renderWaitToStart(*this->window, renderState);
 				this->window->display();
 				break;
 			}
@@ -121,7 +129,7 @@ namespace r3 {
 				this->mode = StoryGameMode::LOAD_LEVEL_ERROR;
 			}
 			else if ( assetLoadingStatus.completionStatus == StoryLevelAssetLoadingCompletionStatus::COMPLETE) {
-				// TODO: setup initial game state
+				this->level = new StoryLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 
 				this->mode = StoryGameMode::WAIT_TO_START;
 			}

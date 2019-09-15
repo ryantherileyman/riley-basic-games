@@ -2,6 +2,7 @@
 #include <fstream>
 #include <codecvt>
 #include "../includes/r3-snake-utils.hpp"
+#include "../includes/r3-snake-RenderUtils.hpp"
 #include "../includes/r3-snake-storymodescene.hpp"
 
 namespace r3 {
@@ -53,7 +54,7 @@ namespace r3 {
 		void StoryGameRenderer::renderLoadCampaignError(sf::RenderTarget& renderTarget) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 
-			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
+			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1920.0f, 400.0f);
 			renderTarget.draw(instructionsBackgroundShape);
 
 			sf::Text errorText = this->createInstructionsText(StoryGameRenderConstants::CAMPAIGN_ERROR_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 150.0f);
@@ -83,7 +84,7 @@ namespace r3 {
 		void StoryGameRenderer::renderLoadLevelError(sf::RenderTarget& renderTarget) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 
-			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
+			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1920.0f, 400.0f);
 			renderTarget.draw(instructionsBackgroundShape);
 
 			sf::Text errorText = this->createInstructionsText(StoryGameRenderConstants::LEVEL_ERROR_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 150.0f);
@@ -93,21 +94,11 @@ namespace r3 {
 			renderTarget.draw(seeLogText);
 		}
 
-		void StoryGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget) {
+		void StoryGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 			this->renderGameRunningUi(renderTarget);
+			this->renderPlayingField(renderTarget, renderState);
 			this->renderWaitToStartInstructions(renderTarget);
-		}
-
-		void StoryGameRenderer::renderWaitToStartInstructions(sf::RenderTarget& renderTarget) {
-			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
-			renderTarget.draw(instructionsBackgroundShape);
-
-			sf::Text startInstructionsText = this->createInstructionsText(StoryGameRenderConstants::START_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
-			renderTarget.draw(startInstructionsText);
-
-			sf::Text exitInstructionsText = this->createInstructionsText(StoryGameRenderConstants::EXIT_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) + 50.0f);
-			renderTarget.draw(exitInstructionsText);
 		}
 
 		void StoryGameRenderer::renderGameRunningUi(sf::RenderTarget& renderTarget) {
@@ -154,9 +145,64 @@ namespace r3 {
 			renderTarget.draw(healthBarSprite);
 		}
 
+		void StoryGameRenderer::renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			sf::Vector2i fieldSize = renderState.level->getMap()->getFieldSize();
+			float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+			sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+			const sf::Texture& primaryFloorTexture = renderState.levelAssetBundle->getFloorTexture(0);
+
+			// Draw primary grass tile (floorId = 0) under entire playing field
+			sf::Sprite grassSprite;
+			grassSprite.setTexture(renderState.levelAssetBundle->getFloorTexture(0));
+			grassSprite.setScale(tileSize / (float)primaryFloorTexture.getSize().x, tileSize / (float)primaryFloorTexture.getSize().y);
+			grassSprite.setPosition(fieldPosition.x, fieldPosition.y);
+			grassSprite.setTextureRect(sf::IntRect(0, 0, fieldSize.x * primaryFloorTexture.getSize().x, fieldSize.y * primaryFloorTexture.getSize().y));
+			renderTarget.draw(grassSprite);
+
+			// Create a generic sprite for drawing a single tile at a time
+			sf::Sprite tileSprite;
+
+			for (int y = 0; y < fieldSize.y; y++) {
+				for (int x = 0; x < fieldSize.x; x++) {
+					int floorId = renderState.level->getMap()->getFloorId(x, y);
+					int barrierId = renderState.level->getMap()->getBarrierId(x, y);
+
+					// Draw the floor tile if it is not the primary
+					if (floorId > 0) {
+						const sf::Texture& floorTexture = renderState.levelAssetBundle->getFloorTexture(floorId);
+						tileSprite.setTexture(floorTexture);
+						tileSprite.setScale(tileSize / (float)floorTexture.getSize().x, tileSize / (float)floorTexture.getSize().y);
+						tileSprite.setPosition(fieldPosition.x + (x * tileSize), fieldPosition.y + (y * tileSize));
+						renderTarget.draw(tileSprite);
+					}
+
+					// Draw the barrier tile if it does not indicate no barrier exists in this location
+					if (barrierId > 0) {
+						const sf::Texture& barrierTexture = renderState.levelAssetBundle->getBarrierTexture(barrierId);
+						tileSprite.setTexture(barrierTexture);
+						tileSprite.setScale(tileSize / (float)barrierTexture.getSize().x, tileSize / (float)barrierTexture.getSize().y);
+						tileSprite.setPosition(fieldPosition.x + (x * tileSize), fieldPosition.y + (y * tileSize));
+						renderTarget.draw(tileSprite);
+					}
+				}
+			}
+		}
+
+		void StoryGameRenderer::renderWaitToStartInstructions(sf::RenderTarget& renderTarget) {
+			sf::RectangleShape instructionsBackgroundShape = this->createTextBackgroundShape(1260.0f, 400.0f);
+			renderTarget.draw(instructionsBackgroundShape);
+
+			sf::Text startInstructionsText = this->createInstructionsText(StoryGameRenderConstants::START_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
+			renderTarget.draw(startInstructionsText);
+
+			sf::Text exitInstructionsText = this->createInstructionsText(StoryGameRenderConstants::EXIT_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) + 50.0f);
+			renderTarget.draw(exitInstructionsText);
+		}
+
 		sf::RectangleShape StoryGameRenderer::createTextBackgroundShape(float width, float height) {
 			sf::RectangleShape result(sf::Vector2f(width, height));
-			result.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (width / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) - (height / 2.0f));
+			result.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (width / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) - (height / 2.0f) + 50.0f);
 			result.setFillColor(sf::Color(0, 0, 0, 64));
 			
 			return result;

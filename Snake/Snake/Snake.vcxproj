@@ -137,6 +137,7 @@
     <ClCompile Include="src\r3-snake-QuickGame.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameController.cpp" />
     <ClCompile Include="src\r3-snake-QuickGameRenderer.cpp" />
+    <ClCompile Include="src\r3-snake-RenderUtils.cpp" />
     <ClCompile Include="src\r3-snake-Snake.cpp" />
     <ClCompile Include="src\r3-snake-SplashMenu.cpp" />
     <ClCompile Include="src\r3-snake-SplashMenuFactory.cpp" />
@@ -149,8 +150,10 @@
     <ClCompile Include="src\storymode\r3-snake-LoadStoryMapValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryGameController.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryGameRenderer.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-StoryLevel.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryLevelAssetBundle.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryLoaderUtils.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-StoryMap.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -159,6 +162,7 @@
     <ClInclude Include="src\includes\r3-snake-gameoptions.hpp" />
     <ClInclude Include="src\includes\r3-snake-gamestate.hpp" />
     <ClInclude Include="src\includes\r3-snake-quickgamescene.hpp" />
+    <ClInclude Include="src\includes\r3-snake-RenderUtils.hpp" />
     <ClInclude Include="src\includes\r3-snake-splashscene.hpp" />
     <ClInclude Include="src\includes\r3-snake-storyassets.hpp" />
     <ClInclude Include="src\includes\r3-snake-storydefn.hpp" />

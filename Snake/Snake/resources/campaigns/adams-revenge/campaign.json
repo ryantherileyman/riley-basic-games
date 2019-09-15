@@ -6,7 +6,7 @@
             "map": "map-test",
             "music": "Artifact.ogg",
             "snakeStart": {
-                "position": { "x": 10, "y": 12 },
+                "position": { "x": 10, "y": 5 },
                 "direction": "right",
                 "length": 5
             },

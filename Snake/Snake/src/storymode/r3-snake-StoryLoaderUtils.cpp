@@ -416,8 +416,9 @@ namespace r3 {
 
 					result.validationResult.snakeStartPositionValid = LoadStoryLevelValidation::snakeStartPositionValid(snakeStartValue);
 					if (result.validationResult.snakeStartPositionValid) {
-						result.levelDefn.snakeStart.headPosition.x = snakeStartValue[StoryLevelProperties::POSITION_X].asInt();
-						result.levelDefn.snakeStart.headPosition.y = snakeStartValue[StoryLevelProperties::POSITION_Y].asInt();
+						Json::Value snakeStartPositionValue = snakeStartValue[StoryLevelProperties::SNAKE_START_POSITION];
+						result.levelDefn.snakeStart.headPosition.x = snakeStartPositionValue[StoryLevelProperties::POSITION_X].asInt();
+						result.levelDefn.snakeStart.headPosition.y = snakeStartPositionValue[StoryLevelProperties::POSITION_Y].asInt();
 					}
 
 					result.validationResult.snakeStartDirectionValid = LoadStoryLevelValidation::snakeStartDirectionValid(snakeStartValue);

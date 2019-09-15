@@ -92,6 +92,7 @@ namespace r3 {
 		private:
 			void renderGameRunningUi(sf::RenderTarget& renderTarget);
 			void renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 
 		private:

@@ -98,6 +98,7 @@ namespace r3 {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 			this->renderGameRunningUi(renderTarget);
 			this->renderPlayingField(renderTarget, renderState);
+			this->renderSnake(renderTarget, renderState);
 			this->renderWaitToStartInstructions(renderTarget);
 		}
 
@@ -187,6 +188,15 @@ namespace r3 {
 					}
 				}
 			}
+		}
+
+		void StoryGameRenderer::renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			RenderUtils::RenderSnakeInput renderSnakeInput;
+			renderSnakeInput.fieldSize = renderState.level->getMap()->getFieldSize();
+			renderSnakeInput.texture = &renderState.levelAssetBundle->getSnakeTexture();
+			renderSnakeInput.snake = renderState.level->getSnake();
+
+			RenderUtils::renderSnake(renderTarget, renderSnakeInput);
 		}
 
 		void StoryGameRenderer::renderWaitToStartInstructions(sf::RenderTarget& renderTarget) {

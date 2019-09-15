@@ -284,6 +284,12 @@ namespace r3 {
 
 			}
 
+			namespace LoadStoryCampaignValidation {
+
+				std::vector<std::string> buildErrorMessages(const LoadStoryCampaignResult& loadResult);
+
+			}
+
 			std::string resolveImageFilePath(const std::string& campaignFolderName, const std::string& imageFilename);
 
 			std::string resolveMusicFilePath(const std::string& campaignFolderName, const std::string& musicFilename);
@@ -293,6 +299,10 @@ namespace r3 {
 			LoadStoryMapResult loadStoryMap(const std::string& campaignFolderName, const std::string& mapFilename);
 
 			LoadStoryCampaignResult loadStoryCampaign(const std::string& campaignFolderName);
+
+			void appendToErrorLog(const std::vector<std::string>& errorMessages);
+
+			void appendFailedFilenameListToErrorLog(const std::vector<std::string>& failedFilenameList);
 
 		}
 

@@ -47,6 +47,10 @@ namespace r3 {
 			}
 			else if (event.type == sf::Event::KeyPressed) {
 				switch (this->mode) {
+				case StoryGameMode::LOAD_CAMPAIGN_ERROR:
+				case StoryGameMode::LOAD_LEVEL_ERROR:
+					result = this->processLoadErrorKeyEvent(event);
+					break;
 				case StoryGameMode::WAIT_TO_START:
 					result = this->processWaitToStartKeyEvent(event);
 					break;
@@ -95,7 +99,7 @@ namespace r3 {
 		void StoryGameController::loadCampaign() {
 			LoadStoryCampaignResult loadResult = StoryLoaderUtils::loadStoryCampaign(this->campaignFolder);
 			if (!loadResult.valid()) {
-				// TODO: output errors to log file
+				StoryLoaderUtils::appendToErrorLog(StoryLoaderUtils::LoadStoryCampaignValidation::buildErrorMessages(loadResult));
 
 				this->mode = StoryGameMode::LOAD_CAMPAIGN_ERROR;
 			}
@@ -124,7 +128,15 @@ namespace r3 {
 		void StoryGameController::updateBasedOnLoadLevelStatus() {
 			StoryLevelAssetLoadingStatus assetLoadingStatus = this->levelAssetBundle->getLoadingStatus();
 			if (assetLoadingStatus.completionStatus == StoryLevelAssetLoadingCompletionStatus::FAILED) {
-				// TODO: output errors to log file
+				LoadStoryMapValidationResult loadMapValidationResult = this->levelAssetBundle->getLoadMapValidationResult();
+				if (!loadMapValidationResult.valid()) {
+					StoryLoaderUtils::appendToErrorLog(StoryLoaderUtils::LoadStoryMapValidation::buildErrorMessages(loadMapValidationResult));
+				}
+
+				std::vector<std::string> failedFilenameList = this->levelAssetBundle->getFailedFilenameList();
+				if (!failedFilenameList.empty()) {
+					StoryLoaderUtils::appendFailedFilenameListToErrorLog(this->levelAssetBundle->getFailedFilenameList());
+				}
 
 				this->mode = StoryGameMode::LOAD_LEVEL_ERROR;
 			}
@@ -133,6 +145,18 @@ namespace r3 {
 
 				this->mode = StoryGameMode::WAIT_TO_START;
 			}
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processLoadErrorKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
+				break;
+			}
+
+			return result;
 		}
 
 		StoryGameSceneClientRequest StoryGameController::processWaitToStartKeyEvent(sf::Event& event) {

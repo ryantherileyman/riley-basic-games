@@ -67,6 +67,7 @@ namespace r3 {
 			void updateBasedOnLoadLevelStatus();
 
 		private:
+			StoryGameSceneClientRequest processLoadErrorKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
 
 		};
@@ -94,6 +95,7 @@ namespace r3 {
 			void renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
+			void renderExitInstructions(sf::RenderTarget& renderTarget);
 
 		private:
 			sf::RectangleShape createTextBackgroundShape(float width, float height);

@@ -60,6 +60,10 @@ namespace r3 {
 			return result;
 		}
 
+		LoadStoryMapValidationResult StoryLevelAssetBundle::getLoadMapValidationResult() const {
+			return this->loadMapValidationResult;
+		}
+
 		std::vector<std::string> StoryLevelAssetBundle::getFailedFilenameList() const {
 			std::vector<std::string> result = this->failedFilenameList;
 			return result;
@@ -122,6 +126,7 @@ namespace r3 {
 				this->loadHitBarrierSoundBuffer();
 			}
 			else {
+				this->loadMapValidationResult = loadStoryMapResult.validationResult;
 				this->failedFilenameList.push_back(this->levelDefn->mapFilename);
 			}
 

@@ -21,7 +21,7 @@ namespace r3 {
 			const wchar_t* HUD_TIME_REMAINING = L"Time Left: %02d:%02d";
 
 			const wchar_t* CAMPAIGN_ERROR_MESSAGE = L"An error occurred attempting to load the campaign.";
-			const wchar_t* LEVEL_ERROR_MESSAGE = L"An error occurred attempting to load the assets for the next level.";
+			const wchar_t* LEVEL_ERROR_MESSAGE = L"An error occurred attempting to load the next level's assets.";
 			const wchar_t* SEE_LOG_MESSAGE = L"See log.txt in the game folder for more information.";
 
 			const wchar_t* LOAD_LEVEL_PCT_FORMAT_STRING = L"Loading assets...  (%.0f%%)";
@@ -62,6 +62,8 @@ namespace r3 {
 
 			sf::Text seeLogText = this->createInstructionsText(StoryGameRenderConstants::SEE_LOG_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
 			renderTarget.draw(seeLogText);
+
+			this->renderExitInstructions(renderTarget);
 		}
 
 		void StoryGameRenderer::renderLoadLevelStatus(sf::RenderTarget& renderTarget, const StoryLevelAssetLoadingStatus& assetLoadingStatus) {
@@ -92,6 +94,8 @@ namespace r3 {
 
 			sf::Text seeLogText = this->createInstructionsText(StoryGameRenderConstants::SEE_LOG_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
 			renderTarget.draw(seeLogText);
+
+			this->renderExitInstructions(renderTarget);
 		}
 
 		void StoryGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
@@ -206,6 +210,10 @@ namespace r3 {
 			sf::Text startInstructionsText = this->createInstructionsText(StoryGameRenderConstants::START_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) - 50.0f);
 			renderTarget.draw(startInstructionsText);
 
+			this->renderExitInstructions(renderTarget);
+		}
+
+		void StoryGameRenderer::renderExitInstructions(sf::RenderTarget& renderTarget) {
 			sf::Text exitInstructionsText = this->createInstructionsText(StoryGameRenderConstants::EXIT_INSTRUCTIONS, (ViewUtils::VIEW_SIZE.y / 2.0f) + 50.0f);
 			renderTarget.draw(exitInstructionsText);
 		}
@@ -213,7 +221,7 @@ namespace r3 {
 		sf::RectangleShape StoryGameRenderer::createTextBackgroundShape(float width, float height) {
 			sf::RectangleShape result(sf::Vector2f(width, height));
 			result.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - (width / 2.0f), (ViewUtils::VIEW_SIZE.y / 2.0f) - (height / 2.0f) + 50.0f);
-			result.setFillColor(sf::Color(0, 0, 0, 64));
+			result.setFillColor(sf::Color(0, 0, 0, 96));
 			
 			return result;
 		}

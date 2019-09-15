@@ -1,6 +1,7 @@
 
 #include <fstream>
 #include <codecvt>
+#include <ctime>
 #include <set>
 #include "../jsoncpp/json/json.h"
 #include "../includes/r3-json-JsonValidationUtils.hpp"
@@ -522,6 +523,41 @@ namespace r3 {
 				}
 
 				return result;
+			}
+
+			std::string resolveCurrTimeStr() {
+				time_t currTime;
+				struct tm* timeInfo;
+				char timeStr[80];
+
+				time(&currTime);
+				timeInfo = localtime(&currTime);
+				strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", timeInfo);
+
+				std::string result(timeStr);
+				return result;
+			}
+
+			void appendToErrorLog(const std::vector<std::string>& errorMessages) {
+				std::ofstream errorLogStream;
+				errorLogStream.open("log.txt", std::ios_base::app);
+
+				errorLogStream << resolveCurrTimeStr() << "\n";
+				for (auto const& currErrorMessage : errorMessages) {
+					errorLogStream << currErrorMessage << "\n";
+				}
+				errorLogStream << "\n";
+			}
+
+			void appendFailedFilenameListToErrorLog(const std::vector<std::string>& failedFilenameList) {
+				std::ofstream errorLogStream;
+				errorLogStream.open("log.txt", std::ios_base::app);
+
+				errorLogStream << resolveCurrTimeStr() << "\n";
+				for (auto const& currFailedFilename : failedFilenameList) {
+					errorLogStream << "Error loading asset file <" << currFailedFilename << ">\n";
+				}
+				errorLogStream << "\n";
 			}
 
 		}

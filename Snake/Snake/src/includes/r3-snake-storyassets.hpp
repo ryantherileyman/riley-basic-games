@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 #include "r3-snake-storydefn.hpp"
+#include "r3-snake-storyloader.hpp"
 #pragma once
 
 namespace r3 {
@@ -37,6 +38,7 @@ namespace r3 {
 			std::string currFilenameBeingLoaded;
 
 		private:
+			LoadStoryMapValidationResult loadMapValidationResult;
 			std::vector<std::string> failedFilenameList;
 
 		private:
@@ -62,6 +64,7 @@ namespace r3 {
 			StoryLevelAssetLoadingStatus getLoadingStatus();
 
 		public:
+			LoadStoryMapValidationResult getLoadMapValidationResult() const;
 			std::vector<std::string> getFailedFilenameList() const;
 
 		public:

@@ -207,11 +207,6 @@ namespace r3 {
 			void renderScoreUi(sf::RenderTarget& renderTarget, const QuickGameRenderState& gameRenderState);
 			void renderLongestSnakeUi(sf::RenderTarget& renderTarget);
 
-		private:
-			sf::Sprite createSnakeHeadSprite(const QuickGame& game);
-			sf::Sprite createSnakeTailSprite(const QuickGame& game);
-			sf::Sprite createSnakeBodySprite(const QuickGame& game, const SnakeSegment& snakeSegment);
-
 		};
 
 	}

@@ -1,4 +1,5 @@
 
+#include <queue>
 #include <SFML/Graphics.hpp>
 #include "r3-snake-storydefn.hpp"
 #include "r3-snake-storyassets.hpp"
@@ -15,6 +16,7 @@ namespace r3 {
 			LOAD_LEVEL,
 			LOAD_LEVEL_ERROR,
 			WAIT_TO_START,
+			GAME_RUNNING,
 		} StoryGameMode;
 
 		typedef enum class Snake_StoryGameSceneClientRequest {
@@ -23,13 +25,56 @@ namespace r3 {
 			RETURN_TO_SPLASH_SCREEN,
 		} StoryGameSceneClientRequest;
 
-		typedef struct Snake_StoryGameRenderState {
-			const StoryLevelAssetBundle* levelAssetBundle;
-			const StoryLevel* level;
-		} StoryGameRenderState;
+		typedef struct Snake_StoryGameInputRequest {
+			std::vector<ObjectDirection> snakeMovementList;
+		} StoryGameInputRequest;
 
+		typedef struct Snake_StoryGameUpdateResult {
+			ObjectDirection snakeMovementResult;
+			bool snakeHitBarrierFlag;
+		} StoryGameUpdateResult;
+
+		class StoryGame;
 		class StoryGameController;
 		class StoryGameRenderer;
+
+		class StoryGame {
+
+		private:
+			StoryMap* map;
+			Snake* snake;
+			float snakeSpeedTilesPerSecond;
+
+		private:
+			int framesSinceSnakeMoved;
+			std::queue<ObjectDirection> snakeMovementQueue;
+
+		public:
+			StoryGame();
+
+		public:
+			~StoryGame();
+
+		public:
+			void startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn);
+
+		public:
+			StoryMap* getMap() const;
+			Snake* getSnake() const;
+
+		public:
+			StoryGameUpdateResult update(const StoryGameInputRequest& input);
+
+		private:
+			void freeLevel();
+
+		private:
+			void acceptSnakeMovementList(const std::vector<ObjectDirection>& snakeMovementList);
+			void consumeAllUnusableSnakeInputs();
+			ObjectDirection resolveDirectionToMoveSnake();
+			bool snakeWouldHitBarrier(ObjectDirection direction);
+
+		};
 
 		class StoryGameController {
 
@@ -44,7 +89,10 @@ namespace r3 {
 			int currLevelIndex;
 			std::vector<StoryLevelDefn> levelDefnList;
 			StoryLevelAssetBundle* levelAssetBundle;
-			StoryLevel* level;
+			StoryGame* storyGame;
+
+		private:
+			std::vector<ObjectDirection> snakeMovementInputQueue;
 
 		public:
 			StoryGameController(sf::RenderWindow& window);
@@ -69,8 +117,17 @@ namespace r3 {
 		private:
 			StoryGameSceneClientRequest processLoadErrorKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
+			StoryGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
+
+		private:
+			void updateGameRunning();
 
 		};
+
+		typedef struct Snake_StoryGameRenderState {
+			const StoryLevelAssetBundle* levelAssetBundle;
+			const StoryGame* storyGame;
+		} StoryGameRenderState;
 
 		class StoryGameRenderer {
 
@@ -89,6 +146,7 @@ namespace r3 {
 			void renderLoadLevelStatus(sf::RenderTarget& renderTarget, const StoryLevelAssetLoadingStatus& assetLoadingStatus);
 			void renderLoadLevelError(sf::RenderTarget& renderTarget);
 			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 
 		private:
 			void renderGameRunningUi(sf::RenderTarget& renderTarget);

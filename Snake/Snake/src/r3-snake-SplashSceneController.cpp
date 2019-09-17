@@ -139,7 +139,7 @@ namespace r3 {
 				this->processQuickGameOptionsKeypressEvent(event);
 				break;
 			case SplashSceneMode::STORY_GAME_OPTIONS_MENU:
-				this->processStoryGameOptionsKeypressEvent(event);
+				result = this->processStoryGameOptionsKeypressEvent(event);
 				break;
 			case SplashSceneMode::SYSTEM_OPTIONS_MENU:
 				this->processSystemOptionsKeypressEvent(event);

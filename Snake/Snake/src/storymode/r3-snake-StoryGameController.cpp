@@ -14,7 +14,7 @@ namespace r3 {
 			this->mode = StoryGameMode::LOAD_CAMPAIGN;
 			this->currLevelIndex = 0;
 			this->levelAssetBundle = nullptr;
-			this->level = nullptr;
+			this->storyGame = new StoryGame();
 		}
 
 		StoryGameController::~StoryGameController() {
@@ -23,9 +23,7 @@ namespace r3 {
 			if (this->levelAssetBundle != nullptr) {
 				delete this->levelAssetBundle;
 			}
-			if (this->level != nullptr) {
-				delete this->level;
-			}
+			delete this->storyGame;
 		}
 
 		void StoryGameController::setCampaignFolder(const std::string& campaignFolder) {
@@ -54,6 +52,9 @@ namespace r3 {
 				case StoryGameMode::WAIT_TO_START:
 					result = this->processWaitToStartKeyEvent(event);
 					break;
+				case StoryGameMode::GAME_RUNNING:
+					result = this->processGameRunningKeyEvent(event);
+					break;
 				}
 			}
 
@@ -67,6 +68,9 @@ namespace r3 {
 				break;
 			case StoryGameMode::LOAD_LEVEL:
 				this->updateBasedOnLoadLevelStatus();
+				break;
+			case StoryGameMode::GAME_RUNNING:
+				this->updateGameRunning();
 				break;
 			}
 		}
@@ -86,12 +90,24 @@ namespace r3 {
 				this->window->display();
 				break;
 			case StoryGameMode::WAIT_TO_START:
+			{
 				StoryGameRenderState renderState;
 				renderState.levelAssetBundle = this->levelAssetBundle;
-				renderState.level = this->level;
+				renderState.storyGame = this->storyGame;
 
 				this->renderer->renderWaitToStart(*this->window, renderState);
 				this->window->display();
+			}
+				break;
+			case StoryGameMode::GAME_RUNNING:
+			{
+				StoryGameRenderState renderState;
+				renderState.levelAssetBundle = this->levelAssetBundle;
+				renderState.storyGame = this->storyGame;
+
+				this->renderer->renderGameRunning(*this->window, renderState);
+				this->window->display();
+			}
 				break;
 			}
 		}
@@ -141,7 +157,7 @@ namespace r3 {
 				this->mode = StoryGameMode::LOAD_LEVEL_ERROR;
 			}
 			else if ( assetLoadingStatus.completionStatus == StoryLevelAssetLoadingCompletionStatus::COMPLETE) {
-				this->level = new StoryLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
+				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 
 				this->mode = StoryGameMode::WAIT_TO_START;
 			}
@@ -163,12 +179,49 @@ namespace r3 {
 			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
 
 			switch (event.key.code) {
+			case sf::Keyboard::Key::Enter:
+				this->mode = StoryGameMode::GAME_RUNNING;
+				break;
 			case sf::Keyboard::Key::Escape:
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
 			}
 
 			return result;
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processGameRunningKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::W:
+			case sf::Keyboard::Key::Up:
+				this->snakeMovementInputQueue.push_back(ObjectDirection::UP);
+				break;
+			case sf::Keyboard::Key::D:
+			case sf::Keyboard::Key::Right:
+				this->snakeMovementInputQueue.push_back(ObjectDirection::RIGHT);
+				break;
+			case sf::Keyboard::Key::S:
+			case sf::Keyboard::Key::Down:
+				this->snakeMovementInputQueue.push_back(ObjectDirection::DOWN);
+				break;
+			case sf::Keyboard::Key::A:
+			case sf::Keyboard::Key::Left:
+				this->snakeMovementInputQueue.push_back(ObjectDirection::LEFT);
+				break;
+			}
+
+			return result;
+		}
+
+		void StoryGameController::updateGameRunning() {
+			StoryGameInputRequest inputRequest;
+			inputRequest.snakeMovementList = this->snakeMovementInputQueue;
+
+			StoryGameUpdateResult updateResult = this->storyGame->update(inputRequest);
+
+			this->snakeMovementInputQueue.clear();
 		}
 
 	}

@@ -106,6 +106,13 @@ namespace r3 {
 			this->renderWaitToStartInstructions(renderTarget);
 		}
 
+		void StoryGameRenderer::renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+			this->renderGameRunningUi(renderTarget);
+			this->renderPlayingField(renderTarget, renderState);
+			this->renderSnake(renderTarget, renderState);
+		}
+
 		void StoryGameRenderer::renderGameRunningUi(sf::RenderTarget& renderTarget) {
 			wchar_t scoreStr[32];
 			swprintf_s(scoreStr, StoryGameRenderConstants::HUD_SCORE_FORMAT_STRING, 0); // TODO: score should come from game state
@@ -151,7 +158,7 @@ namespace r3 {
 		}
 
 		void StoryGameRenderer::renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
-			sf::Vector2i fieldSize = renderState.level->getMap()->getFieldSize();
+			sf::Vector2i fieldSize = renderState.storyGame->getMap()->getFieldSize();
 			float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
 			sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
 
@@ -170,8 +177,8 @@ namespace r3 {
 
 			for (int y = 0; y < fieldSize.y; y++) {
 				for (int x = 0; x < fieldSize.x; x++) {
-					int floorId = renderState.level->getMap()->getFloorId(x, y);
-					int barrierId = renderState.level->getMap()->getBarrierId(x, y);
+					int floorId = renderState.storyGame->getMap()->getFloorId(x, y);
+					int barrierId = renderState.storyGame->getMap()->getBarrierId(x, y);
 
 					// Draw the floor tile if it is not the primary
 					if (floorId > 0) {
@@ -196,9 +203,9 @@ namespace r3 {
 
 		void StoryGameRenderer::renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			RenderUtils::RenderSnakeInput renderSnakeInput;
-			renderSnakeInput.fieldSize = renderState.level->getMap()->getFieldSize();
+			renderSnakeInput.fieldSize = renderState.storyGame->getMap()->getFieldSize();
 			renderSnakeInput.texture = &renderState.levelAssetBundle->getSnakeTexture();
-			renderSnakeInput.snake = renderState.level->getSnake();
+			renderSnakeInput.snake = renderState.storyGame->getSnake();
 
 			RenderUtils::renderSnake(renderTarget, renderSnakeInput);
 		}

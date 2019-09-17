@@ -149,9 +149,9 @@
     <ClCompile Include="src\storymode\r3-snake-LoadStoryCampaignValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-LoadStoryLevelValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-LoadStoryMapValidation.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-StoryGame.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryGameController.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryGameRenderer.cpp" />
-    <ClCompile Include="src\storymode\r3-snake-StoryLevel.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryLevelAssetBundle.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryLoaderUtils.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryMap.cpp" />

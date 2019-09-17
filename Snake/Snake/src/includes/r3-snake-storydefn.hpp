@@ -102,7 +102,6 @@ namespace r3 {
 		} StoryLevelDefn;
 
 		class StoryMap;
-		class StoryLevel;
 
 		class StoryMap {
 
@@ -126,24 +125,6 @@ namespace r3 {
 			int getFloorId(int x, int y) const;
 			int getBarrierId(int x, int y) const;
 			bool barrierAt(int x, int y) const;
-
-		};
-
-		class StoryLevel {
-
-		private:
-			StoryMap* map;
-			Snake* snake;
-
-		public:
-			StoryLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn);
-
-		public:
-			~StoryLevel();
-
-		public:
-			StoryMap* getMap() const;
-			Snake* getSnake() const;
 
 		};
 

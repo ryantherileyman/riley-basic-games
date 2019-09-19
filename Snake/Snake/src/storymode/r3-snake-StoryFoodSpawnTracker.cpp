@@ -15,6 +15,7 @@ namespace r3 {
 
 			this->spawnCount = 0;
 			this->timeOfLastChanceCheck = sf::seconds(-1.0f);
+			this->timeOfLastSpawn = sf::seconds(0.0f - (float)foodDefn.timePassed);
 		}
 
 		const StoryFoodDefn& StoryFoodSpawnTracker::getFoodDefn() const {
@@ -38,6 +39,7 @@ namespace r3 {
 
 		bool StoryFoodSpawnTracker::shouldFoodSpawn(const StoryFoodSpawnCheckInput& input) {
 			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+			sf::Time timeSinceLastSpawn = input.timeSinceLevelStarted - this->timeOfLastSpawn;
 
 			bool conditionsMet = false;
 
@@ -47,7 +49,12 @@ namespace r3 {
 					(this->foodInstanceList.empty()) &&
 					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
 					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
-
+				break;
+			case StoryObjectSpawnType::ON_TIMER:
+				conditionsMet =
+					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+					(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->timePassed) &&
+					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
 				break;
 			}
 
@@ -59,6 +66,9 @@ namespace r3 {
 				printf("Rolled %f, with chance of %f\n", chanceComparison, this->foodDefn->chancePct);
 				this->timeOfLastChanceCheck = input.timeSinceLevelStarted;
 				result = (chanceComparison <= this->foodDefn->chancePct);
+				if (result) {
+					this->timeOfLastSpawn = input.timeSinceLevelStarted;
+				}
 			}
 
 			return result;

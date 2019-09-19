@@ -77,6 +77,7 @@ namespace r3 {
 		private:
 			int spawnCount;
 			sf::Time timeOfLastChanceCheck;
+			sf::Time timeOfLastSpawn;
 
 		public:
 			StoryFoodSpawnTracker(const StoryFoodDefn& foodDefn);

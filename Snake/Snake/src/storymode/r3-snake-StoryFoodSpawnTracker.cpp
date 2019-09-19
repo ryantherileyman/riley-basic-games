@@ -56,6 +56,13 @@ namespace r3 {
 					(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->timePassed) &&
 					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
 				break;
+			case StoryObjectSpawnType::ON_LENGTH_REACHED:
+				conditionsMet =
+					(input.snakeLength >= this->foodDefn->lengthReached) &&
+					(this->foodInstanceList.empty()) &&
+					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+				break;
 			}
 
 			bool result = false;

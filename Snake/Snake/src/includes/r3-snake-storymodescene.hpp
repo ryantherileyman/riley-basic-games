@@ -45,6 +45,7 @@ namespace r3 {
 
 		typedef struct Snake_StoryFoodSpawnCheckInput {
 			sf::Time timeSinceLevelStarted;
+			int snakeLength;
 		} StoryFoodSpawnCheckInput;
 
 		typedef struct Snake_StoryFoodPositionCheckResult {

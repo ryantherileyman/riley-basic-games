@@ -18,11 +18,20 @@
             "foodList": [
                 {
                     "foodType": "Apple",
-                    "spawnType": "onTimer",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 35,
+                    "growthRate": 5,
+                    "timePassed": 5,
+                    "floorIdRange": { "minId": 0, "maxId": 1 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onLengthReached",
                     "chancePct": 100,
                     "maxSpawnCount": 10,
-                    "growthRate": 2,
-                    "timePassed": 5,
+                    "growthRate": 3,
+                    "lengthReached": 30,
                     "floorIdRange": { "minId": 0, "maxId": 1 }
                 }
             ]

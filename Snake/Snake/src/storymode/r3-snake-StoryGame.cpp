@@ -170,6 +170,7 @@ namespace r3 {
 			for (auto& currFoodSpawnTracker : this->foodSpawnTrackerList) {
 				StoryFoodSpawnCheckInput checkInput;
 				checkInput.timeSinceLevelStarted = this->clock.getElapsedTime();
+				checkInput.snakeLength = this->getSnake()->getLength();
 
 				if (currFoodSpawnTracker.shouldFoodSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableFoodSpawnPositionList(currFoodSpawnTracker.getFoodDefn());

@@ -111,6 +111,7 @@ namespace r3 {
 			this->renderGameRunningUi(renderTarget);
 			this->renderPlayingField(renderTarget, renderState);
 			this->renderSnake(renderTarget, renderState);
+			this->renderFoodSpawns(renderTarget, renderState);
 		}
 
 		void StoryGameRenderer::renderGameRunningUi(sf::RenderTarget& renderTarget) {
@@ -208,6 +209,27 @@ namespace r3 {
 			renderSnakeInput.snake = renderState.storyGame->getSnake();
 
 			RenderUtils::renderSnake(renderTarget, renderSnakeInput);
+		}
+
+		void StoryGameRenderer::renderFoodSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			sf::Vector2i fieldSize = renderState.storyGame->getMap()->getFieldSize();
+			float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+			sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+			sf::Sprite foodSprite;
+			foodSprite.setTexture(renderState.levelAssetBundle->getFoodTexture());
+			foodSprite.setTextureRect(sf::IntRect(0, 0, 75, 75)); // TODO: put 75 in a constant for FOOD_PIXEL_SIZE?
+			foodSprite.setScale(tileSize / 75.0f, tileSize / 75.0f);
+
+			for (auto const& currFoodSpawnTracker : renderState.storyGame->getFoodSpawnTrackerList()) {
+				const StoryFoodDefn& foodDefn = currFoodSpawnTracker.getFoodDefn();
+
+				for (auto const& currFoodInstance : currFoodSpawnTracker.getFoodInstanceList()) {
+					foodSprite.setPosition(fieldPosition.x + currFoodInstance.position.x * tileSize, fieldPosition.y + currFoodInstance.position.y * tileSize);
+
+					renderTarget.draw(foodSprite);
+				}
+			}
 		}
 
 		void StoryGameRenderer::renderWaitToStartInstructions(sf::RenderTarget& renderTarget) {

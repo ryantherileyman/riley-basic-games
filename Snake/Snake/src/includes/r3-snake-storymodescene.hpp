@@ -1,4 +1,5 @@
 
+#include <random>
 #include <queue>
 #include <SFML/Graphics.hpp>
 #include "r3-snake-storydefn.hpp"
@@ -29,18 +30,80 @@ namespace r3 {
 			std::vector<ObjectDirection> snakeMovementList;
 		} StoryGameInputRequest;
 
+		typedef struct Snake_StoryFoodInstance {
+			int foodInstanceId;
+			sf::Vector2i position;
+		} StoryFoodInstance;
+
 		typedef struct Snake_StoryGameUpdateResult {
 			ObjectDirection snakeMovementResult;
 			bool snakeHitBarrierFlag;
+			bool snakeGrewFlag;
+			std::vector<StoryFoodInstance> spawnedFoodInstanceList;
+			std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList;
 		} StoryGameUpdateResult;
 
+		typedef struct Snake_StoryFoodSpawnCheckInput {
+			sf::Time timeSinceLevelStarted;
+		} StoryFoodSpawnCheckInput;
+
+		typedef struct Snake_StoryFoodPositionCheckResult {
+			bool foodExistsFlag;
+			int foodInstanceId;
+		} StoryFoodPositionCheckResult;
+
+		typedef struct Snake_StoryCheckForFoodEatenBySnakeResult {
+			std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList;
+			int snakeGrowth;
+		} StoryCheckForFoodEatenBySnakeResult;
+
+		class StoryFoodSpawnTracker;
 		class StoryGame;
 		class StoryGameController;
 		class StoryGameRenderer;
 
+		class StoryFoodSpawnTracker {
+
+		private:
+			const StoryFoodDefn* foodDefn;
+
+		private:
+			std::default_random_engine randomizer;
+			std::uniform_real_distribution<float> chancePctDistribution;
+
+		private:
+			std::vector<StoryFoodInstance> foodInstanceList;
+
+		private:
+			int spawnCount;
+			sf::Time timeOfLastChanceCheck;
+
+		public:
+			StoryFoodSpawnTracker(const StoryFoodDefn& foodDefn);
+
+		public:
+			const StoryFoodDefn& getFoodDefn() const;
+			const std::vector<StoryFoodInstance>& getFoodInstanceList() const;
+			StoryFoodInstance getFoodInstance(int foodInstanceId) const;
+
+		public:
+			bool shouldFoodSpawn(const StoryFoodSpawnCheckInput& input);
+			StoryFoodPositionCheckResult occupiesPosition(const sf::Vector2i& position) const;
+
+		public:
+			void spawnFood(const StoryFoodInstance& foodInstance);
+			void despawnFood(int foodInstanceId);
+
+		};
+
 		class StoryGame {
 
 		private:
+			std::default_random_engine randomizer;
+			sf::Clock clock;
+
+		private:
+			const StoryLevelDefn* levelDefn;
 			StoryMap* map;
 			Snake* snake;
 			float snakeSpeedTilesPerSecond;
@@ -48,6 +111,11 @@ namespace r3 {
 		private:
 			int framesSinceSnakeMoved;
 			std::queue<ObjectDirection> snakeMovementQueue;
+			int queuedSnakeGrowth;
+
+		private:
+			int nextFoodInstanceId;
+			std::vector<StoryFoodSpawnTracker> foodSpawnTrackerList;
 
 		public:
 			StoryGame();
@@ -57,10 +125,12 @@ namespace r3 {
 
 		public:
 			void startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn);
+			void startRunningLevel();
 
 		public:
 			StoryMap* getMap() const;
 			Snake* getSnake() const;
+			const std::vector<StoryFoodSpawnTracker>& getFoodSpawnTrackerList() const;
 
 		public:
 			StoryGameUpdateResult update(const StoryGameInputRequest& input);
@@ -73,6 +143,13 @@ namespace r3 {
 			void consumeAllUnusableSnakeInputs();
 			ObjectDirection resolveDirectionToMoveSnake();
 			bool snakeWouldHitBarrier(ObjectDirection direction);
+			bool moveSnakeForward(ObjectDirection directionToMoveSnake);
+
+		private:
+			std::vector<StoryFoodInstance> checkForFoodSpawns();
+			StoryCheckForFoodEatenBySnakeResult checkForFoodEatenBySnake();
+			std::vector<sf::Vector2i> buildAvailableFoodSpawnPositionList(const StoryFoodDefn& foodDefn);
+			StoryFoodInstance createFoodInstance(const std::vector<sf::Vector2i>& availablePositionList);
 
 		};
 
@@ -152,6 +229,7 @@ namespace r3 {
 			void renderGameRunningUi(sf::RenderTarget& renderTarget);
 			void renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderFoodSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 			void renderExitInstructions(sf::RenderTarget& renderTarget);
 

@@ -180,6 +180,8 @@ namespace r3 {
 
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Enter:
+				this->storyGame->startRunningLevel();
+
 				this->mode = StoryGameMode::GAME_RUNNING;
 				break;
 			case sf::Keyboard::Key::Escape:

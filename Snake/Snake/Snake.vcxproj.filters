@@ -87,6 +87,9 @@
     <ClCompile Include="src\storymode\r3-snake-StoryGame.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\storymode\r3-snake-StoryFoodSpawnTracker.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp">

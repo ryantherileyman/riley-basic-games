@@ -19,10 +19,26 @@
                 {
                     "foodType": "Apple",
                     "spawnType": "onDespawn",
-                    "chancePct": 1,
+                    "chancePct": 100,
                     "maxSpawnCount": 10,
                     "growthRate": 2,
                     "floorIdRange": { "minId": 0, "maxId": 1 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 10,
+                    "maxSpawnCount": 100,
+                    "growthRate": 10,
+                    "floorIdRange": { "minId": 0, "maxId": 1 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 2,
+                    "maxSpawnCount": 100,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 2, "maxId": 2 }
                 }
             ]
         }

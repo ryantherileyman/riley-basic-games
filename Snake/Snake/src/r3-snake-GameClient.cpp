@@ -244,7 +244,7 @@ namespace r3 {
 				}
 
 				sf::Int64 microSecondsElapsed = clock.getElapsedTime().asMicroseconds();
-				printf("microseconds elapsed this frame = %lld\n", microSecondsElapsed);
+				// TODO printf("microseconds elapsed this frame = %lld\n", microSecondsElapsed);
 				if (microSecondsElapsed < MICROSECONDS_PER_FRAME) {
 					std::this_thread::sleep_for(std::chrono::microseconds(MICROSECONDS_PER_FRAME - microSecondsElapsed));
 				}

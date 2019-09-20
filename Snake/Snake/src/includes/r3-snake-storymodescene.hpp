@@ -58,6 +58,18 @@ namespace r3 {
 			int snakeGrowth;
 		} StoryCheckForFoodEatenBySnakeResult;
 
+		typedef struct Snake_StoryFoodTileDistanceTracking {
+			int origTileDistanceFromSnake;
+			int tileDistanceSnakeTravelled;
+		} StoryFoodTileDistanceTracking;
+
+		typedef struct Snake_StoryFoodEatenBySnakeScoreResult {
+			int baseScore;
+			int bonusPathScore;
+			int perfectPathScore;
+			int totalScore;
+		} StoryFoodEatenBySnakeScoreResult;
+
 		class StoryFoodSpawnTracker;
 		class StoryGame;
 		class StoryGameController;
@@ -118,6 +130,10 @@ namespace r3 {
 		private:
 			int nextFoodInstanceId;
 			std::vector<StoryFoodSpawnTracker> foodSpawnTrackerList;
+			std::unordered_map<int, StoryFoodTileDistanceTracking> foodTileDistanceTrackingMap;
+
+		private:
+			int score;
 
 		public:
 			StoryGame();
@@ -133,6 +149,7 @@ namespace r3 {
 			StoryMap* getMap() const;
 			Snake* getSnake() const;
 			const std::vector<StoryFoodSpawnTracker>& getFoodSpawnTrackerList() const;
+			int getScore() const;
 
 		public:
 			StoryGameUpdateResult update(const StoryGameInputRequest& input);
@@ -152,6 +169,11 @@ namespace r3 {
 			StoryCheckForFoodEatenBySnakeResult checkForFoodEatenBySnake();
 			std::vector<sf::Vector2i> buildAvailableFoodSpawnPositionList(const StoryFoodDefn& foodDefn);
 			StoryFoodInstance createFoodInstance(const std::vector<sf::Vector2i>& availablePositionList);
+
+		private:
+			void addNewFoodSpawnsToFoodTileDistanceTrackingMap(const std::vector<StoryFoodInstance> spawnedFoodInstanceList);
+			void updateFoodTileDistanceTrackingMapAfterSnakeMoved();
+			std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList);
 
 		};
 
@@ -228,7 +250,7 @@ namespace r3 {
 			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 
 		private:
-			void renderGameRunningUi(sf::RenderTarget& renderTarget);
+			void renderGameRunningUi(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderFoodSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);

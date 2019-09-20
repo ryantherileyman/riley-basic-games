@@ -1,10 +1,58 @@
 
 #include <time.h>
+#include <math.h>
 #include "../includes/r3-snake-storymodescene.hpp"
 
 namespace r3 {
 
 	namespace snake {
+
+		namespace StoryGameScoreUtils {
+
+			int getBaseFoodScore(StoryFoodType foodType) {
+				int result = 0;
+
+				switch (foodType) {
+				case StoryFoodType::APPLE:
+					result = 10;
+					break;
+				}
+
+				return result;
+			}
+
+			StoryFoodEatenBySnakeScoreResult calcFoodEatenScore(StoryFoodType foodType, const StoryFoodTileDistanceTracking& tileDistanceTracking) {
+				StoryFoodEatenBySnakeScoreResult result;
+
+				result.baseScore = getBaseFoodScore(foodType);
+
+				result.bonusPathScore = 0;
+				if (tileDistanceTracking.tileDistanceSnakeTravelled <= (tileDistanceTracking.origTileDistanceFromSnake * 2)) {
+					float pathPct = 1.0f - (float)(tileDistanceTracking.tileDistanceSnakeTravelled - tileDistanceTracking.origTileDistanceFromSnake) / (float)tileDistanceTracking.origTileDistanceFromSnake;
+					result.bonusPathScore = (int)floorf((float)result.baseScore * pathPct);
+				}
+
+				result.perfectPathScore = 0;
+				if (tileDistanceTracking.tileDistanceSnakeTravelled <= tileDistanceTracking.origTileDistanceFromSnake ) {
+					result.perfectPathScore = result.baseScore;
+				}
+
+				result.totalScore = result.baseScore + result.bonusPathScore + result.perfectPathScore;
+
+				printf("Scoring for food eaten: Base=%d + BonusPath=%d + PerfectPath=%d = %d\n", result.baseScore, result.bonusPathScore, result.perfectPathScore, result.totalScore);
+
+				return result;
+			}
+
+			int calcTotalScore(const std::unordered_map<int, StoryFoodEatenBySnakeScoreResult>& foodEatenBySnakeScoreResultMap) {
+				int result = 0;
+				for (const auto& currScoreResultPair : foodEatenBySnakeScoreResultMap) {
+					result += currScoreResultPair.second.totalScore;
+				}
+				return result;
+			}
+
+		}
 
 		StoryGame::StoryGame() {
 			this->randomizer.seed((unsigned int)time(NULL));
@@ -15,6 +63,7 @@ namespace r3 {
 			this->framesSinceSnakeMoved = 0;
 			this->queuedSnakeGrowth = 0;
 			this->nextFoodInstanceId = 1;
+			this->score = 0;
 		}
 
 		StoryGame::~StoryGame() {
@@ -38,6 +87,8 @@ namespace r3 {
 			for (auto const& currFoodDefn : levelDefn.foodDefnList) {
 				this->foodSpawnTrackerList.push_back(StoryFoodSpawnTracker(currFoodDefn));
 			}
+
+			this->foodTileDistanceTrackingMap.clear();
 		}
 
 		void StoryGame::startRunningLevel() {
@@ -57,11 +108,17 @@ namespace r3 {
 			return this->foodSpawnTrackerList;
 		}
 
+		int StoryGame::getScore() const {
+			return this->score;
+		}
+
 		StoryGameUpdateResult StoryGame::update(const StoryGameInputRequest& input) {
 			StoryGameUpdateResult result;
 			result.snakeMovementResult = ObjectDirection::NONE;
 			result.snakeHitBarrierFlag = false;
 			result.spawnedFoodInstanceList = this->checkForFoodSpawns();
+
+			this->addNewFoodSpawnsToFoodTileDistanceTrackingMap(result.spawnedFoodInstanceList);
 
 			this->acceptSnakeMovementList(input.snakeMovementList);
 			this->consumeAllUnusableSnakeInputs();
@@ -75,10 +132,14 @@ namespace r3 {
 				else {
 					result.snakeMovementResult = directionToMoveSnake;
 					result.snakeGrewFlag = this->moveSnakeForward(directionToMoveSnake);
+					this->updateFoodTileDistanceTrackingMapAfterSnakeMoved();
 
 					StoryCheckForFoodEatenBySnakeResult eatenResult = this->checkForFoodEatenBySnake();
 					result.eatenBySnakeFoodInstanceList = eatenResult.eatenBySnakeFoodInstanceList;
 					this->queuedSnakeGrowth += eatenResult.snakeGrowth;
+
+					std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> foodEatenBySnakeScoreResultMap = this->buildFoodEatenBySnakeScoreResultMap(eatenResult.eatenBySnakeFoodInstanceList);
+					this->score += StoryGameScoreUtils::calcTotalScore(foodEatenBySnakeScoreResultMap);
 				}
 
 				this->framesSinceSnakeMoved -= (int)(60.0f / this->snakeSpeedTilesPerSecond);
@@ -237,6 +298,41 @@ namespace r3 {
 			StoryFoodInstance result;
 			result.foodInstanceId = this->nextFoodInstanceId;
 			result.position = availablePositionList[index];
+			return result;
+		}
+
+		void StoryGame::addNewFoodSpawnsToFoodTileDistanceTrackingMap(const std::vector<StoryFoodInstance> spawnedFoodInstanceList) {
+			sf::Vector2i headPosition = this->getSnake()->getHead().position;
+			for (auto const& currSpawnedFoodInstance : spawnedFoodInstanceList) {
+				StoryFoodTileDistanceTracking currFoodTileDistanceTracking;
+				currFoodTileDistanceTracking.origTileDistanceFromSnake =
+					abs(currSpawnedFoodInstance.position.x - headPosition.x) +
+					abs(currSpawnedFoodInstance.position.y - headPosition.y);
+				currFoodTileDistanceTracking.tileDistanceSnakeTravelled = 0;
+
+				this->foodTileDistanceTrackingMap[currSpawnedFoodInstance.foodInstanceId] = currFoodTileDistanceTracking;
+			}
+		}
+
+		void StoryGame::updateFoodTileDistanceTrackingMapAfterSnakeMoved() {
+			for (auto const& currFoodTileDistanceTrackingPair : this->foodTileDistanceTrackingMap) {
+				StoryFoodTileDistanceTracking currFoodTileDistanceTracking = currFoodTileDistanceTrackingPair.second;
+				currFoodTileDistanceTracking.tileDistanceSnakeTravelled++;
+
+				this->foodTileDistanceTrackingMap[currFoodTileDistanceTrackingPair.first] = currFoodTileDistanceTracking;
+			}
+		}
+
+		std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> StoryGame::buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList) {
+			std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> result;
+
+			for (auto const& currFoodInstance : eatenBySnakeFoodInstanceList) {
+				StoryFoodTileDistanceTracking currFoodTileDistanceTracking = this->foodTileDistanceTrackingMap[currFoodInstance.foodInstanceId];
+
+				// TODO: want to determine the actual food type based on the foodInstanceId somehow...
+				result[currFoodInstance.foodInstanceId] = StoryGameScoreUtils::calcFoodEatenScore(StoryFoodType::APPLE, currFoodTileDistanceTracking);
+			}
+
 			return result;
 		}
 

@@ -100,7 +100,7 @@ namespace r3 {
 
 		void StoryGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
-			this->renderGameRunningUi(renderTarget);
+			this->renderGameRunningUi(renderTarget, renderState);
 			this->renderPlayingField(renderTarget, renderState);
 			this->renderSnake(renderTarget, renderState);
 			this->renderWaitToStartInstructions(renderTarget);
@@ -108,15 +108,15 @@ namespace r3 {
 
 		void StoryGameRenderer::renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
-			this->renderGameRunningUi(renderTarget);
+			this->renderGameRunningUi(renderTarget, renderState);
 			this->renderPlayingField(renderTarget, renderState);
 			this->renderSnake(renderTarget, renderState);
 			this->renderFoodSpawns(renderTarget, renderState);
 		}
 
-		void StoryGameRenderer::renderGameRunningUi(sf::RenderTarget& renderTarget) {
+		void StoryGameRenderer::renderGameRunningUi(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			wchar_t scoreStr[32];
-			swprintf_s(scoreStr, StoryGameRenderConstants::HUD_SCORE_FORMAT_STRING, 0); // TODO: score should come from game state
+			swprintf_s(scoreStr, StoryGameRenderConstants::HUD_SCORE_FORMAT_STRING, renderState.storyGame->getScore());
 
 			sf::Text scoreText;
 			scoreText.setFont(*this->uiFont);

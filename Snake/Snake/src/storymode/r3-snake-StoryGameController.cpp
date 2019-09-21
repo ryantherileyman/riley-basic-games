@@ -55,6 +55,9 @@ namespace r3 {
 				case StoryGameMode::GAME_RUNNING:
 					result = this->processGameRunningKeyEvent(event);
 					break;
+				case StoryGameMode::LEVEL_LOST:
+					result = this->processLevelLostKeyEvent(event);
+					break;
 				}
 			}
 
@@ -106,6 +109,16 @@ namespace r3 {
 				renderState.storyGame = this->storyGame;
 
 				this->renderer->renderGameRunning(*this->window, renderState);
+				this->window->display();
+			}
+				break;
+			case StoryGameMode::LEVEL_LOST:
+			{
+				StoryGameRenderState renderState;
+				renderState.levelAssetBundle = this->levelAssetBundle;
+				renderState.storyGame = this->storyGame;
+
+				this->renderer->renderLevelLost(*this->window, renderState);
 				this->window->display();
 			}
 				break;
@@ -217,11 +230,33 @@ namespace r3 {
 			return result;
 		}
 
+		StoryGameSceneClientRequest StoryGameController::processLevelLostKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Enter:
+				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
+				this->storyGame->startRunningLevel();
+
+				this->mode = StoryGameMode::GAME_RUNNING;
+				break;
+			case sf::Keyboard::Key::Escape:
+				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
+				break;
+			}
+
+			return result;
+		}
+
 		void StoryGameController::updateGameRunning() {
 			StoryGameInputRequest inputRequest;
 			inputRequest.snakeMovementList = this->snakeMovementInputQueue;
 
 			StoryGameUpdateResult updateResult = this->storyGame->update(inputRequest);
+
+			if (updateResult.snakeDiedFlag) {
+				this->mode = StoryGameMode::LEVEL_LOST;
+			}
 
 			this->snakeMovementInputQueue.clear();
 		}

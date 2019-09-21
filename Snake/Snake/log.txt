@@ -1,0 +1,4 @@
+2019-09-20 18:35:15
+Entry 0 within the "levelList" array is invalid.  Individual error messages follow...
+The "snakeHealth" property is invalid.  It must be an integer of 1 or higher.
+

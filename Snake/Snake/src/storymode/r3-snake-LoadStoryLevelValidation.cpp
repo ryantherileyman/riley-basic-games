@@ -241,6 +241,10 @@ namespace r3 {
 						result.push_back("The \"snakeSpeed\" property is invalid.  It must be an integer of 1 or higher.");
 					}
 
+					if (!validationResult.snakeHealthValid) {
+						result.push_back("The \"snakeHealth\" property is invalid.  It must be an integer of 1 or higher.");
+					}
+
 					if (!validationResult.winConditionValid) {
 						result.push_back("The \"winCondition\" property is invalid.  It must be an object with a \"conditionType\" property.");
 					}

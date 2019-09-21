@@ -18,6 +18,7 @@ namespace r3 {
 			LOAD_LEVEL_ERROR,
 			WAIT_TO_START,
 			GAME_RUNNING,
+			LEVEL_LOST,
 		} StoryGameMode;
 
 		typedef enum class Snake_StoryGameSceneClientRequest {
@@ -38,6 +39,7 @@ namespace r3 {
 		typedef struct Snake_StoryGameUpdateResult {
 			ObjectDirection snakeMovementResult;
 			bool snakeHitBarrierFlag;
+			bool snakeDiedFlag;
 			bool snakeGrewFlag;
 			std::vector<StoryFoodInstance> spawnedFoodInstanceList;
 			std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList;
@@ -121,6 +123,7 @@ namespace r3 {
 			StoryMap* map;
 			Snake* snake;
 			float snakeSpeedTilesPerSecond;
+			float snakeHealth;
 
 		private:
 			int framesSinceSnakeMoved;
@@ -148,6 +151,8 @@ namespace r3 {
 		public:
 			StoryMap* getMap() const;
 			Snake* getSnake() const;
+			float getCurrSnakeHealth() const;
+			float getMaxSnakeHealth() const;
 			const std::vector<StoryFoodSpawnTracker>& getFoodSpawnTrackerList() const;
 			int getScore() const;
 
@@ -219,6 +224,7 @@ namespace r3 {
 			StoryGameSceneClientRequest processLoadErrorKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
+			StoryGameSceneClientRequest processLevelLostKeyEvent(sf::Event& event);
 
 		private:
 			void updateGameRunning();
@@ -248,6 +254,7 @@ namespace r3 {
 			void renderLoadLevelError(sf::RenderTarget& renderTarget);
 			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 
 		private:
 			void renderGameRunningUi(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);

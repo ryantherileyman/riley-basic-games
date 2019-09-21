@@ -97,6 +97,7 @@ namespace r3 {
 			std::string mapFilename;
 			SnakeStartDefn snakeStart;
 			int snakeSpeedTilesPerSecond;
+			int maxSnakeHealth;
 			StoryWinCondition winCondition;
 			std::vector<StoryFoodDefn> foodDefnList;
 		} StoryLevelDefn;

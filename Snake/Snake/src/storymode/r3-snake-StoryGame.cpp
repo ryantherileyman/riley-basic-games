@@ -60,6 +60,7 @@ namespace r3 {
 			this->map = nullptr;
 			this->snake = nullptr;
 			this->snakeSpeedTilesPerSecond = 0.0f;
+			this->snakeHealth = 0.0f;
 			this->framesSinceSnakeMoved = 0;
 			this->queuedSnakeGrowth = 0;
 			this->nextFoodInstanceId = 1;
@@ -78,6 +79,7 @@ namespace r3 {
 			this->snake = new Snake(levelDefn.snakeStart);
 
 			this->snakeSpeedTilesPerSecond = (float)levelDefn.snakeSpeedTilesPerSecond;
+			this->snakeHealth = (float)levelDefn.maxSnakeHealth;
 			this->framesSinceSnakeMoved = 0;
 			while (!this->snakeMovementQueue.empty()) {
 				this->snakeMovementQueue.pop();
@@ -104,6 +106,14 @@ namespace r3 {
 			return this->snake;
 		}
 
+		float StoryGame::getCurrSnakeHealth() const {
+			return this->snakeHealth;
+		}
+
+		float StoryGame::getMaxSnakeHealth() const {
+			return (float)this->levelDefn->maxSnakeHealth;
+		}
+
 		const std::vector<StoryFoodSpawnTracker>& StoryGame::getFoodSpawnTrackerList() const {
 			return this->foodSpawnTrackerList;
 		}
@@ -116,6 +126,8 @@ namespace r3 {
 			StoryGameUpdateResult result;
 			result.snakeMovementResult = ObjectDirection::NONE;
 			result.snakeHitBarrierFlag = false;
+			result.snakeDiedFlag = false;
+			result.snakeGrewFlag = false;
 			result.spawnedFoodInstanceList = this->checkForFoodSpawns();
 
 			this->addNewFoodSpawnsToFoodTileDistanceTrackingMap(result.spawnedFoodInstanceList);
@@ -128,6 +140,9 @@ namespace r3 {
 				ObjectDirection directionToMoveSnake = this->resolveDirectionToMoveSnake();
 				if (this->snakeWouldHitBarrier(directionToMoveSnake)) {
 					result.snakeHitBarrierFlag = true;
+
+					this->snakeHealth -= 1.0f;
+					result.snakeDiedFlag = (this->snakeHealth <= 0.0f);
 				}
 				else {
 					result.snakeMovementResult = directionToMoveSnake;

@@ -114,6 +114,12 @@ namespace r3 {
 			this->renderFoodSpawns(renderTarget, renderState);
 		}
 
+		void StoryGameRenderer::renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+			this->renderGameRunningUi(renderTarget, renderState);
+			this->renderPlayingField(renderTarget, renderState);
+		}
+
 		void StoryGameRenderer::renderGameRunningUi(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			wchar_t scoreStr[32];
 			swprintf_s(scoreStr, StoryGameRenderConstants::HUD_SCORE_FORMAT_STRING, renderState.storyGame->getScore());
@@ -147,7 +153,8 @@ namespace r3 {
 			healthBarBackgroundShape.setFillColor(sf::Color::Black);
 			renderTarget.draw(healthBarBackgroundShape);
 
-			sf::RectangleShape healthBarForegroundShape(sf::Vector2f(596.0f * ( 2.0f / 3.0f ), 17.0f)); // TODO: current health / max health should come from game state
+			float healthPct = renderState.storyGame->getCurrSnakeHealth() / renderState.storyGame->getMaxSnakeHealth();
+			sf::RectangleShape healthBarForegroundShape(sf::Vector2f(596.0f * healthPct, 17.0f));
 			healthBarForegroundShape.setPosition(662.0f, 82.0f);
 			healthBarForegroundShape.setFillColor(sf::Color::Red);
 			renderTarget.draw(healthBarForegroundShape);

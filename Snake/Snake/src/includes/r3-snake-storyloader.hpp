@@ -91,6 +91,7 @@ namespace r3 {
 			bool snakeStartDirectionValid = false;
 			bool snakeStartLengthValid = false;
 			bool snakeSpeedValid = false;
+			bool snakeHealthValid = false;
 			bool winConditionValid = false;
 			bool winConditionTypeValid = false;
 			bool winConditionFoodTypeValid = true;
@@ -116,6 +117,7 @@ namespace r3 {
 					snakeStartDirectionValid &&
 					snakeStartLengthValid &&
 					snakeSpeedValid &&
+					snakeHealthValid &&
 					winConditionValid &&
 					winConditionTypeValid &&
 					winConditionFoodTypeValid &&
@@ -198,6 +200,7 @@ namespace r3 {
 				extern const char* SNAKE_START_DIRECTION;
 				extern const char* SNAKE_START_LENGTH;
 				extern const char* SNAKE_SPEED;
+				extern const char* SNAKE_HEALTH;
 				extern const char* WIN_CONDITION;
 				extern const char* WIN_CONDITION_TYPE;
 				extern const char* WIN_CONDITION_FOOD_COUNT;

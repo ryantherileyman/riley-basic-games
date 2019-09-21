@@ -48,6 +48,7 @@ namespace r3 {
 				const char* SNAKE_START_DIRECTION = "direction";
 				const char* SNAKE_START_LENGTH = "length";
 				const char* SNAKE_SPEED = "snakeSpeed";
+				const char* SNAKE_HEALTH = "snakeHealth";
 				const char* WIN_CONDITION = "winCondition";
 				const char* WIN_CONDITION_TYPE = "conditionType";
 				const char* WIN_CONDITION_FOOD_COUNT = "foodCount";
@@ -436,6 +437,11 @@ namespace r3 {
 				result.validationResult.snakeSpeedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::SNAKE_SPEED, 1);
 				if (result.validationResult.snakeSpeedValid) {
 					result.levelDefn.snakeSpeedTilesPerSecond = jsonValue[StoryLevelProperties::SNAKE_SPEED].asInt();
+				}
+
+				result.validationResult.snakeHealthValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::SNAKE_HEALTH, 1);
+				if (result.validationResult.snakeHealthValid) {
+					result.levelDefn.maxSnakeHealth = jsonValue[StoryLevelProperties::SNAKE_HEALTH].asInt();
 				}
 
 				result.validationResult.winConditionValid = r3::json::ValidationUtils::requiredObject(jsonValue, StoryLevelProperties::WIN_CONDITION);

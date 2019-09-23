@@ -75,7 +75,7 @@ namespace r3 {
 			const sf::Texture& getBarrierTexture(int barrierId) const;
 
 		public:
-			const sf::Music& getMusic() const;
+			sf::Music& getMusic();
 			const sf::SoundBuffer& getEatFoodSoundBuffer() const;
 			const sf::SoundBuffer& getHitBarrierSoundBuffer() const;
 

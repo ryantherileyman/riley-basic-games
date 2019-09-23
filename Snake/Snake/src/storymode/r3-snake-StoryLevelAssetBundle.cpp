@@ -95,7 +95,7 @@ namespace r3 {
 			return result;
 		}
 
-		const sf::Music& StoryLevelAssetBundle::getMusic() const {
+		sf::Music& StoryLevelAssetBundle::getMusic() {
 			return this->music;
 		}
 

@@ -11,7 +11,7 @@
                 "length": 5
             },
             "snakeSpeed": 10,
-            "snakeHealth": 1000,
+            "snakeHealth": 10,
             "winCondition": {
                 "conditionType": "onLengthReached",
                 "snakeLength": 100

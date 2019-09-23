@@ -252,10 +252,16 @@ namespace r3 {
 			StoryGameInputRequest inputRequest;
 			inputRequest.snakeMovementList = this->snakeMovementInputQueue;
 
+			sf::Music& music = this->levelAssetBundle->getMusic();
+			if (music.getStatus() == sf::SoundSource::Status::Stopped) {
+				music.play();
+			}
+
 			StoryGameUpdateResult updateResult = this->storyGame->update(inputRequest);
 
 			if (updateResult.snakeDiedFlag) {
 				this->mode = StoryGameMode::LEVEL_LOST;
+				music.stop();
 			}
 
 			this->snakeMovementInputQueue.clear();

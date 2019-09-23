@@ -294,12 +294,26 @@ namespace r3 {
 						!this->map->barrierAt(x, y) &&
 						(floorId >= foodDefn.minFloorId) &&
 						(floorId <= foodDefn.maxFloorId) &&
-						!this->snake->occupiesPosition(sf::Vector2i(x, y));
-					// TODO: also want to ensure no food object is present in this position?  (at least of the same food type)
+						!this->snake->occupiesPosition(sf::Vector2i(x, y)) &&
+						!this->foodOccupiesPosition(sf::Vector2i(x, y));
 
 					if (positionIsAvailable) {
 						result.push_back(sf::Vector2i(x, y));
 					}
+				}
+			}
+
+			return result;
+		}
+
+		bool StoryGame::foodOccupiesPosition(const sf::Vector2i& position) {
+			bool result = false;
+
+			for (auto const& currFoodSpawnTracker : this->foodSpawnTrackerList) {
+				StoryFoodPositionCheckResult checkResult = currFoodSpawnTracker.occupiesPosition(position);
+				if (checkResult.foodExistsFlag) {
+					result = true;
+					break;
 				}
 			}
 

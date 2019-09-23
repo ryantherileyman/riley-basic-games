@@ -173,6 +173,7 @@ namespace r3 {
 			std::vector<StoryFoodInstance> checkForFoodSpawns();
 			StoryCheckForFoodEatenBySnakeResult checkForFoodEatenBySnake();
 			std::vector<sf::Vector2i> buildAvailableFoodSpawnPositionList(const StoryFoodDefn& foodDefn);
+			bool foodOccupiesPosition(const sf::Vector2i& position);
 			StoryFoodInstance createFoodInstance(const std::vector<sf::Vector2i>& availablePositionList);
 
 		private:

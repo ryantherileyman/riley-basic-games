@@ -3,7 +3,7 @@
     "menuDescription": "Adam has trapped you in his diabolical gauntlet!",
     "levelList": [
         {
-            "map": "map-test",
+            "map": "map-level-01",
             "music": "Artifact.ogg",
             "snakeStart": {
                 "position": { "x": 10, "y": 5 },
@@ -11,7 +11,7 @@
                 "length": 5
             },
             "snakeSpeed": 10,
-            "snakeHealth": 5,
+            "snakeHealth": 1000,
             "winCondition": {
                 "conditionType": "onLengthReached",
                 "snakeLength": 100
@@ -22,18 +22,17 @@
                     "spawnType": "onDespawn",
                     "chancePct": 100,
                     "maxSpawnCount": 35,
-                    "growthRate": 5,
-                    "timePassed": 5,
-                    "floorIdRange": { "minId": 0, "maxId": 1 }
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 49 }
                 },
                 {
                     "foodType": "Apple",
-                    "spawnType": "onLengthReached",
-                    "chancePct": 100,
+                    "spawnType": "onTimer",
+                    "chancePct": 5,
                     "maxSpawnCount": 10,
-                    "growthRate": 3,
-                    "lengthReached": 30,
-                    "floorIdRange": { "minId": 0, "maxId": 1 }
+                    "growthRate": 2,
+                    "timePassed": 10,
+                    "floorIdRange": { "minId": 20, "maxId": 20 }
                 }
             ]
         }

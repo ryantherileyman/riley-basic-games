@@ -150,6 +150,7 @@ namespace r3 {
 			~StoryGame();
 
 		public:
+			void startNewCampaign();
 			void startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn);
 			void startRunningLevel();
 

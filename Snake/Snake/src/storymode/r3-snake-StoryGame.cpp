@@ -71,6 +71,10 @@ namespace r3 {
 			this->freeLevel();
 		}
 
+		void StoryGame::startNewCampaign() {
+			this->score = 0;
+		}
+
 		void StoryGame::startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn) {
 			this->freeLevel();
 

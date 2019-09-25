@@ -153,6 +153,7 @@ namespace r3 {
 				}
 
 				this->mode = StoryGameMode::LOAD_LEVEL;
+				this->storyGame->startNewCampaign();
 				this->initiateLoadLevel();
 			}
 		}
@@ -194,6 +195,7 @@ namespace r3 {
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Escape:
 				this->soundManager.stopAllSounds();
+				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
@@ -213,6 +215,7 @@ namespace r3 {
 				break;
 			case sf::Keyboard::Key::Escape:
 				this->soundManager.stopAllSounds();
+				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
@@ -258,6 +261,7 @@ namespace r3 {
 				break;
 			case sf::Keyboard::Key::Escape:
 				this->soundManager.stopAllSounds();
+				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
@@ -272,6 +276,7 @@ namespace r3 {
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Escape:
 				this->soundManager.stopAllSounds();
+				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;

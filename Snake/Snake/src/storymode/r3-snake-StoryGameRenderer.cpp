@@ -131,8 +131,11 @@ namespace r3 {
 			scoreText.setPosition(24.0f, 24.0f);
 			renderTarget.draw(scoreText);
 
+			// TODO: support additional win condition types...
 			wchar_t winConditionStr[48];
-			swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_FOOD_LEFT, L"Apples", 10); // TODO: food info should come from game state
+			int foodWinCount = renderState.storyGame->getWinCondition().foodCount;
+			int foodEatenCount = renderState.storyGame->getFoodEaten(renderState.storyGame->getWinCondition().foodType);
+			swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_FOOD_LEFT, L"Apples", foodWinCount - foodEatenCount); // TODO: adjust label according to food type
 
 			sf::Text winConditionText;
 			winConditionText.setFont(*this->uiFont);

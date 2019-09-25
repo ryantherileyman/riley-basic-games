@@ -140,7 +140,6 @@ namespace r3 {
 				}
 
 				this->mode = StoryGameMode::LOAD_LEVEL;
-
 				this->initiateLoadLevel();
 			}
 		}
@@ -271,6 +270,19 @@ namespace r3 {
 
 			if (updateResult.snakeDiedFlag) {
 				this->mode = StoryGameMode::LEVEL_LOST;
+				music.stop();
+			}
+
+			if (updateResult.completedLevelFlag) {
+				if (this->currLevelIndex == (this->levelDefnList.size() - 1)) {
+					// TODO campaign won...
+					this->mode = StoryGameMode::LEVEL_LOST;
+				} else {
+					this->currLevelIndex++;
+					this->mode = StoryGameMode::LOAD_LEVEL;
+					this->initiateLoadLevel();
+				}
+
 				music.stop();
 			}
 

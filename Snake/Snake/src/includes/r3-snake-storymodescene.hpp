@@ -34,6 +34,7 @@ namespace r3 {
 
 		typedef struct Snake_StoryFoodInstance {
 			int foodInstanceId;
+			StoryFoodType foodType;
 			sf::Vector2i position;
 		} StoryFoodInstance;
 
@@ -42,6 +43,7 @@ namespace r3 {
 			bool snakeHitBarrierFlag;
 			bool snakeDiedFlag;
 			bool snakeGrewFlag;
+			bool completedLevelFlag;
 			std::vector<StoryFoodInstance> spawnedFoodInstanceList;
 			std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList;
 		} StoryGameUpdateResult;
@@ -135,6 +137,7 @@ namespace r3 {
 			int nextFoodInstanceId;
 			std::vector<StoryFoodSpawnTracker> foodSpawnTrackerList;
 			std::unordered_map<int, StoryFoodTileDistanceTracking> foodTileDistanceTrackingMap;
+			std::unordered_map<StoryFoodType, int> foodEatenCountMap;
 
 		private:
 			int score;
@@ -155,6 +158,8 @@ namespace r3 {
 			float getCurrSnakeHealth() const;
 			float getMaxSnakeHealth() const;
 			const std::vector<StoryFoodSpawnTracker>& getFoodSpawnTrackerList() const;
+			int getFoodEaten(StoryFoodType foodType) const;
+			const StoryWinCondition& getWinCondition() const;
 			int getScore() const;
 
 		public:
@@ -175,12 +180,15 @@ namespace r3 {
 			StoryCheckForFoodEatenBySnakeResult checkForFoodEatenBySnake();
 			std::vector<sf::Vector2i> buildAvailableFoodSpawnPositionList(const StoryFoodDefn& foodDefn);
 			bool foodOccupiesPosition(const sf::Vector2i& position);
-			StoryFoodInstance createFoodInstance(const std::vector<sf::Vector2i>& availablePositionList);
+			StoryFoodInstance createFoodInstance(StoryFoodType foodType, const std::vector<sf::Vector2i>& availablePositionList);
 
 		private:
 			void addNewFoodSpawnsToFoodTileDistanceTrackingMap(const std::vector<StoryFoodInstance> spawnedFoodInstanceList);
 			void updateFoodTileDistanceTrackingMapAfterSnakeMoved();
 			std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList);
+
+		private:
+			bool checkLevelCompleted();
 
 		};
 

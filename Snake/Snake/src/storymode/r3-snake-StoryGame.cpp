@@ -91,6 +91,11 @@ namespace r3 {
 			}
 
 			this->foodTileDistanceTrackingMap.clear();
+
+			this->foodEatenCountMap.clear();
+			for (auto const& currFoodDefn : levelDefn.foodDefnList) {
+				this->foodEatenCountMap[currFoodDefn.foodType] = 0;
+			}
 		}
 
 		void StoryGame::startRunningLevel() {
@@ -118,6 +123,15 @@ namespace r3 {
 			return this->foodSpawnTrackerList;
 		}
 
+		int StoryGame::getFoodEaten(StoryFoodType foodType) const {
+			int result = this->foodEatenCountMap.at(foodType);
+			return result;
+		}
+
+		const StoryWinCondition& StoryGame::getWinCondition() const {
+			return this->levelDefn->winCondition;
+		}
+
 		int StoryGame::getScore() const {
 			return this->score;
 		}
@@ -128,6 +142,7 @@ namespace r3 {
 			result.snakeHitBarrierFlag = false;
 			result.snakeDiedFlag = false;
 			result.snakeGrewFlag = false;
+			result.completedLevelFlag = false;
 			result.spawnedFoodInstanceList = this->checkForFoodSpawns();
 
 			this->addNewFoodSpawnsToFoodTileDistanceTrackingMap(result.spawnedFoodInstanceList);
@@ -153,8 +168,14 @@ namespace r3 {
 					result.eatenBySnakeFoodInstanceList = eatenResult.eatenBySnakeFoodInstanceList;
 					this->queuedSnakeGrowth += eatenResult.snakeGrowth;
 
+					for (auto const& currEatenFood : eatenResult.eatenBySnakeFoodInstanceList) {
+						this->foodEatenCountMap[currEatenFood.foodType] = this->foodEatenCountMap.at(currEatenFood.foodType) + 1;
+					}
+
 					std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> foodEatenBySnakeScoreResultMap = this->buildFoodEatenBySnakeScoreResultMap(eatenResult.eatenBySnakeFoodInstanceList);
 					this->score += StoryGameScoreUtils::calcTotalScore(foodEatenBySnakeScoreResultMap);
+
+					result.completedLevelFlag = this->checkLevelCompleted();
 				}
 
 				this->framesSinceSnakeMoved -= (int)(60.0f / this->snakeSpeedTilesPerSecond);
@@ -252,7 +273,7 @@ namespace r3 {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableFoodSpawnPositionList(currFoodSpawnTracker.getFoodDefn());
 					printf("There are %d positions on the map that the food can spawn\n", availablePositionList.size());
 					if (availablePositionList.size() > 0) {
-						StoryFoodInstance newFoodInstance = this->createFoodInstance(availablePositionList);
+						StoryFoodInstance newFoodInstance = this->createFoodInstance(currFoodSpawnTracker.getFoodDefn().foodType, availablePositionList);
 						currFoodSpawnTracker.spawnFood(newFoodInstance);
 						result.push_back(newFoodInstance);
 
@@ -320,12 +341,13 @@ namespace r3 {
 			return result;
 		}
 
-		StoryFoodInstance StoryGame::createFoodInstance(const std::vector<sf::Vector2i>& availablePositionList) {
+		StoryFoodInstance StoryGame::createFoodInstance(StoryFoodType foodType, const std::vector<sf::Vector2i>& availablePositionList) {
 			std::uniform_int_distribution<int> tileDistribution(0, availablePositionList.size() - 1);
 			int index = tileDistribution(this->randomizer);
 
 			StoryFoodInstance result;
 			result.foodInstanceId = this->nextFoodInstanceId;
+			result.foodType = foodType;
 			result.position = availablePositionList[index];
 			return result;
 		}
@@ -358,8 +380,22 @@ namespace r3 {
 			for (auto const& currFoodInstance : eatenBySnakeFoodInstanceList) {
 				StoryFoodTileDistanceTracking currFoodTileDistanceTracking = this->foodTileDistanceTrackingMap[currFoodInstance.foodInstanceId];
 
-				// TODO: want to determine the actual food type based on the foodInstanceId somehow...
-				result[currFoodInstance.foodInstanceId] = StoryGameScoreUtils::calcFoodEatenScore(StoryFoodType::APPLE, currFoodTileDistanceTracking);
+				result[currFoodInstance.foodInstanceId] = StoryGameScoreUtils::calcFoodEatenScore(currFoodInstance.foodType, currFoodTileDistanceTracking);
+			}
+
+			return result;
+		}
+
+		bool StoryGame::checkLevelCompleted() {
+			bool result = false;
+
+			switch (this->levelDefn->winCondition.conditionType) {
+			case StoryWinConditionType::ON_FOOD_EATEN:
+				result = (this->foodEatenCountMap.at(this->levelDefn->winCondition.foodType) >= this->levelDefn->winCondition.foodCount);
+				if (result) {
+					printf("Reached %d of required food to win the level!\n", this->levelDefn->winCondition.foodCount);
+				}
+				break;
 			}
 
 			return result;

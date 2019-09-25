@@ -26,6 +26,8 @@ namespace r3 {
 
 			const wchar_t* LOAD_LEVEL_PCT_FORMAT_STRING = L"Loading assets...  (%.0f%%)";
 
+			const wchar_t* CAMPAIGN_WON_MESSAGE = L"Congratulations!  You have won the campaign!";
+
 			const wchar_t* START_INSTRUCTIONS = L"Press ENTER to start game";
 			const wchar_t* EXIT_INSTRUCTIONS = L"Press ESC to return to the main menu";
 
@@ -118,6 +120,17 @@ namespace r3 {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 			this->renderGameRunningUi(renderTarget, renderState);
 			this->renderPlayingField(renderTarget, renderState);
+		}
+
+		void StoryGameRenderer::renderCampaignWon(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+			this->renderGameRunningUi(renderTarget, renderState);
+			this->renderPlayingField(renderTarget, renderState);
+
+			sf::Text wonText = this->createInstructionsText(StoryGameRenderConstants::CAMPAIGN_WON_MESSAGE, (ViewUtils::VIEW_SIZE.y / 2.0f) - 150.0f);
+			renderTarget.draw(wonText);
+
+			this->renderExitInstructions(renderTarget);
 		}
 
 		void StoryGameRenderer::renderGameRunningUi(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {

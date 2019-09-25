@@ -58,6 +58,9 @@ namespace r3 {
 				case StoryGameMode::LEVEL_LOST:
 					result = this->processLevelLostKeyEvent(event);
 					break;
+				case StoryGameMode::CAMPAIGN_WON:
+					result = this->processCampaignWonKeyEvent(event);
+					break;
 				}
 			}
 
@@ -119,6 +122,16 @@ namespace r3 {
 				renderState.storyGame = this->storyGame;
 
 				this->renderer->renderLevelLost(*this->window, renderState);
+				this->window->display();
+			}
+				break;
+			case StoryGameMode::CAMPAIGN_WON:
+			{
+				StoryGameRenderState renderState;
+				renderState.levelAssetBundle = this->levelAssetBundle;
+				renderState.storyGame = this->storyGame;
+
+				this->renderer->renderCampaignWon(*this->window, renderState);
 				this->window->display();
 			}
 				break;
@@ -253,6 +266,20 @@ namespace r3 {
 			return result;
 		}
 
+		StoryGameSceneClientRequest StoryGameController::processCampaignWonKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+				this->soundManager.stopAllSounds();
+
+				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
+				break;
+			}
+
+			return result;
+		}
+
 		void StoryGameController::updateGameRunning() {
 			StoryGameInputRequest inputRequest;
 			inputRequest.snakeMovementList = this->snakeMovementInputQueue;
@@ -277,8 +304,7 @@ namespace r3 {
 				music.stop();
 
 				if (this->currLevelIndex == (this->levelDefnList.size() - 1)) {
-					// TODO campaign won...
-					this->mode = StoryGameMode::LEVEL_LOST;
+					this->mode = StoryGameMode::CAMPAIGN_WON;
 				} else {
 					this->currLevelIndex++;
 					this->mode = StoryGameMode::LOAD_LEVEL;

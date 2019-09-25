@@ -20,6 +20,7 @@ namespace r3 {
 			WAIT_TO_START,
 			GAME_RUNNING,
 			LEVEL_LOST,
+			CAMPAIGN_WON,
 		} StoryGameMode;
 
 		typedef enum class Snake_StoryGameSceneClientRequest {
@@ -236,6 +237,7 @@ namespace r3 {
 			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processLevelLostKeyEvent(sf::Event& event);
+			StoryGameSceneClientRequest processCampaignWonKeyEvent(sf::Event& event);
 
 		private:
 			void updateGameRunning();
@@ -266,6 +268,7 @@ namespace r3 {
 			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderCampaignWon(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 
 		private:
 			void renderGameRunningUi(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);

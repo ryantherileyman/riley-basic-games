@@ -84,6 +84,7 @@ namespace r3 {
 			while (!this->snakeMovementQueue.empty()) {
 				this->snakeMovementQueue.pop();
 			}
+			this->queuedSnakeGrowth = 0;
 
 			this->foodSpawnTrackerList.clear();
 			for (auto const& currFoodDefn : levelDefn.foodDefnList) {

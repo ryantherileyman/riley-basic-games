@@ -5,6 +5,7 @@
 #include "r3-snake-storydefn.hpp"
 #include "r3-snake-storyassets.hpp"
 #include "r3-snake-gameoptions.hpp"
+#include "r3-sound-SimpleSoundManager.hpp"
 #pragma once
 
 namespace r3 {
@@ -196,6 +197,7 @@ namespace r3 {
 			int currLevelIndex;
 			std::vector<StoryLevelDefn> levelDefnList;
 			StoryLevelAssetBundle* levelAssetBundle;
+			r3::sound::SimpleSoundManager soundManager;
 			StoryGame* storyGame;
 
 		private:
@@ -229,7 +231,7 @@ namespace r3 {
 
 		private:
 			void updateGameRunning();
-
+			
 		};
 
 		typedef struct Snake_StoryGameRenderState {

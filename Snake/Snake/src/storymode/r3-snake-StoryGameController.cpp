@@ -181,6 +181,8 @@ namespace r3 {
 
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Escape:
+				this->soundManager.stopAllSounds();
+
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
 			}
@@ -198,6 +200,8 @@ namespace r3 {
 				this->mode = StoryGameMode::GAME_RUNNING;
 				break;
 			case sf::Keyboard::Key::Escape:
+				this->soundManager.stopAllSounds();
+
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
 			}
@@ -241,6 +245,8 @@ namespace r3 {
 				this->mode = StoryGameMode::GAME_RUNNING;
 				break;
 			case sf::Keyboard::Key::Escape:
+				this->soundManager.stopAllSounds();
+
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
 				break;
 			}
@@ -258,6 +264,10 @@ namespace r3 {
 			}
 
 			StoryGameUpdateResult updateResult = this->storyGame->update(inputRequest);
+
+			if (updateResult.snakeHitBarrierFlag) {
+				this->soundManager.play(this->levelAssetBundle->getHitBarrierSoundBuffer());
+			}
 
 			if (updateResult.snakeDiedFlag) {
 				this->mode = StoryGameMode::LEVEL_LOST;

@@ -20,6 +20,8 @@ namespace r3 {
 			const wchar_t* HUD_SNAKE_LENGTH = L"Snake Length: %d / %d";
 			const wchar_t* HUD_TIME_REMAINING = L"Time Left: %02d:%02d";
 
+			const wchar_t* HUD_FOOD_APPLES = L"Apples";
+
 			const wchar_t* CAMPAIGN_ERROR_MESSAGE = L"An error occurred attempting to load the campaign.";
 			const wchar_t* LEVEL_ERROR_MESSAGE = L"An error occurred attempting to load the next level's assets.";
 			const wchar_t* SEE_LOG_MESSAGE = L"See log.txt in the game folder for more information.";
@@ -32,6 +34,22 @@ namespace r3 {
 			const wchar_t* EXIT_INSTRUCTIONS = L"Press ESC to return to the main menu";
 
 			const sf::Color BACKGROUND_COLOR = sf::Color(0, 126, 3, 255);
+
+		}
+
+		namespace StoryGameRenderUtils {
+
+			const wchar_t* resolveFoodTypeLabel(StoryFoodType foodType) {
+				const wchar_t* result = nullptr;
+
+				switch (foodType) {
+				case StoryFoodType::APPLE:
+					result = StoryGameRenderConstants::HUD_FOOD_APPLES;
+					break;
+				}
+
+				return result;
+			}
 
 		}
 
@@ -146,9 +164,10 @@ namespace r3 {
 
 			// TODO: support additional win condition types...
 			wchar_t winConditionStr[48];
+			const wchar_t* foodTypeLabel = StoryGameRenderUtils::resolveFoodTypeLabel(renderState.storyGame->getWinCondition().foodType);
 			int foodWinCount = renderState.storyGame->getWinCondition().foodCount;
 			int foodEatenCount = renderState.storyGame->getFoodEaten(renderState.storyGame->getWinCondition().foodType);
-			swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_FOOD_LEFT, L"Apples", foodWinCount - foodEatenCount); // TODO: adjust label according to food type
+			swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_FOOD_LEFT, foodTypeLabel, foodWinCount - foodEatenCount);
 
 			sf::Text winConditionText;
 			winConditionText.setFont(*this->uiFont);

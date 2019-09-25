@@ -22,7 +22,7 @@ namespace r3 {
 
 			this->campaignList = StoryLoaderUtils::retrieveCampaignList();
 
-			int firstValidCampaignIndex = 0;
+			int firstValidCampaignIndex = -1;
 			for (auto const& currCampaign : this->campaignList.campaignOptionList) {
 				if (currCampaign.valid()) {
 					firstValidCampaignIndex = currCampaign.index;
@@ -40,7 +40,9 @@ namespace r3 {
 			this->quickGameOptionsMenu->setItemValue(SplashQuickGameOptionsMenuId::FIELD_HEIGHT, quickGameOptions.fieldSize.y);
 
 			this->storyGameOptionsMenu = new SplashMenu(SplashMenuFactory::createStoryGameOptionsMenuDefnMap(this->campaignList));
-			this->storyGameOptionsMenu->setItemValue(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE, firstValidCampaignIndex);
+			if (firstValidCampaignIndex >= 0) {
+				this->storyGameOptionsMenu->setItemValue(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE, firstValidCampaignIndex);
+			}
 
 			SystemOptionsDefn systemOptions;
 			this->systemOptionsMenu = new SplashMenu(SplashMenuFactory::createSystemOptionsMenuDefnMap());

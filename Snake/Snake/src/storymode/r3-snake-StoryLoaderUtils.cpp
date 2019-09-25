@@ -176,8 +176,8 @@ namespace r3 {
 
 				std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> stringConverter;
 
-				std::string strLabel = loadResult.jsonValue[CampaignListProperties::MENU_LABEL].asString();
-				std::string strDescription = loadResult.jsonValue[CampaignListProperties::MENU_DESCRIPTION].asString();
+				std::string strLabel = loadResult.jsonValue.get(CampaignListProperties::MENU_LABEL, folderName).asString();
+				std::string strDescription = loadResult.jsonValue.get(CampaignListProperties::MENU_DESCRIPTION, "Error in campaign.json - check log.txt for details...").asString();
 
 				result.index = index;
 				result.folderName = folderName;

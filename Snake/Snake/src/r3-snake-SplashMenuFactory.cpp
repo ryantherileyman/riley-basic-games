@@ -223,10 +223,8 @@ namespace r3 {
 				SplashMenuItemDefn result = createEmptyNavigableOptionsMenuItem(SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE, SplashStoryGameOptionsMenuLabels::CAMPAIGN_CHOICE_LABEL, nullptr);
 
 				for (auto const& currCampaignOption : campaignList.campaignOptionList) {
-					if (currCampaignOption.valid()) {
-						SplashButtonOptionDefn currMenuItemOption = createButtonOption(currCampaignOption.index, currCampaignOption.menuLabel.c_str(), currCampaignOption.menuDescription.c_str());
-						result.buttonOptionDefnMap[currCampaignOption.index] = currMenuItemOption;
-					}
+					SplashButtonOptionDefn currMenuItemOption = createButtonOption(currCampaignOption.index, currCampaignOption.menuLabel.c_str(), currCampaignOption.menuDescription.c_str());
+					result.buttonOptionDefnMap[currCampaignOption.index] = currMenuItemOption;
 				}
 
 				return result;
@@ -236,8 +234,10 @@ namespace r3 {
 				std::map<int, SplashMenuItemDefn> result;
 
 				result[SplashStoryGameOptionsMenuId::RETURN_TO_MAIN_MENU] = createActionMenuItem(SplashStoryGameOptionsMenuId::RETURN_TO_MAIN_MENU, SplashStoryGameOptionsMenuLabels::RETURN_TO_MAIN_MENU_LABEL, nullptr);
-				result[SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE] = createCampaignChoiceMenuItem(campaignList);
-				result[SplashStoryGameOptionsMenuId::START_CAMPAIGN] = createActionMenuItem(SplashStoryGameOptionsMenuId::START_CAMPAIGN, SplashStoryGameOptionsMenuLabels::START_CAMPAIGN_LABEL, nullptr);
+				if (!campaignList.campaignOptionList.empty()) {
+					result[SplashStoryGameOptionsMenuId::CAMPAIGN_CHOICE] = createCampaignChoiceMenuItem(campaignList);
+					result[SplashStoryGameOptionsMenuId::START_CAMPAIGN] = createActionMenuItem(SplashStoryGameOptionsMenuId::START_CAMPAIGN, SplashStoryGameOptionsMenuLabels::START_CAMPAIGN_LABEL, nullptr);
+				}
 
 				return result;
 			}

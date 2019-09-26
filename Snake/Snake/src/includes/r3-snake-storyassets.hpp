@@ -50,6 +50,7 @@ namespace r3 {
 
 		private:
 			sf::Music music;
+			sf::SoundBuffer foodSpawnedSoundBuffer;
 			sf::SoundBuffer eatFoodSoundBuffer;
 			sf::SoundBuffer hitBarrierSoundBuffer;
 
@@ -76,6 +77,7 @@ namespace r3 {
 
 		public:
 			sf::Music& getMusic();
+			const sf::SoundBuffer& getFoodSpawnedSoundBuffer() const;
 			const sf::SoundBuffer& getEatFoodSoundBuffer() const;
 			const sf::SoundBuffer& getHitBarrierSoundBuffer() const;
 
@@ -90,6 +92,7 @@ namespace r3 {
 
 		private:
 			void loadMusic();
+			void loadFoodSpawnedSoundBuffer();
 			void loadEatFoodSoundBuffer();
 			void loadHitBarrierSoundBuffer();
 

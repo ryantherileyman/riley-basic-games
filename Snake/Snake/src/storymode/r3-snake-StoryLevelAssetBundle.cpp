@@ -12,6 +12,7 @@ namespace r3 {
 			const char* DEFAULT_SNAKE_TEXTURE_PATH = "resources/textures/snake-tileset.png";
 			const char* DEFAULT_FOOD_TEXTURE_PATH = "resources/textures/food-tileset.png";
 
+			const char* DEFAULT_FOOD_SPAWNED_SOUND_PATH = "resources/sounds/food-spawned.wav";
 			const char* DEFAULT_EAT_FOOD_SOUND_PATH = "resources/sounds/eat-apple.wav";
 			const char* DEFAULT_HIT_BARRIER_SOUND_PATH = "resources/sounds/hit-barrier.wav";
 
@@ -37,7 +38,7 @@ namespace r3 {
 			this->campaignFolderName = campaignFolderName;
 			this->levelDefn = &levelDefn;
 			this->loadingCompletionStatus = StoryLevelAssetLoadingCompletionStatus::LOADING;
-			this->totalAssetCount = 5;
+			this->totalAssetCount = 6;
 			if (!levelDefn.musicFilename.empty()) {
 				this->totalAssetCount++;
 			}
@@ -99,6 +100,10 @@ namespace r3 {
 			return this->music;
 		}
 
+		const sf::SoundBuffer& StoryLevelAssetBundle::getFoodSpawnedSoundBuffer() const {
+			return this->foodSpawnedSoundBuffer;
+		}
+
 		const sf::SoundBuffer& StoryLevelAssetBundle::getEatFoodSoundBuffer() const {
 			return this->eatFoodSoundBuffer;
 		}
@@ -122,6 +127,7 @@ namespace r3 {
 				this->loadBarrierTextureMap(loadStoryMapResult.mapDefn);
 
 				this->loadMusic();
+				this->loadFoodSpawnedSoundBuffer();
 				this->loadEatFoodSoundBuffer();
 				this->loadHitBarrierSoundBuffer();
 			}
@@ -191,6 +197,17 @@ namespace r3 {
 			}
 			else {
 				this->failedFilenameList.push_back(this->levelDefn->musicFilename);
+			}
+		}
+
+		void StoryLevelAssetBundle::loadFoodSpawnedSoundBuffer() {
+			this->indicateLoadingFilename(StoryLevelAssetBundleConstants::DEFAULT_FOOD_SPAWNED_SOUND_PATH);
+
+			if (this->foodSpawnedSoundBuffer.loadFromFile(StoryLevelAssetBundleConstants::DEFAULT_FOOD_SPAWNED_SOUND_PATH)) {
+				this->incrementLoadedAssetCount();
+			}
+			else {
+				this->failedFilenameList.push_back(StoryLevelAssetBundleConstants::DEFAULT_FOOD_SPAWNED_SOUND_PATH);
 			}
 		}
 

@@ -296,6 +296,10 @@ namespace r3 {
 
 			StoryGameUpdateResult updateResult = this->storyGame->update(inputRequest);
 
+			if (!updateResult.eatenBySnakeFoodInstanceList.empty()) {
+				this->soundManager.play(this->levelAssetBundle->getEatFoodSoundBuffer());
+			}
+
 			if (updateResult.snakeHitBarrierFlag) {
 				this->soundManager.play(this->levelAssetBundle->getHitBarrierSoundBuffer());
 			}

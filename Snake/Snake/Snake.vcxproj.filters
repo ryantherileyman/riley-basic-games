@@ -93,6 +93,9 @@
     <ClCompile Include="src\sound\r3-sound-SimpleSoundManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\storymode\r3-snake-LoadStoryCampaignListValidation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\includes\r3-snake-client.hpp">

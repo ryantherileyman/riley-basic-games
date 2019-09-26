@@ -21,6 +21,9 @@ namespace r3 {
 			this->musicLoaded = false;
 
 			this->campaignList = StoryLoaderUtils::retrieveCampaignList();
+			if (!this->campaignList.valid()) {
+				StoryLoaderUtils::appendToErrorLog(StoryLoaderUtils::LoadStoryCampaignListValidation::buildErrorMessages(this->campaignList));
+			}
 
 			int firstValidCampaignIndex = -1;
 			for (auto const& currCampaign : this->campaignList.campaignOptionList) {

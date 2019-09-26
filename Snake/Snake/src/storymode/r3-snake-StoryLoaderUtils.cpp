@@ -197,12 +197,10 @@ namespace r3 {
 
 				if (result.isArray) {
 					for (Json::ArrayIndex index = 0; index < loadResult.jsonValue.size(); index++) {
-						if (loadResult.jsonValue[index].isString()) {
-							LoadCampaignOptionResult currCampaignOptionResult = retrieveCampaignOption(index, loadResult.jsonValue[index].asString());
-							bool currEntryIsValid = currCampaignOptionResult.valid();
-							result.campaignOptionList.push_back(currCampaignOptionResult);
-							result.allEntriesValid = result.allEntriesValid && currCampaignOptionResult.valid();
-						}
+						std::string currFolderName = loadResult.jsonValue[index].asString();
+						LoadCampaignOptionResult currCampaignOptionResult = retrieveCampaignOption(index, currFolderName);
+						result.campaignOptionList.push_back(currCampaignOptionResult);
+						result.allEntriesValid = result.allEntriesValid && currCampaignOptionResult.valid();
 					}
 				}
 

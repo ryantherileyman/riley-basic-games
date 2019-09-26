@@ -249,6 +249,12 @@ namespace r3 {
 
 			}
 
+			namespace LoadStoryCampaignListValidation {
+
+				std::vector<std::string> buildErrorMessages(const LoadCampaignListResult& loadResult);
+
+			}
+
 			namespace LoadStoryMapValidation {
 
 				bool widthValid(const Json::Value& jsonValue);

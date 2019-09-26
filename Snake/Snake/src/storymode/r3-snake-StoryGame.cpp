@@ -411,6 +411,12 @@ namespace r3 {
 					printf("Reached %d of required food to win the level!\n", this->levelDefn->winCondition.foodCount);
 				}
 				break;
+			case StoryWinConditionType::ON_LENGTH_REACHED:
+				result = (this->snake->getLength() >= this->levelDefn->winCondition.snakeLength);
+				if (result) {
+					printf("Snake reached length %d to win the level!\n", this->snake->getLength());
+				}
+				break;
 			}
 
 			return result;

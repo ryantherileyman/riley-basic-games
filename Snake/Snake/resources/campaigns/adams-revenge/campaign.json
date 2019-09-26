@@ -13,9 +13,8 @@
             "snakeSpeed": 10,
             "snakeHealth": 10,
             "winCondition": {
-                "conditionType": "onFoodEaten",
-                "foodType": "Apple",
-                "foodCount": 35
+                "conditionType": "onLengthReached",
+                "snakeLength": 15
             },
             "foodList": [
                 {

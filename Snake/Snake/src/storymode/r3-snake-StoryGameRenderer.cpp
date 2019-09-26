@@ -170,10 +170,23 @@ namespace r3 {
 
 			// TODO: support additional win condition types...
 			wchar_t winConditionStr[48];
-			const wchar_t* foodTypeLabel = StoryGameRenderUtils::resolveFoodTypeLabel(renderState.storyGame->getWinCondition().foodType);
-			int foodWinCount = renderState.storyGame->getWinCondition().foodCount;
-			int foodEatenCount = renderState.storyGame->getFoodEaten(renderState.storyGame->getWinCondition().foodType);
-			swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_FOOD_LEFT, foodTypeLabel, foodWinCount - foodEatenCount);
+			switch (renderState.storyGame->getWinCondition().conditionType) {
+			case StoryWinConditionType::ON_FOOD_EATEN:
+			{
+				const wchar_t* foodTypeLabel = StoryGameRenderUtils::resolveFoodTypeLabel(renderState.storyGame->getWinCondition().foodType);
+				int foodWinCount = renderState.storyGame->getWinCondition().foodCount;
+				int foodEatenCount = renderState.storyGame->getFoodEaten(renderState.storyGame->getWinCondition().foodType);
+				swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_FOOD_LEFT, foodTypeLabel, foodWinCount - foodEatenCount);
+			}
+				break;
+			case StoryWinConditionType::ON_LENGTH_REACHED:
+			{
+				int currSnakeLength = renderState.storyGame->getSnake()->getLength();
+				int lengthToWin = renderState.storyGame->getWinCondition().snakeLength;
+				swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_SNAKE_LENGTH, currSnakeLength, lengthToWin);
+			}
+				break;
+			}
 
 			sf::Text winConditionText;
 			winConditionText.setFont(*this->uiFont);

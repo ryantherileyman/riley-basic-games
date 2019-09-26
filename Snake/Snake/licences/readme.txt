@@ -49,11 +49,16 @@ See "OFL.txt" for the full SIL Open Font Licence.
 
 Tileable Grass Texture from https://www.goodtextures.com/
 https://www.goodtextures.com/image/13275/seamless-and-tileable-grass-texture-13275
+https://www.goodtextures.com/image/13304/seamless-and-tileable-grass-texture-13304
+https://www.goodtextures.com/image/13455/seamless-and-tileable-grass-texture-13455
+https://www.goodtextures.com/image/13513/seamless-and-tileable-grass-texture-13513
+https://www.goodtextures.com/image/13886/seamless-and-tileable-grass-texture-13886
+https://www.goodtextures.com/image/13896/seamless-and-tileable-grass-texture-13896
 
 
 Additional artwork created by rileyman can be found in the /artwork/ folder:
-Snake, Shrub, Apple
+Snake, Shrub, Apple, Carrot
 
 Additional sound effects created by rileyman:
 Snake eating apple
-
+Food spawning (story mode)

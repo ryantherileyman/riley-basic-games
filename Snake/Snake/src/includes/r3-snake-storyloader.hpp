@@ -230,6 +230,7 @@ namespace r3 {
 			namespace FoodTypeValues {
 
 				extern const char* APPLE;
+				extern const char* CARROT;
 
 			}
 

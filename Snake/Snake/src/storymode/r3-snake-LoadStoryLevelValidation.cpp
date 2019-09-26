@@ -26,7 +26,8 @@ namespace r3 {
 					std::string foodTypeString = jsonValue.asString();
 
 					bool result =
-						(foodTypeString.compare(FoodTypeValues::APPLE) == 0);
+						(foodTypeString.compare(FoodTypeValues::APPLE) == 0) ||
+						(foodTypeString.compare(FoodTypeValues::CARROT) == 0);
 
 					return result;
 				}

@@ -16,6 +16,9 @@ namespace r3 {
 				case StoryFoodType::APPLE:
 					result = 10;
 					break;
+				case StoryFoodType::CARROT:
+					result = 2;
+					break;
 				}
 
 				return result;
@@ -175,6 +178,13 @@ namespace r3 {
 
 					for (auto const& currEatenFood : eatenResult.eatenBySnakeFoodInstanceList) {
 						this->foodEatenCountMap[currEatenFood.foodType] = this->foodEatenCountMap.at(currEatenFood.foodType) + 1;
+
+						if (currEatenFood.foodType == StoryFoodType::CARROT) {
+							this->snakeHealth += 0.1f;
+							if (this->snakeHealth > (float)this->levelDefn->maxSnakeHealth) {
+								this->snakeHealth = (float)this->levelDefn->maxSnakeHealth;
+							}
+						}
 					}
 
 					std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> foodEatenBySnakeScoreResultMap = this->buildFoodEatenBySnakeScoreResultMap(eatenResult.eatenBySnakeFoodInstanceList);

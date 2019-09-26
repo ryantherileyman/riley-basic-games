@@ -21,6 +21,7 @@ namespace r3 {
 			const wchar_t* HUD_TIME_REMAINING = L"Time Left: %02d:%02d";
 
 			const wchar_t* HUD_FOOD_APPLES = L"Apples";
+			const wchar_t* HUD_FOOD_CARROTS = L"Carrots";
 
 			const wchar_t* CAMPAIGN_ERROR_MESSAGE = L"An error occurred attempting to load the campaign.";
 			const wchar_t* LEVEL_ERROR_MESSAGE = L"An error occurred attempting to load the next level's assets.";
@@ -35,6 +36,8 @@ namespace r3 {
 
 			const sf::Color BACKGROUND_COLOR = sf::Color(0, 126, 3, 255);
 
+			const int FOOD_PIXEL_SIZE = 75;
+
 		}
 
 		namespace StoryGameRenderUtils {
@@ -45,6 +48,9 @@ namespace r3 {
 				switch (foodType) {
 				case StoryFoodType::APPLE:
 					result = StoryGameRenderConstants::HUD_FOOD_APPLES;
+					break;
+				case StoryFoodType::CARROT:
+					result = StoryGameRenderConstants::HUD_FOOD_CARROTS;
 					break;
 				}
 
@@ -260,11 +266,19 @@ namespace r3 {
 
 			sf::Sprite foodSprite;
 			foodSprite.setTexture(renderState.levelAssetBundle->getFoodTexture());
-			foodSprite.setTextureRect(sf::IntRect(0, 0, 75, 75)); // TODO: put 75 in a constant for FOOD_PIXEL_SIZE?
-			foodSprite.setScale(tileSize / 75.0f, tileSize / 75.0f);
+			foodSprite.setScale(tileSize / (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE, tileSize / (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE);
 
 			for (auto const& currFoodSpawnTracker : renderState.storyGame->getFoodSpawnTrackerList()) {
 				const StoryFoodDefn& foodDefn = currFoodSpawnTracker.getFoodDefn();
+
+				switch (foodDefn.foodType) {
+				case StoryFoodType::APPLE:
+					foodSprite.setTextureRect(sf::IntRect(0, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::CARROT:
+					foodSprite.setTextureRect(sf::IntRect(75, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				}
 
 				for (auto const& currFoodInstance : currFoodSpawnTracker.getFoodInstanceList()) {
 					foodSprite.setPosition(fieldPosition.x + currFoodInstance.position.x * tileSize, fieldPosition.y + currFoodInstance.position.y * tileSize);

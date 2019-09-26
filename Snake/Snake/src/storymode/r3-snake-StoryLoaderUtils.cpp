@@ -78,6 +78,7 @@ namespace r3 {
 			namespace FoodTypeValues {
 
 				const char* APPLE = "Apple";
+				const char* CARROT = "Carrot";
 
 			}
 
@@ -334,6 +335,9 @@ namespace r3 {
 				std::string jsonValueStr = jsonValue.asString();
 				if (jsonValueStr.compare(FoodTypeValues::APPLE) == 0) {
 					result = StoryFoodType::APPLE;
+				}
+				else if (jsonValueStr.compare(FoodTypeValues::CARROT) == 0) {
+					result = StoryFoodType::CARROT;
 				}
 
 				return result;

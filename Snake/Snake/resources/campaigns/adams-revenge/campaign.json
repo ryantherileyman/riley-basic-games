@@ -15,7 +15,7 @@
             "winCondition": {
                 "conditionType": "onFoodEaten",
                 "foodType": "Apple",
-                "foodCount": 12
+                "foodCount": 35
             },
             "foodList": [
                 {
@@ -27,13 +27,31 @@
                     "floorIdRange": { "minId": 0, "maxId": 49 }
                 },
                 {
-                    "foodType": "Apple",
+                    "foodType": "Carrot",
                     "spawnType": "onTimer",
-                    "chancePct": 5,
-                    "maxSpawnCount": 10,
-                    "growthRate": 2,
-                    "timePassed": 10,
-                    "floorIdRange": { "minId": 20, "maxId": 20 }
+                    "chancePct": 20,
+                    "maxSpawnCount": 1000,
+                    "growthRate": 1,
+                    "timePassed": 1,
+                    "floorIdRange": { "minId": 0, "maxId": 1 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "chancePct": 10,
+                    "maxSpawnCount": 1000,
+                    "growthRate": 1,
+                    "timePassed": 1,
+                    "floorIdRange": { "minId": 30, "maxId": 49 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "chancePct": 10,
+                    "maxSpawnCount": 1000,
+                    "growthRate": 1,
+                    "timePassed": 1,
+                    "floorIdRange": { "minId": 0, "maxId": 19 }
                 }
             ]
         },

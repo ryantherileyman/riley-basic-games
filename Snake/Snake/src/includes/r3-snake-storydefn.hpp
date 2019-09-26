@@ -58,6 +58,7 @@ namespace r3 {
 
 		typedef enum class Snake_StoryFoodType {
 			APPLE,
+			CARROT,
 		} StoryFoodType;
 
 		typedef enum class Snake_StoryWinConditionType {

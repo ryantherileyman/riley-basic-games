@@ -10,7 +10,6 @@ namespace r3 {
 		StoryFoodSpawnTracker::StoryFoodSpawnTracker(const StoryFoodDefn& foodDefn) {
 			this->foodDefn = &foodDefn;
 
-			this->randomizer.seed((unsigned int)time(NULL));
 			this->chancePctDistribution = std::uniform_real_distribution<float>(0.0f, 100.0f);
 
 			this->spawnCount = 0;
@@ -68,7 +67,7 @@ namespace r3 {
 			bool result = false;
 			if (conditionsMet) {
 				printf("Checking if food with growth of %d will spawn...\n", this->foodDefn->growthRate);
-				float chanceComparison = this->chancePctDistribution(this->randomizer);
+				float chanceComparison = this->chancePctDistribution(*input.randomizer);
 				printf("Time since last chance check is %f seconds\n", timeSinceLastChanceCheck.asSeconds());
 				printf("Rolled %f, with chance of %f\n", chanceComparison, this->foodDefn->chancePct);
 				this->timeOfLastChanceCheck = input.timeSinceLevelStarted;

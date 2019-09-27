@@ -188,7 +188,7 @@ namespace r3 {
 				break;
 			case StoryWinConditionType::ON_TIME_SURVIVED:
 			{
-				int secondsPassed = renderState.storyGame->getTimeElapsed().asSeconds();
+				int secondsPassed = (int)renderState.storyGame->getTimeElapsed().asSeconds();
 				int secondsToWin = renderState.storyGame->getWinCondition().timePassed;
 
 				int minutesRemaining = (secondsToWin - secondsPassed) / 60;

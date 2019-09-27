@@ -307,6 +307,7 @@ namespace r3 {
 			for (auto& currFoodSpawnTracker : this->foodSpawnTrackerList) {
 				StoryFoodSpawnCheckInput checkInput;
 				checkInput.timeSinceLevelStarted = this->clock.getElapsedTime();
+				checkInput.randomizer = &this->randomizer;
 				checkInput.snakeLength = this->getSnake()->getLength();
 
 				if (currFoodSpawnTracker.shouldFoodSpawn(checkInput)) {

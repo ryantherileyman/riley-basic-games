@@ -51,6 +51,7 @@ namespace r3 {
 
 		typedef struct Snake_StoryFoodSpawnCheckInput {
 			sf::Time timeSinceLevelStarted;
+			std::default_random_engine* randomizer;
 			int snakeLength;
 		} StoryFoodSpawnCheckInput;
 
@@ -87,7 +88,6 @@ namespace r3 {
 			const StoryFoodDefn* foodDefn;
 
 		private:
-			std::default_random_engine randomizer;
 			std::uniform_real_distribution<float> chancePctDistribution;
 
 		private:

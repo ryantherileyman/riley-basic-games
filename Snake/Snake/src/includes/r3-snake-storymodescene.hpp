@@ -116,11 +116,19 @@ namespace r3 {
 
 		};
 
+		typedef enum class Snake_StoryGameStatus {
+			NOT_STARTED,
+			RUNNING,
+			ENDED,
+		} StoryGameStatus;
+
 		class StoryGame {
 
 		private:
 			std::default_random_engine randomizer;
 			sf::Clock clock;
+			StoryGameStatus status;
+			sf::Time timeElapsedWhenEnded;
 
 		private:
 			const StoryLevelDefn* levelDefn;
@@ -153,6 +161,7 @@ namespace r3 {
 			void startNewCampaign();
 			void startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn);
 			void startRunningLevel();
+			void stopRunningLevel();
 
 		public:
 			StoryMap* getMap() const;
@@ -161,6 +170,7 @@ namespace r3 {
 			float getMaxSnakeHealth() const;
 			const std::vector<StoryFoodSpawnTracker>& getFoodSpawnTrackerList() const;
 			int getFoodEaten(StoryFoodType foodType) const;
+			sf::Time getTimeElapsed() const;
 			const StoryWinCondition& getWinCondition() const;
 			int getScore() const;
 

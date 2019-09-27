@@ -186,6 +186,16 @@ namespace r3 {
 				swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_SNAKE_LENGTH, currSnakeLength, lengthToWin);
 			}
 				break;
+			case StoryWinConditionType::ON_TIME_SURVIVED:
+			{
+				int secondsPassed = renderState.storyGame->getTimeElapsed().asSeconds();
+				int secondsToWin = renderState.storyGame->getWinCondition().timePassed;
+
+				int minutesRemaining = (secondsToWin - secondsPassed) / 60;
+				int secondsRemaining = secondsToWin - secondsPassed - (minutesRemaining * 60);
+				swprintf_s(winConditionStr, StoryGameRenderConstants::HUD_TIME_REMAINING, minutesRemaining, secondsRemaining);
+			}
+				break;
 			}
 
 			sf::Text winConditionText;

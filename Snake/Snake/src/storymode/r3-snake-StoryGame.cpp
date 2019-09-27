@@ -59,6 +59,8 @@ namespace r3 {
 
 		StoryGame::StoryGame() {
 			this->randomizer.seed((unsigned int)time(NULL));
+			this->status = StoryGameStatus::NOT_STARTED;
+			this->timeElapsedWhenEnded = sf::Time();
 			this->levelDefn = nullptr;
 			this->map = nullptr;
 			this->snake = nullptr;
@@ -80,6 +82,8 @@ namespace r3 {
 
 		void StoryGame::startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn) {
 			this->freeLevel();
+
+			this->status = StoryGameStatus::NOT_STARTED;
 
 			this->levelDefn = &levelDefn;
 			this->map = new StoryMap(mapDefn);
@@ -108,7 +112,13 @@ namespace r3 {
 
 		void StoryGame::startRunningLevel() {
 			this->clock.restart();
+			this->status = StoryGameStatus::RUNNING;
 			printf("Clock restarted, is at %f seconds\n", this->clock.getElapsedTime().asSeconds());
+		}
+
+		void StoryGame::stopRunningLevel() {
+			this->status = StoryGameStatus::ENDED;
+			this->timeElapsedWhenEnded = this->clock.getElapsedTime();
 		}
 
 		StoryMap* StoryGame::getMap() const {
@@ -133,6 +143,21 @@ namespace r3 {
 
 		int StoryGame::getFoodEaten(StoryFoodType foodType) const {
 			int result = this->foodEatenCountMap.at(foodType);
+			return result;
+		}
+
+		sf::Time StoryGame::getTimeElapsed() const {
+			sf::Time result;
+
+			switch (this->status) {
+			case StoryGameStatus::RUNNING:
+				result = this->clock.getElapsedTime();
+				break;
+			case StoryGameStatus::ENDED:
+				result = this->timeElapsedWhenEnded;
+				break;
+			}
+
 			return result;
 		}
 
@@ -414,7 +439,13 @@ namespace r3 {
 			case StoryWinConditionType::ON_LENGTH_REACHED:
 				result = (this->snake->getLength() >= this->levelDefn->winCondition.snakeLength);
 				if (result) {
-					printf("Snake reached length %d to win the level!\n", this->snake->getLength());
+					printf("Snake reached length %d to win the level!\n", this->levelDefn->winCondition.snakeLength);
+				}
+				break;
+			case StoryWinConditionType::ON_TIME_SURVIVED:
+				result = (this->clock.getElapsedTime().asSeconds() >= (float)this->levelDefn->winCondition.timePassed);
+				if (result) {
+					printf("Survived for %d seconds to win the level!\n", this->levelDefn->winCondition.timePassed);
 				}
 				break;
 			}

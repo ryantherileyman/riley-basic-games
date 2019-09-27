@@ -309,11 +309,14 @@ namespace r3 {
 			}
 
 			if (updateResult.snakeDiedFlag) {
-				this->mode = StoryGameMode::LEVEL_LOST;
+				this->storyGame->stopRunningLevel();
 				music.stop();
+
+				this->mode = StoryGameMode::LEVEL_LOST;
 			}
 
 			if (updateResult.completedLevelFlag) {
+				this->storyGame->stopRunningLevel();
 				music.stop();
 
 				if (this->currLevelIndex == (this->levelDefnList.size() - 1)) {

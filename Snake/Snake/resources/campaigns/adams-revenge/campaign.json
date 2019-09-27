@@ -13,8 +13,8 @@
             "snakeSpeed": 10,
             "snakeHealth": 10,
             "winCondition": {
-                "conditionType": "onLengthReached",
-                "snakeLength": 15
+                "conditionType": "onTimeSurvived",
+                "timePassed": 60
             },
             "foodList": [
                 {

@@ -205,6 +205,9 @@ namespace r3 {
 			std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList);
 
 		private:
+			void updateHealthBy(float amount);
+
+		private:
 			bool checkLevelCompleted();
 
 		};

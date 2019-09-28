@@ -189,7 +189,7 @@ namespace r3 {
 				if (this->snakeWouldHitBarrier(directionToMoveSnake)) {
 					result.snakeHitBarrierFlag = true;
 
-					this->snakeHealth -= 1.0f;
+					this->updateHealthBy(-1.0f);
 					result.snakeDiedFlag = (this->snakeHealth <= 0.0f);
 				}
 				else {
@@ -204,10 +204,7 @@ namespace r3 {
 						this->foodEatenCountMap[currEatenFood.foodType] = this->foodEatenCountMap.at(currEatenFood.foodType) + 1;
 
 						if (currEatenFood.foodType == StoryFoodType::CARROT) {
-							this->snakeHealth += 0.1f;
-							if (this->snakeHealth > (float)this->levelDefn->maxSnakeHealth) {
-								this->snakeHealth = (float)this->levelDefn->maxSnakeHealth;
-							}
+							this->updateHealthBy(0.1f);
 						}
 					}
 
@@ -432,6 +429,18 @@ namespace r3 {
 			}
 
 			return result;
+		}
+
+		void StoryGame::updateHealthBy(float amount) {
+			this->snakeHealth += amount;
+
+			if (this->snakeHealth < 0.0f) {
+				this->snakeHealth = 0.0f;
+			}
+
+			if (this->snakeHealth > (float)this->levelDefn->maxSnakeHealth) {
+				this->snakeHealth = (float)this->levelDefn->maxSnakeHealth;
+			}
 		}
 
 		bool StoryGame::checkLevelCompleted() {

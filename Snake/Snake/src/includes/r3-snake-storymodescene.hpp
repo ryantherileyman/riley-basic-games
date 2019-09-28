@@ -39,16 +39,6 @@ namespace r3 {
 			sf::Vector2i position;
 		} StoryFoodInstance;
 
-		typedef struct Snake_StoryGameUpdateResult {
-			ObjectDirection snakeMovementResult;
-			bool snakeHitBarrierFlag;
-			bool snakeDiedFlag;
-			bool snakeGrewFlag;
-			bool completedLevelFlag;
-			std::vector<StoryFoodInstance> spawnedFoodInstanceList;
-			std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList;
-		} StoryGameUpdateResult;
-
 		typedef struct Snake_StoryFoodSpawnCheckInput {
 			sf::Time timeSinceLevelStarted;
 			std::default_random_engine* randomizer;
@@ -76,6 +66,21 @@ namespace r3 {
 			int perfectPathScore;
 			int totalScore;
 		} StoryFoodEatenBySnakeScoreResult;
+
+		typedef struct Snake_StoryFoodEatenResult {
+			StoryFoodInstance foodInstance;
+			StoryFoodEatenBySnakeScoreResult scoreResult;
+		} StoryFoodEatenResult;
+
+		typedef struct Snake_StoryGameUpdateResult {
+			ObjectDirection snakeMovementResult;
+			bool snakeHitBarrierFlag;
+			bool snakeDiedFlag;
+			bool snakeGrewFlag;
+			bool completedLevelFlag;
+			std::vector<StoryFoodInstance> spawnedFoodInstanceList;
+			std::vector<StoryFoodEatenResult> foodEatenResultList;
+		} StoryGameUpdateResult;
 
 		class StoryFoodSpawnTracker;
 		class StoryGame;

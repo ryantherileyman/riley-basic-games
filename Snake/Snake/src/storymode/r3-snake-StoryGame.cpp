@@ -198,7 +198,6 @@ namespace r3 {
 					this->updateFoodTileDistanceTrackingMapAfterSnakeMoved();
 
 					StoryCheckForFoodEatenBySnakeResult eatenResult = this->checkForFoodEatenBySnake();
-					result.eatenBySnakeFoodInstanceList = eatenResult.eatenBySnakeFoodInstanceList;
 					this->queuedSnakeGrowth += eatenResult.snakeGrowth;
 
 					for (auto const& currEatenFood : eatenResult.eatenBySnakeFoodInstanceList) {
@@ -214,6 +213,14 @@ namespace r3 {
 
 					std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> foodEatenBySnakeScoreResultMap = this->buildFoodEatenBySnakeScoreResultMap(eatenResult.eatenBySnakeFoodInstanceList);
 					this->score += StoryGameScoreUtils::calcTotalScore(foodEatenBySnakeScoreResultMap);
+
+					for (auto const& currEatenFood : eatenResult.eatenBySnakeFoodInstanceList) {
+						StoryFoodEatenResult currFoodEatenResult;
+						currFoodEatenResult.foodInstance = currEatenFood;
+						currFoodEatenResult.scoreResult = foodEatenBySnakeScoreResultMap.at(currEatenFood.foodInstanceId);
+
+						result.foodEatenResultList.push_back(currFoodEatenResult);
+					}
 
 					result.completedLevelFlag = this->checkLevelCompleted();
 				}

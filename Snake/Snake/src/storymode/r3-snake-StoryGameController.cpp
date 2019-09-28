@@ -300,7 +300,7 @@ namespace r3 {
 				this->soundManager.play(this->levelAssetBundle->getFoodSpawnedSoundBuffer());
 			}
 
-			if (!updateResult.eatenBySnakeFoodInstanceList.empty()) {
+			if (!updateResult.foodEatenResultList.empty()) {
 				this->soundManager.play(this->levelAssetBundle->getEatFoodSoundBuffer());
 			}
 

@@ -57,7 +57,7 @@ https://www.goodtextures.com/image/13896/seamless-and-tileable-grass-texture-138
 
 
 Additional artwork created by rileyman can be found in the /artwork/ folder:
-Snake, Shrub, Apple, Carrot
+Snake, Shrub, Apple, Carrot, Spike Trap
 
 Additional sound effects created by rileyman:
 Snake eating apple

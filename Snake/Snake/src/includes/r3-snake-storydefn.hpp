@@ -61,6 +61,10 @@ namespace r3 {
 			CARROT,
 		} StoryFoodType;
 
+		typedef enum class Snake_StoryDangerType {
+			SPIKE_TRAP,
+		} StoryDangerType;
+
 		typedef enum class Snake_StoryWinConditionType {
 			ON_FOOD_EATEN,
 			ON_LENGTH_REACHED,
@@ -93,6 +97,17 @@ namespace r3 {
 			int maxFloorId;
 		} StoryFoodDefn;
 
+		typedef struct Snake_StoryDangerDefn {
+			StoryDangerType dangerType;
+			StoryObjectSpawnType spawnType;
+			float chancePct;
+			int maxSpawnCount;
+			int timePassed;
+			int lengthReached;
+			int minFloorId;
+			int maxFloorId;
+		} StoryDangerDefn;
+
 		typedef struct Snake_StoryLevelDefn {
 			std::string musicFilename;
 			std::string mapFilename;
@@ -101,6 +116,7 @@ namespace r3 {
 			int maxSnakeHealth;
 			StoryWinCondition winCondition;
 			std::vector<StoryFoodDefn> foodDefnList;
+			std::vector<StoryDangerDefn> dangerDefnList;
 		} StoryLevelDefn;
 
 		class StoryMap;

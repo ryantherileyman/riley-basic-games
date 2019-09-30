@@ -83,6 +83,30 @@ namespace r3 {
 			}
 		} LoadStoryLevelFoodValidationResult;
 
+		typedef struct Snake_LoadStoryLevelDangerValidationResult {
+			bool rootValid = false;
+			bool dangerTypeValid = false;
+			bool spawnTypeValid = false;
+			bool timePassedValid = false;
+			bool chancePctValid = false;
+			bool maxSpawnCountValid = false;
+			bool lengthReachedValid = true;
+			bool floorIdRangeValid = false;
+
+			bool valid() const {
+				bool result =
+					rootValid &&
+					dangerTypeValid &&
+					spawnTypeValid &&
+					timePassedValid &&
+					chancePctValid &&
+					maxSpawnCountValid &&
+					lengthReachedValid &&
+					floorIdRangeValid;
+				return result;
+			}
+		} LoadStoryLevelDangerValidationResult;
+
 		typedef struct Snake_LoadStoryLevelValidationResult {
 			bool musicValid = false;
 			bool mapValid = false;
@@ -100,6 +124,8 @@ namespace r3 {
 			bool winConditionTimePassedValid = true;
 			bool foodListValid = false;
 			std::vector<LoadStoryLevelFoodValidationResult> foodValidationResultList;
+			bool dangerListValid = false;
+			std::vector<LoadStoryLevelDangerValidationResult> dangerValidationResultList;
 
 			std::vector<std::string> musicFileInvalidList;
 
@@ -107,6 +133,11 @@ namespace r3 {
 				bool allFoodEntriesValid = true;
 				for (auto const& currFoodValidationResult : foodValidationResultList) {
 					allFoodEntriesValid = allFoodEntriesValid && currFoodValidationResult.valid();
+				}
+
+				bool allDangerEntriesValid = true;
+				for (auto const& currDangerValidationResult : dangerValidationResultList) {
+					allDangerEntriesValid = allDangerEntriesValid && currDangerValidationResult.valid();
 				}
 
 				bool result =
@@ -126,6 +157,8 @@ namespace r3 {
 					winConditionTimePassedValid &&
 					foodListValid &&
 					allFoodEntriesValid &&
+					dangerListValid &&
+					allDangerEntriesValid &&
 					musicFileInvalidList.empty();
 				return result;
 			}
@@ -215,6 +248,8 @@ namespace r3 {
 				extern const char* FOOD_LIST;
 				extern const char* FOOD_TYPE;
 				extern const char* FOOD_GROWTH_RATE;
+				extern const char* DANGER_LIST;
+				extern const char* DANGER_TYPE;
 
 			}
 
@@ -231,6 +266,12 @@ namespace r3 {
 
 				extern const char* APPLE;
 				extern const char* CARROT;
+
+			}
+
+			namespace DangerTypeValues {
+				
+				extern const char* SPIKE_TRAP;
 
 			}
 
@@ -289,6 +330,8 @@ namespace r3 {
 				bool winConditionTypeValid(const Json::Value& jsonValue);
 
 				LoadStoryLevelFoodValidationResult validateFoodEntry(const Json::Value& jsonValue);
+
+				LoadStoryLevelDangerValidationResult validateDangerEntry(const Json::Value& jsonValue);
 
 				std::vector<std::string> buildErrorMessages(const LoadStoryLevelValidationResult& validationResult);
 

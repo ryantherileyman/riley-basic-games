@@ -32,6 +32,15 @@ namespace r3 {
 					return result;
 				}
 
+				bool dangerTypeValueValid(const Json::Value& jsonValue) {
+					std::string dangerTypeString = jsonValue.asString();
+
+					bool result =
+						(dangerTypeString.compare(DangerTypeValues::SPIKE_TRAP) == 0);
+
+					return result;
+				}
+
 				bool winConditionTypeValueValid(const Json::Value& jsonValue) {
 					std::string winConditionTypeString = jsonValue.asString();
 
@@ -43,11 +52,21 @@ namespace r3 {
 					return result;
 				}
 
-				bool spawnTypeValueValid(const Json::Value& jsonValue) {
+				bool foodSpawnTypeValueValid(const Json::Value& jsonValue) {
 					std::string spawnTypeString = jsonValue.asString();
 
 					bool result =
 						(spawnTypeString.compare(SpawnTypeValues::ON_DESPAWN) == 0) ||
+						(spawnTypeString.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) ||
+						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0);
+
+					return result;
+				}
+
+				bool dangerSpawnTypeValueValid(const Json::Value& jsonValue) {
+					std::string spawnTypeString = jsonValue.asString();
+
+					bool result =
 						(spawnTypeString.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) ||
 						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0);
 
@@ -90,6 +109,13 @@ namespace r3 {
 					return result;
 				}
 
+				bool dangerTypeValid(const Json::Value& jsonValue) {
+					bool result =
+						r3::json::ValidationUtils::requiredString(jsonValue, StoryLevelProperties::DANGER_TYPE) &&
+						dangerTypeValueValid(jsonValue[StoryLevelProperties::DANGER_TYPE]);
+					return result;
+				}
+
 				bool winConditionTypeValid(const Json::Value& jsonValue) {
 					bool result =
 						r3::json::ValidationUtils::requiredString(jsonValue, StoryLevelProperties::WIN_CONDITION_TYPE) &&
@@ -97,10 +123,17 @@ namespace r3 {
 					return result;
 				}
 
-				bool spawnTypeValid(const Json::Value& jsonValue) {
+				bool foodSpawnTypeValid(const Json::Value& jsonValue) {
 					bool result =
 						r3::json::ValidationUtils::requiredString(jsonValue, StoryLevelProperties::OBJECT_SPAWN_TYPE) &&
-						spawnTypeValueValid(jsonValue[StoryLevelProperties::OBJECT_SPAWN_TYPE]);
+						foodSpawnTypeValueValid(jsonValue[StoryLevelProperties::OBJECT_SPAWN_TYPE]);
+					return result;
+				}
+
+				bool dangerSpawnTypeValid(const Json::Value& jsonValue) {
+					bool result =
+						r3::json::ValidationUtils::requiredString(jsonValue, StoryLevelProperties::OBJECT_SPAWN_TYPE) &&
+						dangerSpawnTypeValueValid(jsonValue[StoryLevelProperties::OBJECT_SPAWN_TYPE]);
 					return result;
 				}
 
@@ -138,7 +171,7 @@ namespace r3 {
 					result.rootValid = jsonValue.isObject();
 					if (jsonValue.isObject()) {
 						result.foodTypeValid = foodTypeValid(jsonValue);
-						result.spawnTypeValid = spawnTypeValid(jsonValue);
+						result.spawnTypeValid = foodSpawnTypeValid(jsonValue);
 						result.chancePctValid = chancePctValid(jsonValue);
 						result.maxSpawnCountValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_MAX_SPAWN_COUNT, 1);
 						result.growthRateValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::FOOD_GROWTH_RATE, 0);
@@ -200,6 +233,70 @@ namespace r3 {
 					}
 
 					if (!foodValidationResult.floorIdRangeValid) {
+						errorMessages.push_back("The \"floorIdRange\" is invalid.  It must be an object with \"minId\" and \"maxId\" integer properties of 0 or higher.  The \"minId\" must be less or equal to the \"maxId\".");
+					}
+				}
+
+				LoadStoryLevelDangerValidationResult validateDangerEntry(const Json::Value& jsonValue) {
+					LoadStoryLevelDangerValidationResult result;
+
+					result.rootValid = jsonValue.isObject();
+					if (jsonValue.isObject()) {
+						result.dangerTypeValid = dangerTypeValid(jsonValue);
+						result.spawnTypeValid = dangerSpawnTypeValid(jsonValue);
+						result.timePassedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::TIME_PASSED, 1);
+						result.chancePctValid = chancePctValid(jsonValue);
+						result.maxSpawnCountValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_MAX_SPAWN_COUNT, 1);
+						result.floorIdRangeValid =
+							r3::json::ValidationUtils::requiredObject(jsonValue, StoryLevelProperties::OBJECT_FLOOR_ID_RANGE) &&
+							floorIdRangeValid(jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE]);
+
+						if (result.spawnTypeValid) {
+							std::string spawnTypeStr = jsonValue[StoryLevelProperties::OBJECT_SPAWN_TYPE].asString();
+
+							if (spawnTypeStr.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) {
+								result.lengthReachedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_LENGTH_REACHED, 2);
+							}
+						}
+					}
+
+					return result;
+				}
+
+				std::string buildDangerEntryErrorMessage(int index) {
+					char resultStr[100];
+					sprintf(resultStr, "Entry %d within the \"dangerList\" array is invalid.  Individual error messages follow...", index);
+
+					std::string result(resultStr);
+					return result;
+				}
+
+				void updateErrorMessagesWithDangerValidationResult(std::vector<std::string>& errorMessages, const LoadStoryLevelDangerValidationResult& dangerValidationResult) {
+					if (!dangerValidationResult.dangerTypeValid) {
+						errorMessages.push_back("The \"dangerType\" is invalid.  It must be a string referencing an available danger type.");
+					}
+
+					if (!dangerValidationResult.spawnTypeValid) {
+						errorMessages.push_back("The \"spawnType\" is invalid.  It must be one of \"onTimer\" or \"onLengthReached\".");
+					}
+
+					if (!dangerValidationResult.timePassedValid) {
+						errorMessages.push_back("The \"timePassed\" is invalid.  It must be an integer of 1 or higher.");
+					}
+
+					if (!dangerValidationResult.chancePctValid) {
+						errorMessages.push_back("The \"chancePct\" is invalid.  It must be a real number between 0.01 and 100.00, and is a percentage chance the danger will appear each second.");
+					}
+
+					if (!dangerValidationResult.maxSpawnCountValid) {
+						errorMessages.push_back("The \"maxSpawnCount\" is invalid.  It must be an integer of 1 or higher.");
+					}
+
+					if (!dangerValidationResult.lengthReachedValid) {
+						errorMessages.push_back("The \"lengthReached\" is invalid.  It must be an integer of 2 or higher.");
+					}
+
+					if (!dangerValidationResult.floorIdRangeValid) {
 						errorMessages.push_back("The \"floorIdRange\" is invalid.  It must be an object with \"minId\" and \"maxId\" integer properties of 0 or higher.  The \"minId\" must be less or equal to the \"maxId\".");
 					}
 				}
@@ -278,6 +375,17 @@ namespace r3 {
 						if (!validationResult.foodValidationResultList[index].valid()) {
 							result.push_back(buildFoodEntryErrorMessage(index));
 							updateErrorMessagesWithFoodValidationResult(result, validationResult.foodValidationResultList[index]);
+						}
+					}
+
+					if (!validationResult.dangerListValid) {
+						result.push_back("The \"dangerList\" property is invalid.  It must be an array of danger spawn objects.");
+					}
+
+					for (size_t index = 0; index < validationResult.dangerValidationResultList.size(); index++) {
+						if (!validationResult.dangerValidationResultList[index].valid()) {
+							result.push_back(buildDangerEntryErrorMessage(index));
+							updateErrorMessagesWithDangerValidationResult(result, validationResult.dangerValidationResultList[index]);
 						}
 					}
 

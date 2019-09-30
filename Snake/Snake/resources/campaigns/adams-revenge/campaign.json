@@ -52,6 +52,16 @@
                     "timePassed": 1,
                     "floorIdRange": { "minId": 0, "maxId": 19 }
                 }
+            ],
+            "dangerList": [
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 10,
+                    "chancePct": 2,
+                    "maxSpawnCount": 5,
+                    "floorIdRange": { "minId": 20, "maxId": 21 }
+                }
             ]
         },
         {
@@ -78,6 +88,8 @@
                     "growthRate": 4,
                     "floorIdRange": { "minId": 0, "maxId": 9 }
                 }
+            ],
+            "dangerList": [
             ]
         }
     ]

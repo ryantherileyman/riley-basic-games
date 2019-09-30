@@ -63,6 +63,8 @@ namespace r3 {
 				const char* FOOD_LIST = "foodList";
 				const char* FOOD_TYPE = "foodType";
 				const char* FOOD_GROWTH_RATE = "growthRate";
+				const char* DANGER_LIST = "dangerList";
+				const char* DANGER_TYPE = "dangerType";
 
 			}
 
@@ -79,6 +81,12 @@ namespace r3 {
 
 				const char* APPLE = "Apple";
 				const char* CARROT = "Carrot";
+
+			}
+
+			namespace DangerTypeValues {
+
+				const char* SPIKE_TRAP = "Spike";
 
 			}
 
@@ -343,6 +351,17 @@ namespace r3 {
 				return result;
 			}
 
+			StoryDangerType convertJsonValueToDangerType(const Json::Value& jsonValue) {
+				StoryDangerType result = StoryDangerType::SPIKE_TRAP;
+
+				std::string jsonValueStr = jsonValue.asString();
+				if (jsonValueStr.compare(DangerTypeValues::SPIKE_TRAP) == 0) {
+					result = StoryDangerType::SPIKE_TRAP;
+				}
+
+				return result;
+			}
+
 			StoryWinConditionType convertJsonValueToWinConditionType(const Json::Value& jsonValue) {
 				StoryWinConditionType result = StoryWinConditionType::ON_FOOD_EATEN;
 
@@ -392,6 +411,26 @@ namespace r3 {
 
 				if (result.spawnType == StoryObjectSpawnType::ON_TIMER) {
 					result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
+				}
+
+				Json::Value floorIdRangeValue = jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE];
+				result.minFloorId = floorIdRangeValue[StoryLevelProperties::OBJECT_FLOOR_MIN_ID].asInt();
+				result.maxFloorId = floorIdRangeValue[StoryLevelProperties::OBJECT_FLOOR_MAX_ID].asInt();
+
+				return result;
+			}
+
+			StoryDangerDefn loadStoryDanger(const Json::Value& jsonValue) {
+				StoryDangerDefn result;
+
+				result.dangerType = convertJsonValueToDangerType(jsonValue[StoryLevelProperties::DANGER_TYPE]);
+				result.spawnType = convertJsonValueToObjectSpawnType(jsonValue[StoryLevelProperties::OBJECT_SPAWN_TYPE]);
+				result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
+				result.chancePct = jsonValue[StoryLevelProperties::OBJECT_CHANCE_PCT].asFloat();
+				result.maxSpawnCount = jsonValue[StoryLevelProperties::OBJECT_MAX_SPAWN_COUNT].asInt();
+
+				if (result.spawnType == StoryObjectSpawnType::ON_LENGTH_REACHED) {
+					result.lengthReached = jsonValue[StoryLevelProperties::OBJECT_LENGTH_REACHED].asInt();
 				}
 
 				Json::Value floorIdRangeValue = jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE];
@@ -493,6 +532,21 @@ namespace r3 {
 
 						if (currFoodValidationResult.valid()) {
 							result.levelDefn.foodDefnList.push_back(loadStoryFood(currFoodValue));
+						}
+					}
+				}
+
+				result.validationResult.dangerListValid = r3::json::ValidationUtils::requiredArray(jsonValue, StoryLevelProperties::DANGER_LIST);
+				if (result.validationResult.dangerListValid) {
+					Json::Value dangerListValue = jsonValue[StoryLevelProperties::DANGER_LIST];
+					for (Json::ArrayIndex index = 0; index < dangerListValue.size(); index++) {
+						Json::Value currDangerValue = dangerListValue[index];
+
+						LoadStoryLevelDangerValidationResult currDangerValidationResult = LoadStoryLevelValidation::validateDangerEntry(currDangerValue);
+						result.validationResult.dangerValidationResultList.push_back(currDangerValidationResult);
+
+						if (currDangerValidationResult.valid()) {
+							result.levelDefn.dangerDefnList.push_back(loadStoryDanger(currDangerValue));
 						}
 					}
 				}

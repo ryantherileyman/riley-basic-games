@@ -280,6 +280,7 @@ namespace r3 {
 			renderSnakeInput.fieldSize = renderState.storyGame->getMap()->getFieldSize();
 			renderSnakeInput.texture = &renderState.levelAssetBundle->getSnakeTexture();
 			renderSnakeInput.snake = renderState.storyGame->getSnake();
+			renderSnakeInput.snakeHurtFlag = renderState.snakeDamagedFlag;
 
 			RenderUtils::renderSnake(renderTarget, renderSnakeInput);
 		}

@@ -21,6 +21,7 @@ namespace r3 {
 				sf::Vector2f fieldPosition;
 				float spriteScale;
 				SnakeSegment segment;
+				bool snakeHurtFlag;
 			} RenderSnakeSegmentInput;
 
 			float resolveViewportTileSize(const sf::Vector2i& fieldSize) {
@@ -54,16 +55,35 @@ namespace r3 {
 
 				switch (input.segment.enterDirection) {
 				case ObjectDirection::UP:
-					result.setTextureRect(sf::IntRect(0, 0, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					if (input.snakeHurtFlag) {
+						result.setTextureRect(sf::IntRect(300, 225, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					}
+					else {
+						result.setTextureRect(sf::IntRect(0, 0, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					}
 					break;
 				case ObjectDirection::RIGHT:
-					result.setTextureRect(sf::IntRect(375, 0, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					if (input.snakeHurtFlag) {
+						result.setTextureRect(sf::IntRect(375, 300, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					}
+					else {
+						result.setTextureRect(sf::IntRect(375, 0, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					}
 					break;
 				case ObjectDirection::DOWN:
-					result.setTextureRect(sf::IntRect(75, 300, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					if (input.snakeHurtFlag) {
+						result.setTextureRect(sf::IntRect(300, 375, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					} else {
+						result.setTextureRect(sf::IntRect(75, 300, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					}
 					break;
 				case ObjectDirection::LEFT:
-					result.setTextureRect(sf::IntRect(75, 75, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					if (input.snakeHurtFlag) {
+						result.setTextureRect(sf::IntRect(225, 300, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					}
+					else {
+						result.setTextureRect(sf::IntRect(75, 75, TILE_PIXEL_SIZE, TILE_PIXEL_SIZE));
+					}
 					break;
 				}
 
@@ -174,6 +194,7 @@ namespace r3 {
 				renderSegmentInput.tileSize = resolveViewportTileSize(renderSnakeInput.fieldSize);
 				renderSegmentInput.fieldPosition = resolveViewportFieldTopLeftPosition(renderSnakeInput.fieldSize, renderSegmentInput.tileSize);
 				renderSegmentInput.spriteScale = renderSegmentInput.tileSize / (float)TILE_PIXEL_SIZE;
+				renderSegmentInput.snakeHurtFlag = renderSnakeInput.snakeHurtFlag;
 
 				renderSegmentInput.segment = renderSnakeInput.snake->getTail();
 				sf::Sprite tailSprite = createSnakeTailSprite(renderSegmentInput);

@@ -12,6 +12,7 @@ namespace r3 {
 				sf::Vector2i fieldSize;
 				const sf::Texture* texture;
 				const Snake* snake;
+				bool snakeHurtFlag;
 			} RenderSnakeInput;
 
 			float resolveViewportTileSize(const sf::Vector2i& fieldSize);

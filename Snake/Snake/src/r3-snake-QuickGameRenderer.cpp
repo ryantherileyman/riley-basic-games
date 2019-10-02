@@ -190,6 +190,7 @@ namespace r3 {
 			renderSnakeInput.fieldSize = game.getFieldSize();
 			renderSnakeInput.texture = this->snakeTilesetTexture;
 			renderSnakeInput.snake = game.getSnake();
+			renderSnakeInput.snakeHurtFlag = false;
 
 			RenderUtils::renderSnake(renderTarget, renderSnakeInput);
 		}

@@ -104,6 +104,13 @@ namespace r3 {
 			std::vector<StoryDangerInstance> spawnedDangerInstanceList;
 			std::vector<StoryFoodEatenResult> foodEatenResultList;
 			std::vector<StoryDangerInstance> dangerInstanceStruckSnakeList;
+
+			bool snakeDamaged() {
+				bool result =
+					snakeHitBarrierFlag ||
+					!dangerInstanceStruckSnakeList.empty();
+				return result;
+			}
 		} StoryGameUpdateResult;
 
 		class StoryFoodSpawnTracker;
@@ -314,6 +321,9 @@ namespace r3 {
 		private:
 			std::vector<ObjectDirection> snakeMovementInputQueue;
 
+		private:
+			sf::Time timeSnakeLastDamaged;
+
 		public:
 			StoryGameController(sf::RenderWindow& window);
 
@@ -349,6 +359,7 @@ namespace r3 {
 		typedef struct Snake_StoryGameRenderState {
 			const StoryLevelAssetBundle* levelAssetBundle;
 			const StoryGame* storyGame;
+			bool snakeDamagedFlag;
 		} StoryGameRenderState;
 
 		class StoryGameRenderer {

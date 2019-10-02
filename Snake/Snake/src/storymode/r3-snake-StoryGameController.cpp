@@ -15,6 +15,8 @@ namespace r3 {
 			this->currLevelIndex = 0;
 			this->levelAssetBundle = nullptr;
 			this->storyGame = new StoryGame();
+
+			this->timeSnakeLastDamaged = sf::seconds(-0.5f);
 		}
 
 		StoryGameController::~StoryGameController() {
@@ -100,6 +102,7 @@ namespace r3 {
 				StoryGameRenderState renderState;
 				renderState.levelAssetBundle = this->levelAssetBundle;
 				renderState.storyGame = this->storyGame;
+				renderState.snakeDamagedFlag = false;
 
 				this->renderer->renderWaitToStart(*this->window, renderState);
 				this->window->display();
@@ -110,6 +113,7 @@ namespace r3 {
 				StoryGameRenderState renderState;
 				renderState.levelAssetBundle = this->levelAssetBundle;
 				renderState.storyGame = this->storyGame;
+				renderState.snakeDamagedFlag = ((this->storyGame->getTimeElapsed().asSeconds() - this->timeSnakeLastDamaged.asSeconds()) < 0.5f);
 
 				this->renderer->renderGameRunning(*this->window, renderState);
 				this->window->display();
@@ -120,6 +124,7 @@ namespace r3 {
 				StoryGameRenderState renderState;
 				renderState.levelAssetBundle = this->levelAssetBundle;
 				renderState.storyGame = this->storyGame;
+				renderState.snakeDamagedFlag = true;
 
 				this->renderer->renderLevelLost(*this->window, renderState);
 				this->window->display();
@@ -130,6 +135,7 @@ namespace r3 {
 				StoryGameRenderState renderState;
 				renderState.levelAssetBundle = this->levelAssetBundle;
 				renderState.storyGame = this->storyGame;
+				renderState.snakeDamagedFlag = false;
 
 				this->renderer->renderCampaignWon(*this->window, renderState);
 				this->window->display();
@@ -210,6 +216,7 @@ namespace r3 {
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Enter:
 				this->storyGame->startRunningLevel();
+				this->timeSnakeLastDamaged = sf::seconds(-0.5f);
 
 				this->mode = StoryGameMode::GAME_RUNNING;
 				break;
@@ -256,6 +263,7 @@ namespace r3 {
 			case sf::Keyboard::Key::Enter:
 				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 				this->storyGame->startRunningLevel();
+				this->timeSnakeLastDamaged = sf::seconds(-0.5f);
 
 				this->mode = StoryGameMode::GAME_RUNNING;
 				break;
@@ -310,6 +318,10 @@ namespace r3 {
 
 			if (!updateResult.dangerInstanceStruckSnakeList.empty()) {
 				this->soundManager.play(this->levelAssetBundle->getSnakeHissSoundBuffer());
+			}
+
+			if (updateResult.snakeDamaged()) {
+				this->timeSnakeLastDamaged = this->storyGame->getTimeElapsed();
 			}
 
 			if (updateResult.snakeDiedFlag) {

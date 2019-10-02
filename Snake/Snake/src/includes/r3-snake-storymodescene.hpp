@@ -362,17 +362,30 @@ namespace r3 {
 			bool snakeDamagedFlag;
 		} StoryGameRenderState;
 
+		typedef struct Snake_StoryFoodEatenAnimation {
+			sf::Vector2i tilePosition;
+			sf::Time eatenTime;
+			StoryFoodEatenBySnakeScoreResult scoreResult;
+		} StoryFoodEatenAnimation;
+
 		class StoryGameRenderer {
 
 		private:
 			sf::Font* uiFont;
 			sf::Texture* healthBarTexture;
 
+		private:
+			std::vector<StoryFoodEatenAnimation> foodEatenAnimationList;
+
 		public:
 			StoryGameRenderer();
 
 		public:
 			~StoryGameRenderer();
+
+		public:
+			void clearAnimations();
+			void queueFoodEatenAnimations(const std::vector<StoryFoodEatenResult>& foodEatenResultList, const StoryGame* storyGame);
 
 		public:
 			void renderLoadCampaignError(sf::RenderTarget& renderTarget);
@@ -389,6 +402,7 @@ namespace r3 {
 			void renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderFoodSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderDangerSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderFoodEatenAnimations(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 			void renderExitInstructions(sf::RenderTarget& renderTarget);
 

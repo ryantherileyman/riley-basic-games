@@ -217,11 +217,14 @@ namespace r3 {
 			case sf::Keyboard::Key::Enter:
 				this->storyGame->startRunningLevel();
 				this->timeSnakeLastDamaged = sf::seconds(-0.5f);
+				this->renderer->clearAnimations();
 
 				this->mode = StoryGameMode::GAME_RUNNING;
 				break;
 			case sf::Keyboard::Key::Escape:
 				this->soundManager.stopAllSounds();
+				this->renderer->clearAnimations();
+
 				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
@@ -264,11 +267,14 @@ namespace r3 {
 				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 				this->storyGame->startRunningLevel();
 				this->timeSnakeLastDamaged = sf::seconds(-0.5f);
+				this->renderer->clearAnimations();
 
 				this->mode = StoryGameMode::GAME_RUNNING;
 				break;
 			case sf::Keyboard::Key::Escape:
 				this->soundManager.stopAllSounds();
+				this->renderer->clearAnimations();
+
 				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
@@ -309,6 +315,8 @@ namespace r3 {
 			}
 
 			if (!updateResult.foodEatenResultList.empty()) {
+				this->renderer->queueFoodEatenAnimations(updateResult.foodEatenResultList, this->storyGame);
+
 				this->soundManager.play(this->levelAssetBundle->getEatFoodSoundBuffer());
 			}
 

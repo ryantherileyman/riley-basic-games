@@ -23,6 +23,10 @@ namespace r3 {
 			const wchar_t* HUD_FOOD_APPLES = L"Apples";
 			const wchar_t* HUD_FOOD_CARROTS = L"Carrots";
 
+			const wchar_t* SCORE_FOOD_EATEN_NO_BONUS = L"+%d";
+			const wchar_t* SCORE_FOOD_EATEN_WITH_BONUS = L"+%d Bonus Path!";
+			const wchar_t* SCORE_FOOD_EATEN_PERFECT_PATH = L"+%d Perfect Path!";
+
 			const wchar_t* CAMPAIGN_ERROR_MESSAGE = L"An error occurred attempting to load the campaign.";
 			const wchar_t* LEVEL_ERROR_MESSAGE = L"An error occurred attempting to load the next level's assets.";
 			const wchar_t* SEE_LOG_MESSAGE = L"See log.txt in the game folder for more information.";
@@ -58,6 +62,19 @@ namespace r3 {
 				return result;
 			}
 
+			const wchar_t* resolveFoodEatenFormatString(const StoryFoodEatenBySnakeScoreResult& scoreResult) {
+				const wchar_t* result = StoryGameRenderConstants::SCORE_FOOD_EATEN_NO_BONUS;
+
+				if (scoreResult.perfectPathScore > 0) {
+					result = StoryGameRenderConstants::SCORE_FOOD_EATEN_PERFECT_PATH;
+				}
+				else if (scoreResult.bonusPathScore > 0) {
+					result = StoryGameRenderConstants::SCORE_FOOD_EATEN_WITH_BONUS;
+				}
+
+				return result;
+			}
+
 		}
 
 		StoryGameRenderer::StoryGameRenderer() {
@@ -76,6 +93,23 @@ namespace r3 {
 		StoryGameRenderer::~StoryGameRenderer() {
 			delete this->uiFont;
 			delete this->healthBarTexture;
+		}
+
+		void StoryGameRenderer::clearAnimations() {
+			this->foodEatenAnimationList.clear();
+		}
+
+		void StoryGameRenderer::queueFoodEatenAnimations(const std::vector<StoryFoodEatenResult>& foodEatenResultList, const StoryGame* storyGame) {
+			for (auto const& currFoodEaten : foodEatenResultList) {
+				StoryFoodEatenAnimation currAnimation;
+				currAnimation.tilePosition = currFoodEaten.foodInstance.position;
+				currAnimation.eatenTime = storyGame->getTimeElapsed();
+				currAnimation.scoreResult = currFoodEaten.scoreResult;
+
+				printf("Adding food eaten animation for score of %d\n", currAnimation.scoreResult.totalScore);
+
+				this->foodEatenAnimationList.push_back(currAnimation);
+			}
 		}
 
 		void StoryGameRenderer::renderLoadCampaignError(sf::RenderTarget& renderTarget) {
@@ -140,6 +174,7 @@ namespace r3 {
 			this->renderSnake(renderTarget, renderState);
 			this->renderFoodSpawns(renderTarget, renderState);
 			this->renderDangerSpawns(renderTarget, renderState);
+			this->renderFoodEatenAnimations(renderTarget, renderState);
 		}
 
 		void StoryGameRenderer::renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
@@ -334,6 +369,45 @@ namespace r3 {
 					dangerSprite.setPosition(fieldPosition.x + currDangerInstance.position.x * tileSize, fieldPosition.y + currDangerInstance.position.y * tileSize);
 
 					renderTarget.draw(dangerSprite);
+				}
+			}
+		}
+
+		void StoryGameRenderer::renderFoodEatenAnimations(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			sf::Vector2i fieldSize = renderState.storyGame->getMap()->getFieldSize();
+			float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+			sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+			wchar_t foodEatenStr[32];
+
+			sf::Text foodEatenText;
+			foodEatenText.setFont(*this->uiFont);
+			foodEatenText.setCharacterSize(32);
+
+			for (int animationIndex = this->foodEatenAnimationList.size() - 1; animationIndex >= 0; animationIndex--) {
+				StoryFoodEatenAnimation currAnimation = this->foodEatenAnimationList[animationIndex];
+
+				float secondsSinceFoodEaten = renderState.storyGame->getTimeElapsed().asSeconds() - currAnimation.eatenTime.asSeconds();
+				if (secondsSinceFoodEaten >= 1.0f) {
+					this->foodEatenAnimationList.erase(this->foodEatenAnimationList.begin() + animationIndex);
+
+					printf("Removing food eaten animation at index %d, size is now %d\n", animationIndex, this->foodEatenAnimationList.size());
+				}
+				else {
+					swprintf_s(foodEatenStr, StoryGameRenderUtils::resolveFoodEatenFormatString(currAnimation.scoreResult), currAnimation.scoreResult.totalScore);
+					foodEatenText.setString(foodEatenStr);
+
+					float basePosX = fieldPosition.x + currAnimation.tilePosition.x * tileSize + tileSize / 2.0f;
+					float animatedPosX = basePosX - FontUtils::resolveTextWidth(foodEatenText) / 2.0f;
+
+					float basePosY = fieldPosition.y + currAnimation.tilePosition.y * tileSize;
+					float animatedPosY = basePosY - secondsSinceFoodEaten * 30.0f;
+					foodEatenText.setPosition(animatedPosX, animatedPosY);
+
+					sf::Uint8 alpha = 255 - (sf::Uint8)(secondsSinceFoodEaten * 255);
+					foodEatenText.setFillColor(sf::Color(255, 255, 255, alpha));
+
+					renderTarget.draw(foodEatenText);
 				}
 			}
 		}

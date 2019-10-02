@@ -308,6 +308,10 @@ namespace r3 {
 				this->soundManager.play(this->levelAssetBundle->getHitBarrierSoundBuffer());
 			}
 
+			if (!updateResult.dangerInstanceStruckSnakeList.empty()) {
+				this->soundManager.play(this->levelAssetBundle->getSnakeHissSoundBuffer());
+			}
+
 			if (updateResult.snakeDiedFlag) {
 				this->storyGame->stopRunningLevel();
 				music.stop();

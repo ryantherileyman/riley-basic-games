@@ -72,6 +72,28 @@ namespace r3 {
 			StoryFoodEatenBySnakeScoreResult scoreResult;
 		} StoryFoodEatenResult;
 
+		typedef struct Snake_StoryDangerInstance {
+			int dangerInstanceId;
+			StoryDangerType dangerType;
+			sf::Vector2i position;
+		} StoryDangerInstance;
+
+		typedef struct Snake_StoryDangerSpawnCheckInput {
+			sf::Time timeSinceLevelStarted;
+			std::default_random_engine* randomizer;
+			int snakeLength;
+		} StoryDangerSpawnCheckInput;
+
+		typedef struct Snake_StoryDangerPositionCheckResult {
+			bool dangerExistsFlag;
+			int dangerInstanceId;
+		} StoryDangerPositionCheckResult;
+
+		typedef struct Snake_StoryDangerDespawnCheckInput {
+			int dangerInstanceId;
+			sf::Time timeSinceLevelStarted;
+		} StoryDangerDespawnCheckInput;
+
 		typedef struct Snake_StoryGameUpdateResult {
 			ObjectDirection snakeMovementResult;
 			bool snakeHitBarrierFlag;
@@ -79,10 +101,13 @@ namespace r3 {
 			bool snakeGrewFlag;
 			bool completedLevelFlag;
 			std::vector<StoryFoodInstance> spawnedFoodInstanceList;
+			std::vector<StoryDangerInstance> spawnedDangerInstanceList;
 			std::vector<StoryFoodEatenResult> foodEatenResultList;
+			std::vector<StoryDangerInstance> dangerInstanceStruckSnakeList;
 		} StoryGameUpdateResult;
 
 		class StoryFoodSpawnTracker;
+		class StoryDangerSpawnTracker;
 		class StoryGame;
 		class StoryGameController;
 		class StoryGameRenderer;
@@ -119,6 +144,47 @@ namespace r3 {
 			void spawnFood(const StoryFoodInstance& foodInstance);
 			void despawnFood(int foodInstanceId);
 
+		private:
+			int findFoodInstanceIndex(int foodInstanceId) const;
+
+		};
+
+		class StoryDangerSpawnTracker {
+
+		private:
+			const StoryDangerDefn* dangerDefn;
+
+		private:
+			std::uniform_real_distribution<float> chancePctDistribution;
+
+		private:
+			std::vector<StoryDangerInstance> dangerInstanceList;
+
+		private:
+			int spawnCount;
+			sf::Time timeOfLastChanceCheck;
+			sf::Time timeOfLastSpawn;
+
+		public:
+			StoryDangerSpawnTracker(const StoryDangerDefn& dangerDefn);
+
+		public:
+			const StoryDangerDefn& getDangerDefn() const;
+			const std::vector<StoryDangerInstance>& getDangerInstanceList() const;
+			StoryDangerInstance getDangerInstance(int dangerInstanceId) const;
+
+		public:
+			bool shouldDangerSpawn(const StoryDangerSpawnCheckInput& input);
+			StoryDangerPositionCheckResult occupiesPosition(const sf::Vector2i& position) const;
+			bool shouldDangerDespawn(const StoryDangerDespawnCheckInput& input) const;
+
+		public:
+			void spawnDanger(const StoryDangerInstance& dangerInstance);
+			void despawnDanger(int dangerInstanceId);
+
+		private:
+			int findDangerInstanceIndex(int dangerInstanceId) const;
+
 		};
 
 		typedef enum class Snake_StoryGameStatus {
@@ -154,6 +220,11 @@ namespace r3 {
 			std::unordered_map<StoryFoodType, int> foodEatenCountMap;
 
 		private:
+			int nextDangerInstanceId;
+			std::vector<StoryDangerSpawnTracker> dangerSpawnTrackerList;
+			std::unordered_map<int, bool> dangerStruckSnakeMap;
+
+		private:
 			int score;
 
 		public:
@@ -174,6 +245,7 @@ namespace r3 {
 			float getCurrSnakeHealth() const;
 			float getMaxSnakeHealth() const;
 			const std::vector<StoryFoodSpawnTracker>& getFoodSpawnTrackerList() const;
+			const std::vector<StoryDangerSpawnTracker>& getDangerSpawnTrackerList() const;
 			int getFoodEaten(StoryFoodType foodType) const;
 			sf::Time getTimeElapsed() const;
 			const StoryWinCondition& getWinCondition() const;
@@ -200,9 +272,20 @@ namespace r3 {
 			StoryFoodInstance createFoodInstance(StoryFoodType foodType, const std::vector<sf::Vector2i>& availablePositionList);
 
 		private:
-			void addNewFoodSpawnsToFoodTileDistanceTrackingMap(const std::vector<StoryFoodInstance> spawnedFoodInstanceList);
+			void addNewFoodSpawnsToFoodTileDistanceTrackingMap(const std::vector<StoryFoodInstance>& spawnedFoodInstanceList);
 			void updateFoodTileDistanceTrackingMapAfterSnakeMoved();
-			std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList);
+			std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance>& eatenBySnakeFoodInstanceList);
+
+		private:
+			std::vector<StoryDangerInstance> checkForDangerSpawns();
+			std::vector<StoryDangerInstance> checkForDangersStrikingSnake();
+			void checkForDangerDespawns();
+			std::vector<sf::Vector2i> buildAvailableDangerSpawnPositionList(const StoryDangerDefn& dangerDefn);
+			bool dangerOccupiesPosition(const sf::Vector2i& position);
+			StoryDangerInstance createDangerInstance(StoryDangerType dangerType, const std::vector<sf::Vector2i>& availablePositionList);
+
+		private:
+			void addNewDangerSpawnsToDangerStruckSnakeMap(const std::vector<StoryDangerInstance>& spawnedDangerInstanceList);
 
 		private:
 			void updateHealthBy(float amount);
@@ -294,6 +377,7 @@ namespace r3 {
 			void renderPlayingField(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderSnake(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderFoodSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderDangerSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 			void renderExitInstructions(sf::RenderTarget& renderTarget);
 

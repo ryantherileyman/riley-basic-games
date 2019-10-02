@@ -14,7 +14,7 @@
             "snakeHealth": 10,
             "winCondition": {
                 "conditionType": "onTimeSurvived",
-                "timePassed": 60
+                "timePassed": 6000
             },
             "foodList": [
                 {
@@ -57,9 +57,9 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 10,
-                    "chancePct": 2,
-                    "maxSpawnCount": 5,
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 1000,
                     "floorIdRange": { "minId": 20, "maxId": 21 }
                 }
             ]

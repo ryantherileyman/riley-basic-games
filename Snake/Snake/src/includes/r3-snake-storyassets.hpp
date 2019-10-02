@@ -45,6 +45,7 @@ namespace r3 {
 			StoryMapDefn mapDefn;
 			sf::Texture snakeTexture;
 			sf::Texture foodTexture;
+			sf::Texture dangerTexture;
 			std::unordered_map<int, sf::Texture> floorTextureMap;
 			std::unordered_map<int, sf::Texture> barrierTextureMap;
 
@@ -53,6 +54,7 @@ namespace r3 {
 			sf::SoundBuffer foodSpawnedSoundBuffer;
 			sf::SoundBuffer eatFoodSoundBuffer;
 			sf::SoundBuffer hitBarrierSoundBuffer;
+			sf::SoundBuffer snakeHissSoundBuffer;
 
 		public:
 			StoryLevelAssetBundle();
@@ -72,6 +74,7 @@ namespace r3 {
 			const StoryMapDefn& getMapDefn() const;
 			const sf::Texture& getSnakeTexture() const;
 			const sf::Texture& getFoodTexture() const;
+			const sf::Texture& getDangerTexture() const;
 			const sf::Texture& getFloorTexture(int floorId) const;
 			const sf::Texture& getBarrierTexture(int barrierId) const;
 
@@ -80,6 +83,7 @@ namespace r3 {
 			const sf::SoundBuffer& getFoodSpawnedSoundBuffer() const;
 			const sf::SoundBuffer& getEatFoodSoundBuffer() const;
 			const sf::SoundBuffer& getHitBarrierSoundBuffer() const;
+			const sf::SoundBuffer& getSnakeHissSoundBuffer() const;
 
 		private:
 			void loadLevel();
@@ -87,6 +91,7 @@ namespace r3 {
 		private:
 			void loadSnakeTexture();
 			void loadFoodTexture();
+			void loadDangerTexture();
 			void loadFloorTextureMap(const StoryMapDefn& mapDefn);
 			void loadBarrierTextureMap(const StoryMapDefn& mapDefn);
 
@@ -95,6 +100,7 @@ namespace r3 {
 			void loadFoodSpawnedSoundBuffer();
 			void loadEatFoodSoundBuffer();
 			void loadHitBarrierSoundBuffer();
+			void loadSnakeHissSoundBuffer();
 
 		private:
 			void indicateLoadingFilename(const std::string& filename);

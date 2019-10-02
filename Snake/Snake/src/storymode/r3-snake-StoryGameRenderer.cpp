@@ -37,6 +37,7 @@ namespace r3 {
 			const sf::Color BACKGROUND_COLOR = sf::Color(0, 126, 3, 255);
 
 			const int FOOD_PIXEL_SIZE = 75;
+			const int DANGER_PIXEL_SIZE = 75;
 
 		}
 
@@ -138,6 +139,7 @@ namespace r3 {
 			this->renderPlayingField(renderTarget, renderState);
 			this->renderSnake(renderTarget, renderState);
 			this->renderFoodSpawns(renderTarget, renderState);
+			this->renderDangerSpawns(renderTarget, renderState);
 		}
 
 		void StoryGameRenderer::renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
@@ -307,6 +309,30 @@ namespace r3 {
 					foodSprite.setPosition(fieldPosition.x + currFoodInstance.position.x * tileSize, fieldPosition.y + currFoodInstance.position.y * tileSize);
 
 					renderTarget.draw(foodSprite);
+				}
+			}
+		}
+
+		void StoryGameRenderer::renderDangerSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
+			sf::Vector2i fieldSize = renderState.storyGame->getMap()->getFieldSize();
+			float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+			sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+			sf::Sprite dangerSprite;
+			dangerSprite.setTexture(renderState.levelAssetBundle->getDangerTexture());
+			dangerSprite.setScale(tileSize / (float)StoryGameRenderConstants::DANGER_PIXEL_SIZE, tileSize / (float)StoryGameRenderConstants::DANGER_PIXEL_SIZE);
+
+			for (auto const& currDangerSpawnTracker : renderState.storyGame->getDangerSpawnTrackerList()) {
+				const StoryDangerDefn& dangerDefn = currDangerSpawnTracker.getDangerDefn();
+
+				for (auto const& currDangerInstance : currDangerSpawnTracker.getDangerInstanceList()) {
+					bool snakeOccupiesPosition = renderState.storyGame->getSnake()->occupiesPosition(currDangerInstance.position);
+					int textureRectXPos = (snakeOccupiesPosition ? 75 : 0);
+
+					dangerSprite.setTextureRect(sf::IntRect(textureRectXPos, 0, StoryGameRenderConstants::DANGER_PIXEL_SIZE, StoryGameRenderConstants::DANGER_PIXEL_SIZE));
+					dangerSprite.setPosition(fieldPosition.x + currDangerInstance.position.x * tileSize, fieldPosition.y + currDangerInstance.position.y * tileSize);
+
+					renderTarget.draw(dangerSprite);
 				}
 			}
 		}

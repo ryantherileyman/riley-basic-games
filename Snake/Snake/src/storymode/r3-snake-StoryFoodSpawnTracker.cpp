@@ -1,6 +1,5 @@
 
 #include <assert.h>
-#include <time.h>
 #include "../includes/r3-snake-storymodescene.hpp"
 
 namespace r3 {
@@ -26,14 +25,10 @@ namespace r3 {
 		}
 
 		StoryFoodInstance StoryFoodSpawnTracker::getFoodInstance(int foodInstanceId) const {
-			for (auto& currFoodInstance : this->foodInstanceList) {
-				if (currFoodInstance.foodInstanceId == foodInstanceId) {
-					return currFoodInstance;
-				}
-			}
+			int index = this->findFoodInstanceIndex(foodInstanceId);
+			assert(index >= 0);
 
-			bool foodInstanceIdExistsFlag = false;
-			assert(foodInstanceIdExistsFlag);
+			return( this->foodInstanceList[index] );
 		}
 
 		bool StoryFoodSpawnTracker::shouldFoodSpawn(const StoryFoodSpawnCheckInput& input) {
@@ -102,17 +97,21 @@ namespace r3 {
 		}
 
 		void StoryFoodSpawnTracker::despawnFood(int foodInstanceId) {
-			int indexOfFood = -1;
+			int index = this->findFoodInstanceIndex(foodInstanceId);
+			assert(index >= 0);
+
+			this->foodInstanceList.erase(this->foodInstanceList.begin() + index);
+		}
+
+		int StoryFoodSpawnTracker::findFoodInstanceIndex(int foodInstanceId) const {
+			int result = -1;
 			for (size_t index = 0; index < this->foodInstanceList.size(); index++) {
 				if (this->foodInstanceList[index].foodInstanceId == foodInstanceId) {
-					indexOfFood = index;
+					result = index;
 					break;
 				}
 			}
-
-			assert(indexOfFood >= 0);
-
-			this->foodInstanceList.erase(this->foodInstanceList.begin() + indexOfFood);
+			return result;
 		}
 
 	}

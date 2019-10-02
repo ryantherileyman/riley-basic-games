@@ -11,10 +11,12 @@ namespace r3 {
 
 			const char* DEFAULT_SNAKE_TEXTURE_PATH = "resources/textures/snake-tileset.png";
 			const char* DEFAULT_FOOD_TEXTURE_PATH = "resources/textures/food-tileset.png";
+			const char* DEFAULT_DANGER_TEXTURE_PATH = "resources/textures/danger-tileset.png";
 
 			const char* DEFAULT_FOOD_SPAWNED_SOUND_PATH = "resources/sounds/food-spawned.wav";
 			const char* DEFAULT_EAT_FOOD_SOUND_PATH = "resources/sounds/eat-apple.wav";
 			const char* DEFAULT_HIT_BARRIER_SOUND_PATH = "resources/sounds/hit-barrier.wav";
+			const char* DEFAULT_SNAKE_HISS_SOUND_PATH = "resources/sounds/snake-hiss.wav";
 
 		}
 
@@ -38,7 +40,7 @@ namespace r3 {
 			this->campaignFolderName = campaignFolderName;
 			this->levelDefn = &levelDefn;
 			this->loadingCompletionStatus = StoryLevelAssetLoadingCompletionStatus::LOADING;
-			this->totalAssetCount = 6;
+			this->totalAssetCount = 8;
 			if (!levelDefn.musicFilename.empty()) {
 				this->totalAssetCount++;
 			}
@@ -82,6 +84,10 @@ namespace r3 {
 			return this->foodTexture;
 		}
 
+		const sf::Texture& StoryLevelAssetBundle::getDangerTexture() const {
+			return this->dangerTexture;
+		}
+
 		const sf::Texture& StoryLevelAssetBundle::getFloorTexture(int floorId) const {
 			assert( this->floorTextureMap.count(floorId) == 1 );
 
@@ -112,6 +118,10 @@ namespace r3 {
 			return this->hitBarrierSoundBuffer;
 		}
 
+		const sf::SoundBuffer& StoryLevelAssetBundle::getSnakeHissSoundBuffer() const {
+			return this->snakeHissSoundBuffer;
+		}
+
 		void StoryLevelAssetBundle::loadLevel() {
 			this->indicateLoadingFilename(this->levelDefn->mapFilename);
 			LoadStoryMapResult loadStoryMapResult = StoryLoaderUtils::loadStoryMap(this->campaignFolderName, this->levelDefn->mapFilename);
@@ -123,6 +133,7 @@ namespace r3 {
 
 				this->loadSnakeTexture();
 				this->loadFoodTexture();
+				this->loadDangerTexture();
 				this->loadFloorTextureMap(loadStoryMapResult.mapDefn);
 				this->loadBarrierTextureMap(loadStoryMapResult.mapDefn);
 
@@ -130,6 +141,7 @@ namespace r3 {
 				this->loadFoodSpawnedSoundBuffer();
 				this->loadEatFoodSoundBuffer();
 				this->loadHitBarrierSoundBuffer();
+				this->loadSnakeHissSoundBuffer();
 			}
 			else {
 				this->loadMapValidationResult = loadStoryMapResult.validationResult;
@@ -158,6 +170,17 @@ namespace r3 {
 			}
 			else {
 				this->failedFilenameList.push_back(StoryLevelAssetBundleConstants::DEFAULT_FOOD_TEXTURE_PATH);
+			}
+		}
+
+		void StoryLevelAssetBundle::loadDangerTexture() {
+			this->indicateLoadingFilename(StoryLevelAssetBundleConstants::DEFAULT_DANGER_TEXTURE_PATH);
+
+			if (this->dangerTexture.loadFromFile(StoryLevelAssetBundleConstants::DEFAULT_DANGER_TEXTURE_PATH)) {
+				this->incrementLoadedAssetCount();
+			}
+			else {
+				this->failedFilenameList.push_back(StoryLevelAssetBundleConstants::DEFAULT_DANGER_TEXTURE_PATH);
 			}
 		}
 
@@ -230,6 +253,17 @@ namespace r3 {
 			}
 			else {
 				this->failedFilenameList.push_back(StoryLevelAssetBundleConstants::DEFAULT_HIT_BARRIER_SOUND_PATH);
+			}
+		}
+
+		void StoryLevelAssetBundle::loadSnakeHissSoundBuffer() {
+			this->indicateLoadingFilename(StoryLevelAssetBundleConstants::DEFAULT_SNAKE_HISS_SOUND_PATH);
+
+			if (this->snakeHissSoundBuffer.loadFromFile(StoryLevelAssetBundleConstants::DEFAULT_SNAKE_HISS_SOUND_PATH)) {
+				this->incrementLoadedAssetCount();
+			}
+			else {
+				this->failedFilenameList.push_back(StoryLevelAssetBundleConstants::DEFAULT_SNAKE_HISS_SOUND_PATH);
 			}
 		}
 

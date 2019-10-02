@@ -69,6 +69,7 @@ namespace r3 {
 			this->framesSinceSnakeMoved = 0;
 			this->queuedSnakeGrowth = 0;
 			this->nextFoodInstanceId = 1;
+			this->nextDangerInstanceId = 1;
 			this->score = 0;
 		}
 
@@ -97,6 +98,7 @@ namespace r3 {
 			}
 			this->queuedSnakeGrowth = 0;
 
+			this->nextFoodInstanceId = 1;
 			this->foodSpawnTrackerList.clear();
 			for (auto const& currFoodDefn : levelDefn.foodDefnList) {
 				this->foodSpawnTrackerList.push_back(StoryFoodSpawnTracker(currFoodDefn));
@@ -108,6 +110,14 @@ namespace r3 {
 			for (auto const& currFoodDefn : levelDefn.foodDefnList) {
 				this->foodEatenCountMap[currFoodDefn.foodType] = 0;
 			}
+
+			this->nextDangerInstanceId = 1;
+			this->dangerSpawnTrackerList.clear();
+			for (auto const& currDangerDefn : levelDefn.dangerDefnList) {
+				this->dangerSpawnTrackerList.push_back(StoryDangerSpawnTracker(currDangerDefn));
+			}
+
+			this->dangerStruckSnakeMap.clear();
 		}
 
 		void StoryGame::startRunningLevel() {
@@ -139,6 +149,10 @@ namespace r3 {
 
 		const std::vector<StoryFoodSpawnTracker>& StoryGame::getFoodSpawnTrackerList() const {
 			return this->foodSpawnTrackerList;
+		}
+
+		const std::vector<StoryDangerSpawnTracker>& StoryGame::getDangerSpawnTrackerList() const {
+			return this->dangerSpawnTrackerList;
 		}
 
 		int StoryGame::getFoodEaten(StoryFoodType foodType) const {
@@ -177,8 +191,12 @@ namespace r3 {
 			result.snakeGrewFlag = false;
 			result.completedLevelFlag = false;
 			result.spawnedFoodInstanceList = this->checkForFoodSpawns();
+			result.spawnedDangerInstanceList = this->checkForDangerSpawns();
+
+			this->checkForDangerDespawns();
 
 			this->addNewFoodSpawnsToFoodTileDistanceTrackingMap(result.spawnedFoodInstanceList);
+			this->addNewDangerSpawnsToDangerStruckSnakeMap(result.spawnedDangerInstanceList);
 
 			this->acceptSnakeMovementList(input.snakeMovementList);
 			this->consumeAllUnusableSnakeInputs();
@@ -188,9 +206,7 @@ namespace r3 {
 				ObjectDirection directionToMoveSnake = this->resolveDirectionToMoveSnake();
 				if (this->snakeWouldHitBarrier(directionToMoveSnake)) {
 					result.snakeHitBarrierFlag = true;
-
 					this->updateHealthBy(-1.0f);
-					result.snakeDiedFlag = (this->snakeHealth <= 0.0f);
 				}
 				else {
 					result.snakeMovementResult = directionToMoveSnake;
@@ -218,9 +234,16 @@ namespace r3 {
 
 						result.foodEatenResultList.push_back(currFoodEatenResult);
 					}
+					
+					result.dangerInstanceStruckSnakeList = this->checkForDangersStrikingSnake();
+					for (auto const& currDangerInstance : result.dangerInstanceStruckSnakeList) {
+						this->updateHealthBy(-1.0f);
+					}
 
 					result.completedLevelFlag = this->checkLevelCompleted();
 				}
+
+				result.snakeDiedFlag = (this->snakeHealth <= 0.0f);
 
 				this->framesSinceSnakeMoved -= (int)(60.0f / this->snakeSpeedTilesPerSecond);
 			}
@@ -397,7 +420,7 @@ namespace r3 {
 			return result;
 		}
 
-		void StoryGame::addNewFoodSpawnsToFoodTileDistanceTrackingMap(const std::vector<StoryFoodInstance> spawnedFoodInstanceList) {
+		void StoryGame::addNewFoodSpawnsToFoodTileDistanceTrackingMap(const std::vector<StoryFoodInstance>& spawnedFoodInstanceList) {
 			sf::Vector2i headPosition = this->getSnake()->getHead().position;
 			for (auto const& currSpawnedFoodInstance : spawnedFoodInstanceList) {
 				StoryFoodTileDistanceTracking currFoodTileDistanceTracking;
@@ -419,7 +442,7 @@ namespace r3 {
 			}
 		}
 
-		std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> StoryGame::buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance> eatenBySnakeFoodInstanceList) {
+		std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> StoryGame::buildFoodEatenBySnakeScoreResultMap(const std::vector<StoryFoodInstance>& eatenBySnakeFoodInstanceList) {
 			std::unordered_map<int, StoryFoodEatenBySnakeScoreResult> result;
 
 			for (auto const& currFoodInstance : eatenBySnakeFoodInstanceList) {
@@ -429,6 +452,117 @@ namespace r3 {
 			}
 
 			return result;
+		}
+
+		std::vector<StoryDangerInstance> StoryGame::checkForDangerSpawns() {
+			std::vector<StoryDangerInstance> result;
+
+			for (auto& currDangerSpawnTracker : this->dangerSpawnTrackerList) {
+				StoryDangerSpawnCheckInput checkInput;
+				checkInput.timeSinceLevelStarted = this->getTimeElapsed();
+				checkInput.randomizer = &this->randomizer;
+				checkInput.snakeLength = this->snake->getLength();
+
+				if (currDangerSpawnTracker.shouldDangerSpawn(checkInput)) {
+					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableDangerSpawnPositionList(currDangerSpawnTracker.getDangerDefn());
+					printf("There are %d positions on the map that the danger can spawn\n", availablePositionList.size());
+					if (availablePositionList.size() > 0) {
+						StoryDangerInstance newDangerInstance = this->createDangerInstance(currDangerSpawnTracker.getDangerDefn().dangerType, availablePositionList);
+						currDangerSpawnTracker.spawnDanger(newDangerInstance);
+						result.push_back(newDangerInstance);
+
+						this->nextDangerInstanceId++;
+					}
+				}
+			}
+
+			return result;
+		}
+
+		std::vector<StoryDangerInstance> StoryGame::checkForDangersStrikingSnake() {
+			std::vector<StoryDangerInstance> result;
+
+			for (auto& currDangerSpawnTracker : this->dangerSpawnTrackerList) {
+				for (auto const& currDangerInstance : currDangerSpawnTracker.getDangerInstanceList()) {
+					if (
+						!this->dangerStruckSnakeMap[currDangerInstance.dangerInstanceId] &&
+						this->snake->occupiesPosition(currDangerInstance.position)
+					) {
+						this->dangerStruckSnakeMap[currDangerInstance.dangerInstanceId] = true;
+						result.push_back(currDangerInstance);
+					}
+				}
+			}
+
+			return result;
+		}
+
+		void StoryGame::checkForDangerDespawns() {
+			for (auto& currDangerSpawnTracker : this->dangerSpawnTrackerList) {
+				for (auto const& currDangerInstance : currDangerSpawnTracker.getDangerInstanceList()) {
+					StoryDangerDespawnCheckInput checkInput;
+					checkInput.timeSinceLevelStarted = this->getTimeElapsed();
+					checkInput.dangerInstanceId = currDangerInstance.dangerInstanceId;
+
+					if (currDangerSpawnTracker.shouldDangerDespawn(checkInput)) {
+						currDangerSpawnTracker.despawnDanger(currDangerInstance.dangerInstanceId);
+					}
+				}
+			}
+		}
+
+		std::vector<sf::Vector2i> StoryGame::buildAvailableDangerSpawnPositionList(const StoryDangerDefn& dangerDefn) {
+			std::vector<sf::Vector2i> result;
+
+			for (int y = 0; y < this->map->getFieldSize().y; y++) {
+				for (int x = 0; x < this->map->getFieldSize().x; x++) {
+					int floorId = this->map->getFloorId(x, y);
+
+					bool positionIsAvailable =
+						!this->map->barrierAt(x, y) &&
+						(floorId >= dangerDefn.minFloorId) &&
+						(floorId <= dangerDefn.maxFloorId) &&
+						!this->foodOccupiesPosition(sf::Vector2i(x, y)) &&
+						!this->dangerOccupiesPosition(sf::Vector2i(x, y));
+
+					if (positionIsAvailable) {
+						result.push_back(sf::Vector2i(x, y));
+					}
+				}
+			}
+
+			return result;
+		}
+
+		bool StoryGame::dangerOccupiesPosition(const sf::Vector2i& position) {
+			bool result = false;
+
+			for (auto const& currDangerSpawnTracker : this->dangerSpawnTrackerList) {
+				StoryDangerPositionCheckResult checkResult = currDangerSpawnTracker.occupiesPosition(position);
+				if (checkResult.dangerExistsFlag) {
+					result = true;
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		StoryDangerInstance StoryGame::createDangerInstance(StoryDangerType dangerType, const std::vector<sf::Vector2i>& availablePositionList) {
+			std::uniform_int_distribution<int> tileDistribution(0, availablePositionList.size() - 1);
+			int index = tileDistribution(this->randomizer);
+
+			StoryDangerInstance result;
+			result.dangerInstanceId = this->nextDangerInstanceId;
+			result.dangerType = dangerType;
+			result.position = availablePositionList[index];
+			return result;
+		}
+
+		void StoryGame::addNewDangerSpawnsToDangerStruckSnakeMap(const std::vector<StoryDangerInstance>& spawnedDangerInstanceList) {
+			for (auto const& currDangerInstance : spawnedDangerInstanceList) {
+				this->dangerStruckSnakeMap[currDangerInstance.dangerInstanceId] = false;
+			}
 		}
 
 		void StoryGame::updateHealthBy(float amount) {

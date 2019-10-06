@@ -1,0 +1,96 @@
+{
+    "menuLabel": "Test Levels",
+    "menuDescription": "Levels and Maps used during testing",
+    "levelList": [
+        {
+            "map": "map-level-01",
+            "music": "Artifact.ogg",
+            "snakeStart": {
+                "position": { "x": 10, "y": 5 },
+                "direction": "right",
+                "length": 5
+            },
+            "snakeSpeed": 10,
+            "snakeHealth": 10,
+            "winCondition": {
+                "conditionType": "onTimeSurvived",
+                "timePassed": 6000
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 35,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 49 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "chancePct": 20,
+                    "maxSpawnCount": 1000,
+                    "growthRate": 1,
+                    "timePassed": 1,
+                    "floorIdRange": { "minId": 0, "maxId": 1 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "chancePct": 10,
+                    "maxSpawnCount": 1000,
+                    "growthRate": 1,
+                    "timePassed": 1,
+                    "floorIdRange": { "minId": 30, "maxId": 49 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "chancePct": 10,
+                    "maxSpawnCount": 1000,
+                    "growthRate": 1,
+                    "timePassed": 1,
+                    "floorIdRange": { "minId": 0, "maxId": 19 }
+                }
+            ],
+            "dangerList": [
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 1000,
+                    "floorIdRange": { "minId": 20, "maxId": 21 }
+                }
+            ]
+        },
+        {
+            "map": "map-level-01",
+            "music": "Artifact.ogg",
+            "snakeStart": {
+                "position": { "x": 15, "y": 10 },
+                "direction": "left",
+                "length": 3
+            },
+            "snakeSpeed": 10,
+            "snakeHealth": 8,
+            "winCondition": {
+                "conditionType": "onFoodEaten",
+                "foodType": "Apple",
+                "foodCount": 15
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 15,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 0, "maxId": 9 }
+                }
+            ],
+            "dangerList": [
+            ]
+        }
+    ]
+}

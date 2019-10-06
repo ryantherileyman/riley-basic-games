@@ -13,7 +13,7 @@ namespace r3 {
 
 			this->spawnCount = 0;
 			this->timeOfLastChanceCheck = sf::seconds(-1.0f);
-			this->timeOfLastSpawn = sf::seconds(0.0f - (float)foodDefn.timePassed);
+			this->timeOfLastSpawn = sf::seconds(0.0f);
 		}
 
 		const StoryFoodDefn& StoryFoodSpawnTracker::getFoodDefn() const {

@@ -443,6 +443,10 @@ namespace r3 {
 			LoadStoryLevelResult loadStoryLevel(const std::string& campaignFolderName, const Json::Value& jsonValue) {
 				LoadStoryLevelResult result;
 
+				result.levelDefn.openingCutsceneDefn.existsFlag = false;
+				result.levelDefn.winCutsceneDefn.existsFlag = false;
+				result.levelDefn.lossCutsceneDefn.existsFlag = false;
+
 				result.validationResult.musicValid = r3::json::ValidationUtils::optionalString(jsonValue, StoryLevelProperties::MUSIC_FILENAME);
 				if (result.validationResult.musicValid) {
 					result.levelDefn.musicFilename = jsonValue.get(StoryLevelProperties::MUSIC_FILENAME, "").asString();

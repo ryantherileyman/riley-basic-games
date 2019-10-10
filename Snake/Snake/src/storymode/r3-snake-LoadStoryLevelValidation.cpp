@@ -73,11 +73,11 @@ namespace r3 {
 					return result;
 				}
 
-				bool snakeStartPositionValid(const Json::Value& jsonValue) {
-					bool result = r3::json::ValidationUtils::requiredObject(jsonValue, StoryLevelProperties::SNAKE_START_POSITION);
+				bool positionValid(const Json::Value& jsonValue) {
+					bool result = r3::json::ValidationUtils::requiredObject(jsonValue, StoryLevelProperties::POSITION);
 
 					if (result) {
-						Json::Value startPositionValue = jsonValue[StoryLevelProperties::SNAKE_START_POSITION];
+						Json::Value startPositionValue = jsonValue[StoryLevelProperties::POSITION];
 						result =
 							r3::json::ValidationUtils::requiredInt(startPositionValue, StoryLevelProperties::POSITION_X) &&
 							r3::json::ValidationUtils::requiredInt(startPositionValue, StoryLevelProperties::POSITION_Y);
@@ -310,6 +310,27 @@ namespace r3 {
 
 				std::vector<std::string> buildErrorMessages(const LoadStoryLevelValidationResult& validationResult) {
 					std::vector<std::string> result;
+
+					if (!validationResult.openingCutsceneValidationResult.valid()) {
+						result.push_back("The \"openingCutscene\" is invalid.  It must be an object representing a cutscene.  Individual error messages follow...");
+
+						std::vector<std::string> openingCutsceneErrorMessages = LoadStoryCutsceneValidation::buildErrorMessages(validationResult.openingCutsceneValidationResult);
+						result.insert(result.end(), openingCutsceneErrorMessages.begin(), openingCutsceneErrorMessages.end());
+					}
+
+					if (!validationResult.winCutsceneValidationResult.valid()) {
+						result.push_back("The \"winCutscene\" is invalid.  It must be an object representing a cutscene.  Individual error messages follow...");
+
+						std::vector<std::string> winCutsceneErrorMessages = LoadStoryCutsceneValidation::buildErrorMessages(validationResult.winCutsceneValidationResult);
+						result.insert(result.end(), winCutsceneErrorMessages.begin(), winCutsceneErrorMessages.end());
+					}
+
+					if (!validationResult.lossCutsceneValidationResult.valid()) {
+						result.push_back("The \"lossCutscene\" is invalid.  It must be an object representing a cutscene.  Individual error messages follow...");
+
+						std::vector<std::string> lossCutsceneErrorMessages = LoadStoryCutsceneValidation::buildErrorMessages(validationResult.lossCutsceneValidationResult);
+						result.insert(result.end(), lossCutsceneErrorMessages.begin(), lossCutsceneErrorMessages.end());
+					}
 
 					if (!validationResult.musicValid) {
 						result.push_back("The \"music\" is invalid.  It must be a filename, including the extension.");

@@ -22,6 +22,13 @@ namespace r3 {
 				return result;
 			}
 
+			bool requiredBool(const Json::Value& jsonValue, const char* propertyName) {
+				bool result =
+					jsonValue.isMember(propertyName) &&
+					jsonValue[propertyName].isBool();
+				return result;
+			}
+
 			bool requiredInt(const Json::Value& jsonValue, const char* propertyName) {
 				bool result =
 					jsonValue.isMember(propertyName) &&
@@ -49,6 +56,14 @@ namespace r3 {
 				bool result =
 					jsonValue.isMember(propertyName) &&
 					jsonValue[propertyName].isObject();
+				return result;
+			}
+
+			bool optionalObject(const Json::Value& jsonValue, const char* propertyName) {
+				bool result = true;
+				if (jsonValue.isMember(propertyName)) {
+					result = jsonValue[propertyName].isObject();
+				}
 				return result;
 			}
 

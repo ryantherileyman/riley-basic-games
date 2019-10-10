@@ -57,6 +57,75 @@ namespace r3 {
 			LoadStoryMapValidationResult validationResult;
 		} LoadStoryMapResult;
 
+		typedef struct Snake_LoadStoryCutsceneEventValidationResult {
+			bool rootValid = false;
+			bool framesSinceLastEventValid = false;
+			bool eventTypeValid = false;
+			bool fadeFramesValid = true;
+			bool colorValid = true;
+			bool textureValid = true;
+			bool mapValid = true;
+			bool snakeStartValid = true;
+			bool snakeStartPositionValid = true;
+			bool snakeStartDirectionValid = true;
+			bool snakeStartLengthValid = true;
+			bool snakeMovementValid = true;
+			bool showObjectValid = true;
+			bool hideObjectValid = true;
+			bool objectInstanceIdValid = true;
+			bool objectFoodTypeValid = true;
+			bool objectDangerTypeValid = true;
+			bool objectPositionValid = true;
+
+			bool valid() const {
+				bool result =
+					rootValid &&
+					framesSinceLastEventValid &&
+					eventTypeValid &&
+					fadeFramesValid &&
+					colorValid &&
+					textureValid &&
+					mapValid &&
+					snakeStartValid &&
+					snakeStartPositionValid &&
+					snakeStartDirectionValid &&
+					snakeStartLengthValid &&
+					snakeMovementValid &&
+					showObjectValid &&
+					hideObjectValid &&
+					objectInstanceIdValid &&
+					objectFoodTypeValid &&
+					objectDangerTypeValid &&
+					objectPositionValid;
+				return result;
+			}
+		} LoadStoryCutsceneEventValidationResult;
+
+		typedef struct Snake_LoadStoryCutsceneValidationResult {
+			bool existsFlag = false;
+			bool rootValid = false;
+			bool soundTrackValid = true;
+			bool eventListValid = false;
+			std::vector<LoadStoryCutsceneEventValidationResult> eventValidationResultList;
+
+			bool valid() const {
+				bool allEventEntriesValid = true;
+				for (auto const& currEventValidationResult : eventValidationResultList) {
+					allEventEntriesValid = allEventEntriesValid && currEventValidationResult.valid();
+				}
+
+				bool result =
+					!existsFlag ||
+					(
+						rootValid &&
+						soundTrackValid &&
+						eventListValid &&
+						allEventEntriesValid
+					);
+				return result;
+			}
+		} LoadStoryCutsceneValidationResult;
+
 		typedef struct Snake_LoadStoryLevelFoodValidationResult {
 			bool rootValid = false;
 			bool foodTypeValid = false;
@@ -108,6 +177,9 @@ namespace r3 {
 		} LoadStoryLevelDangerValidationResult;
 
 		typedef struct Snake_LoadStoryLevelValidationResult {
+			LoadStoryCutsceneValidationResult openingCutsceneValidationResult;
+			LoadStoryCutsceneValidationResult winCutsceneValidationResult;
+			LoadStoryCutsceneValidationResult lossCutsceneValidationResult;
 			bool musicValid = false;
 			bool mapValid = false;
 			bool snakeStartValid = false;
@@ -141,6 +213,9 @@ namespace r3 {
 				}
 
 				bool result =
+					openingCutsceneValidationResult.valid() &&
+					winCutsceneValidationResult.valid() &&
+					lossCutsceneValidationResult.valid() &&
 					musicValid &&
 					mapValid &&
 					snakeStartValid &&
@@ -220,16 +295,40 @@ namespace r3 {
 
 			}
 
+			namespace StoryCutsceneProperties {
+
+				extern const char* SOUND_TRACK;
+				extern const char* EVENT_LIST;
+
+				extern const char* FRAMES_SINCE_LAST_EVENT;
+				extern const char* EVENT_TYPE;
+				extern const char* FADE_FRAMES;
+				extern const char* COLOR;
+				extern const char* COLOR_RED;
+				extern const char* COLOR_GREEN;
+				extern const char* COLOR_BLUE;
+				extern const char* TEXTURE;
+				extern const char* SNAKE_MOVEMENT;
+				extern const char* SNAKE_MOVEMENT_GROW;
+				extern const char* SHOW_OBJECT;
+				extern const char* HIDE_OBJECT;
+				extern const char* OBJECT_INSTANCE_ID;
+
+			}
+
 			namespace StoryLevelProperties {
 
+				extern const char* POSITION;
 				extern const char* POSITION_X;
 				extern const char* POSITION_Y;
 				extern const char* TIME_PASSED;
 
+				extern const char* OPENING_CUTSCENE;
+				extern const char* WIN_CUTSCENE;
+				extern const char* LOSS_CUTSCENE;
 				extern const char* MUSIC_FILENAME;
 				extern const char* MAP_FILENAME;
 				extern const char* SNAKE_START;
-				extern const char* SNAKE_START_POSITION;
 				extern const char* SNAKE_START_DIRECTION;
 				extern const char* SNAKE_START_LENGTH;
 				extern const char* SNAKE_SPEED;
@@ -259,6 +358,21 @@ namespace r3 {
 				extern const char* DOWN;
 				extern const char* LEFT;
 				extern const char* RIGHT;
+
+			}
+
+			namespace CutsceneEventTypeValues {
+
+				extern const char* COLOR;
+				extern const char* TEXTURE;
+				extern const char* SHOW_MAP;
+				extern const char* SHOW_SNAKE;
+				extern const char* MOVE_SNAKE;
+				extern const char* HIDE_SNAKE;
+				extern const char* SHOW_FOOD;
+				extern const char* HIDE_FOOD;
+				extern const char* SHOW_DANGER;
+				extern const char* HIDE_DANGER;
 
 			}
 
@@ -319,13 +433,35 @@ namespace r3 {
 
 			}
 
+			namespace LoadStoryCutsceneValidation {
+
+				bool eventTypeValueValid(const Json::Value& jsonValue);
+
+				bool colorValueValid(const Json::Value& jsonValue);
+
+				bool eventTypeValid(const Json::Value& jsonValue);
+				
+				bool colorValid(const Json::Value& jsonValue);
+
+				bool snakeMovementValid(const Json::Value& jsonValue);
+
+				LoadStoryCutsceneEventValidationResult validateEventEntry(const Json::Value& jsonValue);
+
+				LoadStoryCutsceneValidationResult validate(const Json::Value& jsonValue, const char* propertyName);
+
+				std::vector<std::string> buildErrorMessages(const LoadStoryCutsceneValidationResult& validationResult);
+
+			}
+
 			namespace LoadStoryLevelValidation {
 
-				bool snakeStartPositionValid(const Json::Value& jsonValue);
+				bool positionValid(const Json::Value& jsonValue);
 
 				bool snakeStartDirectionValid(const Json::Value& jsonValue);
 
 				bool foodTypeValid(const Json::Value& jsonValue);
+
+				bool dangerTypeValid(const Json::Value& jsonValue);
 
 				bool winConditionTypeValid(const Json::Value& jsonValue);
 

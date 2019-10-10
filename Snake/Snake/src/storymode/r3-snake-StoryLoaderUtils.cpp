@@ -35,16 +35,40 @@ namespace r3 {
 
 			}
 
+			namespace StoryCutsceneProperties {
+
+				const char* SOUND_TRACK = "soundTrack";
+				const char* EVENT_LIST = "eventList";
+
+				const char* FRAMES_SINCE_LAST_EVENT = "framesSinceLastEvent";
+				const char* EVENT_TYPE = "eventType";
+				const char* FADE_FRAMES = "fadeFrames";
+				const char* COLOR = "color";
+				const char* COLOR_RED = "red";
+				const char* COLOR_GREEN = "green";
+				const char* COLOR_BLUE = "blue";
+				const char* TEXTURE = "texture";
+				const char* SNAKE_MOVEMENT = "snakeMovement";
+				const char* SNAKE_MOVEMENT_GROW = "grow";
+				const char* SHOW_OBJECT = "showObject";
+				const char* HIDE_OBJECT = "hideObject";
+				const char* OBJECT_INSTANCE_ID = "instanceId";
+
+			}
+
 			namespace StoryLevelProperties {
 
+				const char* POSITION = "position";
 				const char* POSITION_X = "x";
 				const char* POSITION_Y = "y";
 				const char* TIME_PASSED = "timePassed";
 
+				const char* OPENING_CUTSCENE = "openingCutscene";
+				const char* WIN_CUTSCENE = "winCutscene";
+				const char* LOSS_CUTSCENE = "lossCutscene";
 				const char* MUSIC_FILENAME = "music";
 				const char* MAP_FILENAME = "map";
 				const char* SNAKE_START = "snakeStart";
-				const char* SNAKE_START_POSITION = "position";
 				const char* SNAKE_START_DIRECTION = "direction";
 				const char* SNAKE_START_LENGTH = "length";
 				const char* SNAKE_SPEED = "snakeSpeed";
@@ -74,6 +98,21 @@ namespace r3 {
 				const char* DOWN = "down";
 				const char* LEFT = "left";
 				const char* RIGHT = "right";
+
+			}
+
+			namespace CutsceneEventTypeValues {
+
+				const char* COLOR = "color";
+				const char* TEXTURE = "texture";
+				const char* SHOW_MAP = "showMap";
+				const char* SHOW_SNAKE = "showSnake";
+				const char* MOVE_SNAKE = "moveSnake";
+				const char* HIDE_SNAKE = "hideSnake";
+				const char* SHOW_FOOD = "showFood";
+				const char* HIDE_FOOD = "hideFood";
+				const char* SHOW_DANGER = "showDanger";
+				const char* HIDE_DANGER = "hideDanger";
 
 			}
 
@@ -443,9 +482,20 @@ namespace r3 {
 			LoadStoryLevelResult loadStoryLevel(const std::string& campaignFolderName, const Json::Value& jsonValue) {
 				LoadStoryLevelResult result;
 
-				result.levelDefn.openingCutsceneDefn.existsFlag = false;
-				result.levelDefn.winCutsceneDefn.existsFlag = false;
-				result.levelDefn.lossCutsceneDefn.existsFlag = false;
+				result.levelDefn.openingCutsceneDefn.existsFlag = jsonValue.isMember(StoryLevelProperties::OPENING_CUTSCENE);
+				if (result.levelDefn.openingCutsceneDefn.existsFlag) {
+					result.validationResult.openingCutsceneValidationResult = LoadStoryCutsceneValidation::validate(jsonValue, StoryLevelProperties::OPENING_CUTSCENE);
+				}
+
+				result.levelDefn.winCutsceneDefn.existsFlag = jsonValue.isMember(StoryLevelProperties::WIN_CUTSCENE);
+				if (result.levelDefn.winCutsceneDefn.existsFlag) {
+					result.validationResult.winCutsceneValidationResult = LoadStoryCutsceneValidation::validate(jsonValue, StoryLevelProperties::WIN_CUTSCENE);
+				}
+
+				result.levelDefn.lossCutsceneDefn.existsFlag = jsonValue.isMember(StoryLevelProperties::LOSS_CUTSCENE);
+				if (result.levelDefn.lossCutsceneDefn.existsFlag) {
+					result.validationResult.lossCutsceneValidationResult = LoadStoryCutsceneValidation::validate(jsonValue, StoryLevelProperties::LOSS_CUTSCENE);
+				}
 
 				result.validationResult.musicValid = r3::json::ValidationUtils::optionalString(jsonValue, StoryLevelProperties::MUSIC_FILENAME);
 				if (result.validationResult.musicValid) {
@@ -461,9 +511,9 @@ namespace r3 {
 				if (result.validationResult.snakeStartValid) {
 					Json::Value snakeStartValue = jsonValue[StoryLevelProperties::SNAKE_START];
 
-					result.validationResult.snakeStartPositionValid = LoadStoryLevelValidation::snakeStartPositionValid(snakeStartValue);
+					result.validationResult.snakeStartPositionValid = LoadStoryLevelValidation::positionValid(snakeStartValue);
 					if (result.validationResult.snakeStartPositionValid) {
-						Json::Value snakeStartPositionValue = snakeStartValue[StoryLevelProperties::SNAKE_START_POSITION];
+						Json::Value snakeStartPositionValue = snakeStartValue[StoryLevelProperties::POSITION];
 						result.levelDefn.snakeStart.headPosition.x = snakeStartPositionValue[StoryLevelProperties::POSITION_X].asInt();
 						result.levelDefn.snakeStart.headPosition.y = snakeStartPositionValue[StoryLevelProperties::POSITION_Y].asInt();
 					}

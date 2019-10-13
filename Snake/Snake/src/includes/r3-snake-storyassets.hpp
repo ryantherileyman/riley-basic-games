@@ -23,6 +23,13 @@ namespace r3 {
 			std::string currFilename;
 		} StoryLevelAssetLoadingStatus;
 
+		typedef struct Snake_StoryMapAssetBundle {
+			StoryMapDefn mapDefn;
+			LoadStoryMapValidationResult loadMapValidationResult;
+			std::unordered_map<int, sf::Texture*> floorTextureRefMap;
+			std::unordered_map<int, sf::Texture*> barrierTextureRefMap;
+		} StoryMapAssetBundle;
+
 		class StoryLevelAssetBundle {
 
 		private:
@@ -38,17 +45,17 @@ namespace r3 {
 			std::string currFilenameBeingLoaded;
 
 		private:
-			LoadStoryMapValidationResult loadMapValidationResult;
 			std::vector<std::string> failedFilenameList;
 
 		private:
-			StoryMapDefn mapDefn;
 			sf::Texture snakeTexture;
 			sf::Texture foodTexture;
 			sf::Texture dangerTexture;
 			std::unordered_map<std::string, sf::Texture> textureMap;
-			std::unordered_map<int, sf::Texture*> floorTextureRefMap;
-			std::unordered_map<int, sf::Texture*> barrierTextureRefMap;
+
+		private:
+			StoryMapAssetBundle mapAssetBundle;
+			std::unordered_map<std::string, StoryMapAssetBundle> cutsceneMapAssetBundleMap;
 
 		private:
 			sf::Music music;
@@ -88,6 +95,7 @@ namespace r3 {
 
 		private:
 			void loadLevel();
+			LoadStoryMapResult loadMap(const std::string& filename);
 
 		private:
 			void loadSnakeTexture();

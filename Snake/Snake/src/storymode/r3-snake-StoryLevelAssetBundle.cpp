@@ -65,7 +65,7 @@ namespace r3 {
 		}
 
 		LoadStoryMapValidationResult StoryLevelAssetBundle::getLoadMapValidationResult() const {
-			return this->loadMapValidationResult;
+			return this->mapAssetBundle.loadMapValidationResult;
 		}
 
 		std::vector<std::string> StoryLevelAssetBundle::getFailedFilenameList() const {
@@ -74,7 +74,7 @@ namespace r3 {
 		}
 
 		const StoryMapDefn& StoryLevelAssetBundle::getMapDefn() const {
-			return this->mapDefn;
+			return this->mapAssetBundle.mapDefn;
 		}
 
 		const sf::Texture& StoryLevelAssetBundle::getSnakeTexture() const {
@@ -90,16 +90,16 @@ namespace r3 {
 		}
 
 		const sf::Texture& StoryLevelAssetBundle::getFloorTexture(int floorId) const {
-			assert( this->floorTextureRefMap.count(floorId) == 1 );
+			assert( this->mapAssetBundle.floorTextureRefMap.count(floorId) == 1 );
 
-			const sf::Texture& result = *this->floorTextureRefMap.at(floorId);
+			const sf::Texture& result = *this->mapAssetBundle.floorTextureRefMap.at(floorId);
 			return result;
 		}
 
 		const sf::Texture& StoryLevelAssetBundle::getBarrierTexture(int barrierId) const {
-			assert( this->barrierTextureRefMap.count(barrierId) == 1 );
+			assert( this->mapAssetBundle.barrierTextureRefMap.count(barrierId) == 1 );
 
-			const sf::Texture& result = *this->barrierTextureRefMap.at(barrierId);
+			const sf::Texture& result = *this->mapAssetBundle.barrierTextureRefMap.at(barrierId);
 			return result;
 		}
 
@@ -124,19 +124,16 @@ namespace r3 {
 		}
 
 		void StoryLevelAssetBundle::loadLevel() {
-			this->indicateLoadingFilename(this->levelDefn->mapFilename);
-			LoadStoryMapResult loadStoryMapResult = StoryLoaderUtils::loadStoryMap(this->campaignFolderName, this->levelDefn->mapFilename);
-			if (loadStoryMapResult.validationResult.valid()) {
-				this->updateTotalAssetCount(loadStoryMapResult.mapDefn);
-				this->incrementLoadedAssetCount();
+			LoadStoryMapResult loadMainMapResult = this->loadMap(this->levelDefn->mapFilename);
+			this->mapAssetBundle.mapDefn = loadMainMapResult.mapDefn;
+			this->mapAssetBundle.loadMapValidationResult = loadMainMapResult.validationResult;
 
-				this->mapDefn = loadStoryMapResult.mapDefn;
-
+			if (loadMainMapResult.validationResult.valid()) {
 				this->loadSnakeTexture();
 				this->loadFoodTexture();
 				this->loadDangerTexture();
-				this->loadFloorTextureMap(loadStoryMapResult.mapDefn);
-				this->loadBarrierTextureMap(loadStoryMapResult.mapDefn);
+				this->loadFloorTextureMap(loadMainMapResult.mapDefn);
+				this->loadBarrierTextureMap(loadMainMapResult.mapDefn);
 
 				this->loadMusic();
 				this->loadFoodSpawnedSoundBuffer();
@@ -144,12 +141,23 @@ namespace r3 {
 				this->loadHitBarrierSoundBuffer();
 				this->loadSnakeHissSoundBuffer();
 			}
-			else {
-				this->loadMapValidationResult = loadStoryMapResult.validationResult;
-				this->failedFilenameList.push_back(this->levelDefn->mapFilename);
-			}
 
 			this->indicateLoadingComplete();
+		}
+
+		LoadStoryMapResult StoryLevelAssetBundle::loadMap(const std::string& filename) {
+			this->indicateLoadingFilename(filename);
+
+			LoadStoryMapResult result = StoryLoaderUtils::loadStoryMap(this->campaignFolderName, filename);
+			if (result.validationResult.valid()) {
+				this->updateTotalAssetCount(result.mapDefn);
+				this->incrementLoadedAssetCount();
+			}
+			else {
+				this->failedFilenameList.push_back(filename);
+			}
+
+			return result;
 		}
 
 		void StoryLevelAssetBundle::loadSnakeTexture() {
@@ -188,14 +196,14 @@ namespace r3 {
 		void StoryLevelAssetBundle::loadFloorTextureMap(const StoryMapDefn& mapDefn) {
 			for (auto const& currFloorDefnPair : mapDefn.floorDefnMap) {
 				this->loadMapTexture(currFloorDefnPair.second.filename);
-				this->floorTextureRefMap[currFloorDefnPair.first] = &this->textureMap[currFloorDefnPair.second.filename];
+				this->mapAssetBundle.floorTextureRefMap[currFloorDefnPair.first] = &this->textureMap[currFloorDefnPair.second.filename];
 			}
 		}
 
 		void StoryLevelAssetBundle::loadBarrierTextureMap(const StoryMapDefn& mapDefn) {
 			for (auto const& currBarrierDefnPair : mapDefn.barrierDefnMap) {
 				this->loadMapTexture(currBarrierDefnPair.second.filename);
-				this->barrierTextureRefMap[currBarrierDefnPair.first] = &this->textureMap[currBarrierDefnPair.second.filename];
+				this->mapAssetBundle.barrierTextureRefMap[currBarrierDefnPair.first] = &this->textureMap[currBarrierDefnPair.second.filename];
 			}
 		}
 

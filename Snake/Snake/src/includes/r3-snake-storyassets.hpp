@@ -46,8 +46,9 @@ namespace r3 {
 			sf::Texture snakeTexture;
 			sf::Texture foodTexture;
 			sf::Texture dangerTexture;
-			std::unordered_map<int, sf::Texture> floorTextureMap;
-			std::unordered_map<int, sf::Texture> barrierTextureMap;
+			std::unordered_map<std::string, sf::Texture> textureMap;
+			std::unordered_map<int, sf::Texture*> floorTextureRefMap;
+			std::unordered_map<int, sf::Texture*> barrierTextureRefMap;
 
 		private:
 			sf::Music music;
@@ -94,6 +95,7 @@ namespace r3 {
 			void loadDangerTexture();
 			void loadFloorTextureMap(const StoryMapDefn& mapDefn);
 			void loadBarrierTextureMap(const StoryMapDefn& mapDefn);
+			void loadMapTexture(const std::string& filename);
 
 		private:
 			void loadMusic();

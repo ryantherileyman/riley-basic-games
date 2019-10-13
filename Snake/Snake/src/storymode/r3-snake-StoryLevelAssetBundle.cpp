@@ -1,5 +1,6 @@
 
 #include <assert.h>
+#include <string>
 #include "../includes/r3-snake-storyassets.hpp"
 #include "../includes/r3-snake-storyloader.hpp"
 
@@ -89,16 +90,16 @@ namespace r3 {
 		}
 
 		const sf::Texture& StoryLevelAssetBundle::getFloorTexture(int floorId) const {
-			assert( this->floorTextureMap.count(floorId) == 1 );
+			assert( this->floorTextureRefMap.count(floorId) == 1 );
 
-			const sf::Texture& result = this->floorTextureMap.at(floorId);
+			const sf::Texture& result = *this->floorTextureRefMap.at(floorId);
 			return result;
 		}
 
 		const sf::Texture& StoryLevelAssetBundle::getBarrierTexture(int barrierId) const {
-			assert( this->barrierTextureMap.count(barrierId) == 1 );
+			assert( this->barrierTextureRefMap.count(barrierId) == 1 );
 
-			const sf::Texture& result = this->barrierTextureMap.at(barrierId);
+			const sf::Texture& result = *this->barrierTextureRefMap.at(barrierId);
 			return result;
 		}
 
@@ -186,31 +187,35 @@ namespace r3 {
 
 		void StoryLevelAssetBundle::loadFloorTextureMap(const StoryMapDefn& mapDefn) {
 			for (auto const& currFloorDefnPair : mapDefn.floorDefnMap) {
-				this->indicateLoadingFilename(currFloorDefnPair.second.filename);
-
-				this->floorTextureMap[currFloorDefnPair.first] = sf::Texture();
-				if (this->floorTextureMap[currFloorDefnPair.first].loadFromFile(r3::snake::StoryLoaderUtils::resolveImageFilePath(this->campaignFolderName, currFloorDefnPair.second.filename))) {
-					this->floorTextureMap[currFloorDefnPair.first].setRepeated(true);
-					this->incrementLoadedAssetCount();
-				}
-				else {
-					this->failedFilenameList.push_back(currFloorDefnPair.second.filename);
-				}
+				this->loadMapTexture(currFloorDefnPair.second.filename);
+				this->floorTextureRefMap[currFloorDefnPair.first] = &this->textureMap[currFloorDefnPair.second.filename];
 			}
 		}
 
 		void StoryLevelAssetBundle::loadBarrierTextureMap(const StoryMapDefn& mapDefn) {
 			for (auto const& currBarrierDefnPair : mapDefn.barrierDefnMap) {
-				this->indicateLoadingFilename(currBarrierDefnPair.second.filename);
+				this->loadMapTexture(currBarrierDefnPair.second.filename);
+				this->barrierTextureRefMap[currBarrierDefnPair.first] = &this->textureMap[currBarrierDefnPair.second.filename];
+			}
+		}
 
-				this->barrierTextureMap[currBarrierDefnPair.first] = sf::Texture();
-				if (this->barrierTextureMap[currBarrierDefnPair.first].loadFromFile(r3::snake::StoryLoaderUtils::resolveImageFilePath(this->campaignFolderName, currBarrierDefnPair.second.filename))) {
-					this->barrierTextureMap[currBarrierDefnPair.first].setRepeated(true);
+		void StoryLevelAssetBundle::loadMapTexture(const std::string& filename) {
+			this->indicateLoadingFilename(filename);
+
+			if (this->textureMap.count(filename) == 0) {
+				std::string fullFilePath = r3::snake::StoryLoaderUtils::resolveImageFilePath(this->campaignFolderName, filename);
+
+				this->textureMap[filename] = sf::Texture();
+				if (this->textureMap[filename].loadFromFile(fullFilePath)) {
+					this->textureMap[filename].setRepeated(true);
 					this->incrementLoadedAssetCount();
 				}
 				else {
-					this->failedFilenameList.push_back(currBarrierDefnPair.second.filename);
+					this->failedFilenameList.push_back(filename);
 				}
+			}
+			else {
+				this->incrementLoadedAssetCount();
 			}
 		}
 

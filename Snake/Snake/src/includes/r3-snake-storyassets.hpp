@@ -95,14 +95,15 @@ namespace r3 {
 
 		private:
 			void loadLevel();
+			void loadCutsceneMaps(const StoryCutsceneDefn& cutsceneDefn);
 			LoadStoryMapResult loadMap(const std::string& filename);
 
 		private:
 			void loadSnakeTexture();
 			void loadFoodTexture();
 			void loadDangerTexture();
-			void loadFloorTextureMap(const StoryMapDefn& mapDefn);
-			void loadBarrierTextureMap(const StoryMapDefn& mapDefn);
+			void loadFloorTextureMap(StoryMapAssetBundle& mapAssetBundle);
+			void loadBarrierTextureMap(StoryMapAssetBundle& mapAssetBundle);
 			void loadMapTexture(const std::string& filename);
 
 		private:

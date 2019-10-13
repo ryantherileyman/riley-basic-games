@@ -128,12 +128,24 @@ namespace r3 {
 			this->mapAssetBundle.mapDefn = loadMainMapResult.mapDefn;
 			this->mapAssetBundle.loadMapValidationResult = loadMainMapResult.validationResult;
 
+			if (this->levelDefn->openingCutsceneDefn.existsFlag) {
+				this->loadCutsceneMaps(this->levelDefn->openingCutsceneDefn);
+			}
+
+			if (this->levelDefn->lossCutsceneDefn.existsFlag) {
+				this->loadCutsceneMaps(this->levelDefn->lossCutsceneDefn);
+			}
+
+			if (this->levelDefn->winCutsceneDefn.existsFlag) {
+				this->loadCutsceneMaps(this->levelDefn->winCutsceneDefn);
+			}
+
 			if (loadMainMapResult.validationResult.valid()) {
 				this->loadSnakeTexture();
 				this->loadFoodTexture();
 				this->loadDangerTexture();
-				this->loadFloorTextureMap(loadMainMapResult.mapDefn);
-				this->loadBarrierTextureMap(loadMainMapResult.mapDefn);
+				this->loadFloorTextureMap(this->mapAssetBundle);
+				this->loadBarrierTextureMap(this->mapAssetBundle);
 
 				this->loadMusic();
 				this->loadFoodSpawnedSoundBuffer();
@@ -143,6 +155,25 @@ namespace r3 {
 			}
 
 			this->indicateLoadingComplete();
+		}
+
+		void StoryLevelAssetBundle::loadCutsceneMaps(const StoryCutsceneDefn& cutsceneDefn) {
+			for (auto const& currEventDefn : cutsceneDefn.eventDefnList) {
+				if (currEventDefn.eventType == StoryCutsceneEventType::SHOW_MAP) {
+					if (this->cutsceneMapAssetBundleMap.count(currEventDefn.mapEvent.mapFilename) == 0) {
+						LoadStoryMapResult currLoadStoryMapResult = this->loadMap(currEventDefn.mapEvent.mapFilename);
+
+						this->cutsceneMapAssetBundleMap[currEventDefn.mapEvent.mapFilename] = StoryMapAssetBundle();
+						this->cutsceneMapAssetBundleMap[currEventDefn.mapEvent.mapFilename].mapDefn = currLoadStoryMapResult.mapDefn;
+						this->cutsceneMapAssetBundleMap[currEventDefn.mapEvent.mapFilename].loadMapValidationResult = currLoadStoryMapResult.validationResult;
+
+						if (currLoadStoryMapResult.validationResult.valid()) {
+							this->loadFloorTextureMap(this->cutsceneMapAssetBundleMap[currEventDefn.mapEvent.mapFilename]);
+							this->loadBarrierTextureMap(this->cutsceneMapAssetBundleMap[currEventDefn.mapEvent.mapFilename]);
+						}
+					}
+				}
+			}
 		}
 
 		LoadStoryMapResult StoryLevelAssetBundle::loadMap(const std::string& filename) {
@@ -193,17 +224,17 @@ namespace r3 {
 			}
 		}
 
-		void StoryLevelAssetBundle::loadFloorTextureMap(const StoryMapDefn& mapDefn) {
-			for (auto const& currFloorDefnPair : mapDefn.floorDefnMap) {
+		void StoryLevelAssetBundle::loadFloorTextureMap(StoryMapAssetBundle& mapAssetBundle) {
+			for (auto const& currFloorDefnPair : mapAssetBundle.mapDefn.floorDefnMap) {
 				this->loadMapTexture(currFloorDefnPair.second.filename);
-				this->mapAssetBundle.floorTextureRefMap[currFloorDefnPair.first] = &this->textureMap[currFloorDefnPair.second.filename];
+				mapAssetBundle.floorTextureRefMap[currFloorDefnPair.first] = &this->textureMap[currFloorDefnPair.second.filename];
 			}
 		}
 
-		void StoryLevelAssetBundle::loadBarrierTextureMap(const StoryMapDefn& mapDefn) {
-			for (auto const& currBarrierDefnPair : mapDefn.barrierDefnMap) {
+		void StoryLevelAssetBundle::loadBarrierTextureMap(StoryMapAssetBundle& mapAssetBundle) {
+			for (auto const& currBarrierDefnPair : mapAssetBundle.mapDefn.barrierDefnMap) {
 				this->loadMapTexture(currBarrierDefnPair.second.filename);
-				this->mapAssetBundle.barrierTextureRefMap[currBarrierDefnPair.first] = &this->textureMap[currBarrierDefnPair.second.filename];
+				mapAssetBundle.barrierTextureRefMap[currBarrierDefnPair.first] = &this->textureMap[currBarrierDefnPair.second.filename];
 			}
 		}
 

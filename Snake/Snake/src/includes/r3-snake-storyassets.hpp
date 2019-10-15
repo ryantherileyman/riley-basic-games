@@ -59,6 +59,9 @@ namespace r3 {
 
 		private:
 			sf::Music music;
+			sf::Music openingCutsceneMusic;
+			sf::Music winCutsceneMusic;
+			sf::Music lossCutsceneMusic;
 			sf::SoundBuffer foodSpawnedSoundBuffer;
 			sf::SoundBuffer eatFoodSoundBuffer;
 			sf::SoundBuffer hitBarrierSoundBuffer;
@@ -96,6 +99,7 @@ namespace r3 {
 
 		private:
 			void loadLevel();
+			void loadCutsceneSoundTrack(sf::Music& targetMusic, const StoryCutsceneDefn& cutsceneDefn);
 			void loadCutsceneTextures(const StoryCutsceneDefn& cutsceneDefn);
 			void loadCutsceneMaps(const StoryCutsceneDefn& cutsceneDefn);
 			LoadStoryMapResult loadMap(const std::string& filename);

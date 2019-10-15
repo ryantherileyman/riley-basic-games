@@ -26,6 +26,10 @@ namespace r3 {
 			int resolveCutsceneAssetCount(const StoryCutsceneDefn& cutsceneDefn) {
 				int result = 0;
 
+				if (!cutsceneDefn.soundTrackFilename.empty()) {
+					result++;
+				}
+
 				for (auto const& currEventDefn : cutsceneDefn.eventDefnList) {
 					if (
 						(currEventDefn.eventType == StoryCutsceneEventType::TEXTURE) ||
@@ -170,16 +174,19 @@ namespace r3 {
 			this->mapAssetBundle.loadMapValidationResult = loadMainMapResult.validationResult;
 
 			if (this->levelDefn->openingCutsceneDefn.existsFlag) {
+				this->loadCutsceneSoundTrack(this->openingCutsceneMusic, this->levelDefn->openingCutsceneDefn);
 				this->loadCutsceneTextures(this->levelDefn->openingCutsceneDefn);
 				this->loadCutsceneMaps(this->levelDefn->openingCutsceneDefn);
 			}
 
 			if (this->levelDefn->winCutsceneDefn.existsFlag) {
+				this->loadCutsceneSoundTrack(this->winCutsceneMusic, this->levelDefn->winCutsceneDefn);
 				this->loadCutsceneTextures(this->levelDefn->winCutsceneDefn);
 				this->loadCutsceneMaps(this->levelDefn->winCutsceneDefn);
 			}
 
 			if (this->levelDefn->lossCutsceneDefn.existsFlag) {
+				this->loadCutsceneSoundTrack(this->lossCutsceneMusic, this->levelDefn->lossCutsceneDefn);
 				this->loadCutsceneTextures(this->levelDefn->lossCutsceneDefn);
 				this->loadCutsceneMaps(this->levelDefn->lossCutsceneDefn);
 			}
@@ -316,6 +323,17 @@ namespace r3 {
 			}
 			else {
 				this->failedFilenameList.push_back(this->levelDefn->musicFilename);
+			}
+		}
+
+		void StoryLevelAssetBundle::loadCutsceneSoundTrack(sf::Music& targetMusic, const StoryCutsceneDefn& cutsceneDefn) {
+			if (!cutsceneDefn.soundTrackFilename.empty()) {
+				if (targetMusic.openFromFile(r3::snake::StoryLoaderUtils::resolveMusicFilePath(this->campaignFolderName, cutsceneDefn.soundTrackFilename))) {
+					this->incrementLoadedAssetCount();
+				}
+				else {
+					this->failedFilenameList.push_back(cutsceneDefn.soundTrackFilename);
+				}
 			}
 		}
 

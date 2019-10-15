@@ -159,6 +159,43 @@ namespace r3 {
 			this->renderExitInstructions(renderTarget);
 		}
 
+		void StoryGameRenderer::renderCutscene(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+
+			for (auto const& currScreenView : renderState.storyCutscene->getActiveScreenViewList()) {
+				float percent = 1.0f;
+				if (currScreenView.fadeFrames > 0) {
+					percent = (float)(currScreenView.fadeFrames - currScreenView.fadeFramesRemaining) / (float)currScreenView.fadeFrames;
+				}
+
+				int alpha = (int)(255 * percent);
+
+				if (currScreenView.screenEventType == StoryCutsceneScreenViewType::COLOR) {
+					sf::Color color = currScreenView.color;
+					color.a = alpha;
+
+					printf("Displaying color %d,%d,%d,%d\n", color.r, color.g, color.b, color.a);
+
+					sf::RectangleShape colorShape = sf::RectangleShape(sf::Vector2f(1920.0f, 1080.0f));
+					colorShape.setFillColor(color);
+
+					renderTarget.draw(colorShape);
+				}
+				else if (currScreenView.screenEventType == StoryCutsceneScreenViewType::TEXTURE) {
+					printf("Displaying texture <%s> at %d alpha\n", currScreenView.textureFilename.c_str(), alpha);
+
+					const sf::Texture& texture = renderState.levelAssetBundle->getTexture(currScreenView.textureFilename);
+
+					sf::Sprite textureSprite;
+					textureSprite.setTexture(texture);
+					textureSprite.setColor(sf::Color(255, 255, 255, alpha));
+					textureSprite.setScale(1920.0f / texture.getSize().x, 1080.0f / texture.getSize().y);
+
+					renderTarget.draw(textureSprite);
+				}
+			}
+		}
+
 		void StoryGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 			this->renderGameRunningUi(renderTarget, renderState);

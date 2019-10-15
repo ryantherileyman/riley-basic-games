@@ -17,6 +17,7 @@ namespace r3 {
 			LOAD_CAMPAIGN_ERROR,
 			LOAD_LEVEL,
 			LOAD_LEVEL_ERROR,
+			PLAY_OPENING_CUTSCENE,
 			WAIT_TO_START,
 			GAME_RUNNING,
 			LEVEL_LOST,
@@ -116,6 +117,7 @@ namespace r3 {
 		class StoryFoodSpawnTracker;
 		class StoryDangerSpawnTracker;
 		class StoryGame;
+		class StoryCutscene;
 		class StoryGameController;
 		class StoryGameRenderer;
 
@@ -302,6 +304,58 @@ namespace r3 {
 
 		};
 
+		typedef enum class Snake_StoryCutsceneScreenViewType {
+			COLOR,
+			TEXTURE,
+			MAP,
+		} StoryCutsceneScreenViewType;
+
+		typedef struct Snake_StoryCutsceneScreenView {
+			StoryCutsceneScreenViewType screenEventType;
+			int fadeFrames;
+			int fadeFramesRemaining;
+			sf::Color color;
+			std::string textureFilename;
+			std::string mapFilename;
+		} StoryCutsceneScreenView;
+
+		class StoryCutscene {
+
+		private:
+			const StoryCutsceneDefn* cutsceneDefn;
+
+		private:
+			int currFrame;
+			int framesSinceLastEvent;
+			size_t nextEventIndex;
+
+		private:
+			std::vector<StoryCutsceneScreenView> activeScreenViewList;
+
+		public:
+			StoryCutscene(const StoryCutsceneDefn& cutsceneDefn);
+
+		public:
+			const std::vector<StoryCutsceneScreenView>& getActiveScreenViewList() const;
+
+		public:
+			bool update();
+
+		private:
+			void updateActiveScreenViews();
+
+		private:
+			void processEvents();
+			void processEvent(const StoryCutsceneEventDefn& eventDefn);
+
+		private:
+			void processColorEvent(const StoryCutsceneColorEventDefn& colorEventDefn);
+			void processTextureEvent(const StoryCutsceneTextureEventDefn& textureEventDefn);
+			void processShowMapEvent(const StoryCutsceneMapEventDefn& showMapEventDefn);
+			void addScreenView(const StoryCutsceneScreenView& screenView);
+
+		};
+
 		class StoryGameController {
 
 		private:
@@ -317,6 +371,7 @@ namespace r3 {
 			StoryLevelAssetBundle* levelAssetBundle;
 			r3::sound::SimpleSoundManager soundManager;
 			StoryGame* storyGame;
+			StoryCutscene* storyCutscene;
 
 		private:
 			std::vector<ObjectDirection> snakeMovementInputQueue;
@@ -362,6 +417,11 @@ namespace r3 {
 			bool snakeDamagedFlag;
 		} StoryGameRenderState;
 
+		typedef struct Snake_StoryCutsceneRenderState {
+			const StoryLevelAssetBundle* levelAssetBundle;
+			const StoryCutscene* storyCutscene;
+		} StoryCutsceneRenderState;
+
 		typedef struct Snake_StoryFoodEatenAnimation {
 			sf::Vector2i tilePosition;
 			sf::Time eatenTime;
@@ -391,6 +451,7 @@ namespace r3 {
 			void renderLoadCampaignError(sf::RenderTarget& renderTarget);
 			void renderLoadLevelStatus(sf::RenderTarget& renderTarget, const StoryLevelAssetLoadingStatus& assetLoadingStatus);
 			void renderLoadLevelError(sf::RenderTarget& renderTarget);
+			void renderCutscene(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState);
 			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);

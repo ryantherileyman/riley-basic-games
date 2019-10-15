@@ -21,6 +21,46 @@ namespace r3 {
 
 		}
 
+		namespace StoryLevelAssetBundleUtils {
+
+			int resolveCutsceneAssetCount(const StoryCutsceneDefn& cutsceneDefn) {
+				int result = 0;
+
+				for (auto const& currEventDefn : cutsceneDefn.eventDefnList) {
+					if (
+						(currEventDefn.eventType == StoryCutsceneEventType::TEXTURE) ||
+						(currEventDefn.eventType == StoryCutsceneEventType::SHOW_MAP)
+					) {
+						result++;
+					}
+				}
+
+				return result;
+			}
+
+			int resolveLevelAssetCount(const StoryLevelDefn& levelDefn) {
+				int result = 8;
+				if (!levelDefn.musicFilename.empty()) {
+					result++;
+				}
+
+				if (levelDefn.openingCutsceneDefn.existsFlag) {
+					result += resolveCutsceneAssetCount(levelDefn.openingCutsceneDefn);
+				}
+
+				if (levelDefn.winCutsceneDefn.existsFlag) {
+					result += resolveCutsceneAssetCount(levelDefn.winCutsceneDefn);
+				}
+
+				if (levelDefn.lossCutsceneDefn.existsFlag) {
+					result += resolveCutsceneAssetCount(levelDefn.lossCutsceneDefn);
+				}
+
+				return result;
+			}
+
+		}
+
 		StoryLevelAssetBundle::StoryLevelAssetBundle() {
 			this->levelDefn = { nullptr };
 			this->loadingThread = { nullptr };
@@ -41,10 +81,7 @@ namespace r3 {
 			this->campaignFolderName = campaignFolderName;
 			this->levelDefn = &levelDefn;
 			this->loadingCompletionStatus = StoryLevelAssetLoadingCompletionStatus::LOADING;
-			this->totalAssetCount = 8;
-			if (!levelDefn.musicFilename.empty()) {
-				this->totalAssetCount++;
-			}
+			this->totalAssetCount = StoryLevelAssetBundleUtils::resolveLevelAssetCount(levelDefn);
 
 			this->loadingThread = new sf::Thread(&StoryLevelAssetBundle::loadLevel, this);
 			this->loadingThread->launch();
@@ -75,6 +112,10 @@ namespace r3 {
 
 		const StoryMapDefn& StoryLevelAssetBundle::getMapDefn() const {
 			return this->mapAssetBundle.mapDefn;
+		}
+
+		const sf::Texture& StoryLevelAssetBundle::getTexture(const std::string& filename) const {
+			return this->textureMap.at(filename);
 		}
 
 		const sf::Texture& StoryLevelAssetBundle::getSnakeTexture() const {
@@ -129,15 +170,18 @@ namespace r3 {
 			this->mapAssetBundle.loadMapValidationResult = loadMainMapResult.validationResult;
 
 			if (this->levelDefn->openingCutsceneDefn.existsFlag) {
+				this->loadCutsceneTextures(this->levelDefn->openingCutsceneDefn);
 				this->loadCutsceneMaps(this->levelDefn->openingCutsceneDefn);
 			}
 
-			if (this->levelDefn->lossCutsceneDefn.existsFlag) {
-				this->loadCutsceneMaps(this->levelDefn->lossCutsceneDefn);
+			if (this->levelDefn->winCutsceneDefn.existsFlag) {
+				this->loadCutsceneTextures(this->levelDefn->winCutsceneDefn);
+				this->loadCutsceneMaps(this->levelDefn->winCutsceneDefn);
 			}
 
-			if (this->levelDefn->winCutsceneDefn.existsFlag) {
-				this->loadCutsceneMaps(this->levelDefn->winCutsceneDefn);
+			if (this->levelDefn->lossCutsceneDefn.existsFlag) {
+				this->loadCutsceneTextures(this->levelDefn->lossCutsceneDefn);
+				this->loadCutsceneMaps(this->levelDefn->lossCutsceneDefn);
 			}
 
 			if (loadMainMapResult.validationResult.valid()) {
@@ -155,6 +199,14 @@ namespace r3 {
 			}
 
 			this->indicateLoadingComplete();
+		}
+
+		void StoryLevelAssetBundle::loadCutsceneTextures(const StoryCutsceneDefn& cutsceneDefn) {
+			for (auto const& currEventDefn : cutsceneDefn.eventDefnList) {
+				if (currEventDefn.eventType == StoryCutsceneEventType::TEXTURE) {
+					this->loadTexture(currEventDefn.textureEvent.textureFilename, false);
+				}
+			}
 		}
 
 		void StoryLevelAssetBundle::loadCutsceneMaps(const StoryCutsceneDefn& cutsceneDefn) {
@@ -226,19 +278,19 @@ namespace r3 {
 
 		void StoryLevelAssetBundle::loadFloorTextureMap(StoryMapAssetBundle& mapAssetBundle) {
 			for (auto const& currFloorDefnPair : mapAssetBundle.mapDefn.floorDefnMap) {
-				this->loadMapTexture(currFloorDefnPair.second.filename);
+				this->loadTexture(currFloorDefnPair.second.filename, true);
 				mapAssetBundle.floorTextureRefMap[currFloorDefnPair.first] = &this->textureMap[currFloorDefnPair.second.filename];
 			}
 		}
 
 		void StoryLevelAssetBundle::loadBarrierTextureMap(StoryMapAssetBundle& mapAssetBundle) {
 			for (auto const& currBarrierDefnPair : mapAssetBundle.mapDefn.barrierDefnMap) {
-				this->loadMapTexture(currBarrierDefnPair.second.filename);
+				this->loadTexture(currBarrierDefnPair.second.filename, true);
 				mapAssetBundle.barrierTextureRefMap[currBarrierDefnPair.first] = &this->textureMap[currBarrierDefnPair.second.filename];
 			}
 		}
 
-		void StoryLevelAssetBundle::loadMapTexture(const std::string& filename) {
+		void StoryLevelAssetBundle::loadTexture(const std::string& filename, bool repeatFlag) {
 			this->indicateLoadingFilename(filename);
 
 			if (this->textureMap.count(filename) == 0) {
@@ -246,7 +298,7 @@ namespace r3 {
 
 				this->textureMap[filename] = sf::Texture();
 				if (this->textureMap[filename].loadFromFile(fullFilePath)) {
-					this->textureMap[filename].setRepeated(true);
+					this->textureMap[filename].setRepeated(repeatFlag);
 					this->incrementLoadedAssetCount();
 				}
 				else {

@@ -15,6 +15,7 @@ namespace r3 {
 			this->currLevelIndex = 0;
 			this->levelAssetBundle = nullptr;
 			this->storyGame = new StoryGame();
+			this->storyCutscene = nullptr;
 
 			this->timeSnakeLastDamaged = sf::seconds(-0.5f);
 		}
@@ -26,6 +27,9 @@ namespace r3 {
 				delete this->levelAssetBundle;
 			}
 			delete this->storyGame;
+			if (this->storyCutscene != nullptr) {
+				delete this->storyCutscene;
+			}
 		}
 
 		void StoryGameController::setCampaignFolder(const std::string& campaignFolder) {
@@ -77,6 +81,14 @@ namespace r3 {
 			case StoryGameMode::LOAD_LEVEL:
 				this->updateBasedOnLoadLevelStatus();
 				break;
+			case StoryGameMode::PLAY_OPENING_CUTSCENE:
+				if (this->storyCutscene->update()) {
+					this->mode = StoryGameMode::WAIT_TO_START;
+
+					delete this->storyCutscene;
+					this->storyCutscene = nullptr;
+				}
+				break;
 			case StoryGameMode::GAME_RUNNING:
 				this->updateGameRunning();
 				break;
@@ -106,6 +118,17 @@ namespace r3 {
 
 				this->renderer->renderWaitToStart(*this->window, renderState);
 				this->window->display();
+			}
+				break;
+			case StoryGameMode::PLAY_OPENING_CUTSCENE:
+			{
+				StoryCutsceneRenderState renderState;
+				renderState.levelAssetBundle = this->levelAssetBundle;
+				renderState.storyCutscene = this->storyCutscene;
+
+				this->renderer->renderCutscene(*this->window, renderState);
+				this->window->display();
+
 			}
 				break;
 			case StoryGameMode::GAME_RUNNING:
@@ -191,7 +214,14 @@ namespace r3 {
 			else if ( assetLoadingStatus.completionStatus == StoryLevelAssetLoadingCompletionStatus::COMPLETE) {
 				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 
-				this->mode = StoryGameMode::WAIT_TO_START;
+				if (this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.existsFlag) {
+					this->storyCutscene = new StoryCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn);
+
+					this->mode = StoryGameMode::PLAY_OPENING_CUTSCENE;
+				}
+				else {
+					this->mode = StoryGameMode::WAIT_TO_START;
+				}
 			}
 		}
 

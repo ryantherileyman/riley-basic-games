@@ -3,6 +3,40 @@
     "menuDescription": "Adam has trapped you in his diabolical gauntlet!",
     "levelList": [
         {
+            "openingCutscene": {
+                "eventList": [
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "color",
+                        "fadeFrames": 0,
+                        "color": { "red": 255, "green": 0, "blue": 0 }
+                    },
+                    {
+                        "framesSinceLastEvent": 60,
+                        "eventType": "color",
+                        "fadeFrames": 15,
+                        "color": { "red": 0, "green": 255, "blue": 0 }
+                    },
+                    {
+                        "framesSinceLastEvent": 60,
+                        "eventType": "color",
+                        "fadeFrames": 15,
+                        "color": { "red": 0, "green": 0, "blue": 255 }
+                    },
+                    {
+                        "framesSinceLastEvent": 60,
+                        "eventType": "texture",
+                        "fadeFrames": 60,
+                        "texture": "brown-grass.png"
+                    },
+                    {
+                        "framesSinceLastEvent": 180,
+                        "eventType": "color",
+                        "fadeFrames": 15,
+                        "color": { "red": 0, "green": 0, "blue": 0 }
+                    }
+                ]
+            },
             "map": "map-level-03",
             "music": "Artifact.ogg",
             "snakeStart": {

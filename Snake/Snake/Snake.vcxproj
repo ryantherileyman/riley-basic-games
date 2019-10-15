@@ -152,6 +152,7 @@
     <ClCompile Include="src\storymode\r3-snake-LoadStoryCutsceneValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-LoadStoryLevelValidation.cpp" />
     <ClCompile Include="src\storymode\r3-snake-LoadStoryMapValidation.cpp" />
+    <ClCompile Include="src\storymode\r3-snake-StoryCutscene.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryDangerSpawnTracker.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryFoodSpawnTracker.cpp" />
     <ClCompile Include="src\storymode\r3-snake-StoryGame.cpp" />

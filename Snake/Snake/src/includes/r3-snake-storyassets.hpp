@@ -80,6 +80,7 @@ namespace r3 {
 
 		public:
 			const StoryMapDefn& getMapDefn() const;
+			const sf::Texture& getTexture(const std::string& filename) const;
 			const sf::Texture& getSnakeTexture() const;
 			const sf::Texture& getFoodTexture() const;
 			const sf::Texture& getDangerTexture() const;
@@ -95,6 +96,7 @@ namespace r3 {
 
 		private:
 			void loadLevel();
+			void loadCutsceneTextures(const StoryCutsceneDefn& cutsceneDefn);
 			void loadCutsceneMaps(const StoryCutsceneDefn& cutsceneDefn);
 			LoadStoryMapResult loadMap(const std::string& filename);
 
@@ -104,7 +106,7 @@ namespace r3 {
 			void loadDangerTexture();
 			void loadFloorTextureMap(StoryMapAssetBundle& mapAssetBundle);
 			void loadBarrierTextureMap(StoryMapAssetBundle& mapAssetBundle);
-			void loadMapTexture(const std::string& filename);
+			void loadTexture(const std::string& filename, bool repeatFlag);
 
 		private:
 			void loadMusic();

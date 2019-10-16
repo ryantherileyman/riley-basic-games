@@ -92,6 +92,9 @@ namespace r3 {
 
 		public:
 			sf::Music& getMusic();
+			sf::Music& getOpeningCutsceneMusic();
+			sf::Music& getWinCutsceneMusic();
+			sf::Music& getLossCutsceneMusic();
 			const sf::SoundBuffer& getFoodSpawnedSoundBuffer() const;
 			const sf::SoundBuffer& getEatFoodSoundBuffer() const;
 			const sf::SoundBuffer& getHitBarrierSoundBuffer() const;

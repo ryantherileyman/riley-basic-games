@@ -150,6 +150,7 @@ namespace r3 {
 			const char* PATH_CAMPAIGNS = "resources/campaigns/";
 			const char* PATH_TEXTURES = "textures";
 			const char* PATH_MUSIC = "music";
+			const char* PATH_SOUND = "sound";
 			const char* CAMPAIGN_FILENAME = "campaign.json";
 
 			typedef struct Json_LoadJsonFromFileResult {
@@ -195,6 +196,16 @@ namespace r3 {
 				result.append(PATH_TEXTURES);
 				result.append(PATH_SLASH);
 				result.append(imageFilename);
+				return result;
+			}
+
+			std::string resolveSoundFilePath(const std::string& campaignFolderName, const std::string& soundFilename) {
+				std::string result(PATH_CAMPAIGNS);
+				result.append(campaignFolderName);
+				result.append(PATH_SLASH);
+				result.append(PATH_SOUND);
+				result.append(PATH_SLASH);
+				result.append(soundFilename);
 				return result;
 			}
 

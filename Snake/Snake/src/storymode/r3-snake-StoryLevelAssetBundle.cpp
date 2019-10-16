@@ -152,6 +152,18 @@ namespace r3 {
 			return this->music;
 		}
 
+		sf::Music& StoryLevelAssetBundle::getOpeningCutsceneMusic() {
+			return this->openingCutsceneMusic;
+		}
+
+		sf::Music& StoryLevelAssetBundle::getWinCutsceneMusic() {
+			return this->winCutsceneMusic;
+		}
+
+		sf::Music& StoryLevelAssetBundle::getLossCutsceneMusic() {
+			return this->lossCutsceneMusic;
+		}
+
 		const sf::SoundBuffer& StoryLevelAssetBundle::getFoodSpawnedSoundBuffer() const {
 			return this->foodSpawnedSoundBuffer;
 		}
@@ -328,7 +340,7 @@ namespace r3 {
 
 		void StoryLevelAssetBundle::loadCutsceneSoundTrack(sf::Music& targetMusic, const StoryCutsceneDefn& cutsceneDefn) {
 			if (!cutsceneDefn.soundTrackFilename.empty()) {
-				if (targetMusic.openFromFile(r3::snake::StoryLoaderUtils::resolveMusicFilePath(this->campaignFolderName, cutsceneDefn.soundTrackFilename))) {
+				if (targetMusic.openFromFile(r3::snake::StoryLoaderUtils::resolveSoundFilePath(this->campaignFolderName, cutsceneDefn.soundTrackFilename))) {
 					this->incrementLoadedAssetCount();
 				}
 				else {

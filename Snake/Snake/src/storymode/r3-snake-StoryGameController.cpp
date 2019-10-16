@@ -82,12 +82,7 @@ namespace r3 {
 				this->updateBasedOnLoadLevelStatus();
 				break;
 			case StoryGameMode::PLAY_OPENING_CUTSCENE:
-				if (this->storyCutscene->update()) {
-					this->mode = StoryGameMode::WAIT_TO_START;
-
-					delete this->storyCutscene;
-					this->storyCutscene = nullptr;
-				}
+				this->updateCutscene();
 				break;
 			case StoryGameMode::GAME_RUNNING:
 				this->updateGameRunning();
@@ -216,6 +211,9 @@ namespace r3 {
 
 				if (this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.existsFlag) {
 					this->storyCutscene = new StoryCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn);
+					if (!this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.soundTrackFilename.empty()) {
+						this->levelAssetBundle->getOpeningCutsceneMusic().play();
+					}
 
 					this->mode = StoryGameMode::PLAY_OPENING_CUTSCENE;
 				}
@@ -327,6 +325,15 @@ namespace r3 {
 			}
 
 			return result;
+		}
+
+		void StoryGameController::updateCutscene() {
+			if (this->storyCutscene->update()) {
+				this->mode = StoryGameMode::WAIT_TO_START;
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+			}
 		}
 
 		void StoryGameController::updateGameRunning() {

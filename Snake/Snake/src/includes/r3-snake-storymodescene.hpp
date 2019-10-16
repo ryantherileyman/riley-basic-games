@@ -407,6 +407,7 @@ namespace r3 {
 			StoryGameSceneClientRequest processCampaignWonKeyEvent(sf::Event& event);
 
 		private:
+			void updateCutscene();
 			void updateGameRunning();
 			
 		};

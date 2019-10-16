@@ -481,6 +481,8 @@ namespace r3 {
 
 			std::string resolveImageFilePath(const std::string& campaignFolderName, const std::string& imageFilename);
 
+			std::string resolveSoundFilePath(const std::string& campaignFolderName, const std::string& soundFilename);
+
 			std::string resolveMusicFilePath(const std::string& campaignFolderName, const std::string& musicFilename);
 
 			LoadCampaignListResult retrieveCampaignList();

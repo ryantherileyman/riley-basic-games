@@ -77,6 +77,45 @@ namespace r3 {
 
 		}
 
+		namespace StoryCutsceneRenderUtils {
+
+			int resolveScreenViewAlpha(const StoryCutsceneScreenView& screenView) {
+				float percent = 1.0f;
+				if (screenView.fadeFrames > 0) {
+					percent = (float)(screenView.fadeFrames - screenView.fadeFramesRemaining) / (float)screenView.fadeFrames;
+				}
+
+				int result = (int)(255 * percent);
+				return result;
+			}
+
+			sf::RectangleShape createScreenViewColorShape(const StoryCutsceneScreenView& screenView) {
+				int alpha = resolveScreenViewAlpha(screenView);
+
+				sf::Color color = screenView.color;
+				color.a = alpha;
+
+				printf("Screen view color %d,%d,%d,%d\n", color.r, color.g, color.b, color.a);
+
+				sf::RectangleShape result = sf::RectangleShape(sf::Vector2f(ViewUtils::VIEW_SIZE.x, ViewUtils::VIEW_SIZE.y));
+				result.setFillColor(color);
+				return result;
+			}
+
+			sf::Sprite createScreenViewTextureSprite(const StoryCutsceneScreenView& screenView, const sf::Texture& texture) {
+				int alpha = resolveScreenViewAlpha(screenView);
+
+				printf("Screen view texture <%s> at %d alpha\n", screenView.textureFilename.c_str(), alpha);
+
+				sf::Sprite result;
+				result.setTexture(texture);
+				result.setColor(sf::Color(255, 255, 255, alpha));
+				result.setScale(ViewUtils::VIEW_SIZE.x / texture.getSize().x, ViewUtils::VIEW_SIZE.y / texture.getSize().y);
+				return result;
+			}
+
+		}
+
 		StoryGameRenderer::StoryGameRenderer() {
 			this->uiFont = new sf::Font();
 			this->healthBarTexture = new sf::Texture();
@@ -163,34 +202,13 @@ namespace r3 {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 
 			for (auto const& currScreenView : renderState.storyCutscene->getActiveScreenViewList()) {
-				float percent = 1.0f;
-				if (currScreenView.fadeFrames > 0) {
-					percent = (float)(currScreenView.fadeFrames - currScreenView.fadeFramesRemaining) / (float)currScreenView.fadeFrames;
-				}
-
-				int alpha = (int)(255 * percent);
-
 				if (currScreenView.screenEventType == StoryCutsceneScreenViewType::COLOR) {
-					sf::Color color = currScreenView.color;
-					color.a = alpha;
-
-					printf("Displaying color %d,%d,%d,%d\n", color.r, color.g, color.b, color.a);
-
-					sf::RectangleShape colorShape = sf::RectangleShape(sf::Vector2f(1920.0f, 1080.0f));
-					colorShape.setFillColor(color);
-
+					sf::RectangleShape colorShape = StoryCutsceneRenderUtils::createScreenViewColorShape(currScreenView);
 					renderTarget.draw(colorShape);
 				}
 				else if (currScreenView.screenEventType == StoryCutsceneScreenViewType::TEXTURE) {
-					printf("Displaying texture <%s> at %d alpha\n", currScreenView.textureFilename.c_str(), alpha);
-
 					const sf::Texture& texture = renderState.levelAssetBundle->getTexture(currScreenView.textureFilename);
-
-					sf::Sprite textureSprite;
-					textureSprite.setTexture(texture);
-					textureSprite.setColor(sf::Color(255, 255, 255, alpha));
-					textureSprite.setScale(1920.0f / texture.getSize().x, 1080.0f / texture.getSize().y);
-
+					sf::Sprite textureSprite = StoryCutsceneRenderUtils::createScreenViewTextureSprite(currScreenView, texture);
 					renderTarget.draw(textureSprite);
 				}
 			}

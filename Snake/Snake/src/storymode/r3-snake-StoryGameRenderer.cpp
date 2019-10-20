@@ -388,7 +388,7 @@ namespace r3 {
 
 			// Draw primary grass tile (floorId = 0) under entire playing field
 			sf::Sprite grassSprite;
-			grassSprite.setTexture(renderState.levelAssetBundle->getFloorTexture(0));
+			grassSprite.setTexture(primaryFloorTexture);
 			grassSprite.setScale(tileSize / (float)primaryFloorTexture.getSize().x, tileSize / (float)primaryFloorTexture.getSize().y);
 			grassSprite.setPosition(fieldPosition.x, fieldPosition.y);
 			grassSprite.setTextureRect(sf::IntRect(0, 0, fieldSize.x * primaryFloorTexture.getSize().x, fieldSize.y * primaryFloorTexture.getSize().y));

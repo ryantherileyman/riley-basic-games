@@ -38,6 +38,8 @@ namespace r3 {
 
 		void StoryGameController::setSystemOptions(const SystemOptionsDefn& systemOptions) {
 			this->systemOptions = systemOptions;
+
+			this->soundManager.setVolume(systemOptions.soundEffectsVolume);
 		}
 
 		StoryGameSceneClientRequest StoryGameController::processEvent(sf::Event& event) {
@@ -215,6 +217,7 @@ namespace r3 {
 				if (this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.existsFlag) {
 					this->storyCutscene = new StoryCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn);
 					if (!this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.soundTrackFilename.empty()) {
+						this->levelAssetBundle->getOpeningCutsceneMusic().setVolume((float)this->systemOptions.soundEffectsVolume);
 						this->levelAssetBundle->getOpeningCutsceneMusic().play();
 					}
 
@@ -363,6 +366,7 @@ namespace r3 {
 
 			sf::Music& music = this->levelAssetBundle->getMusic();
 			if (music.getStatus() == sf::SoundSource::Status::Stopped) {
+				music.setVolume((float)this->systemOptions.musicVolume);
 				music.play();
 			}
 

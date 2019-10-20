@@ -5,6 +5,15 @@ namespace r3 {
 
 	namespace sound {
 
+		SimpleSoundManager::SimpleSoundManager() {
+			this->nextSoundIndex = 0;
+			this->volume = 100;
+		}
+
+		void SimpleSoundManager::setVolume(int volume) {
+			this->volume = volume;
+		}
+
 		void SimpleSoundManager::play(const sf::SoundBuffer& soundBuffer) {
 			printf("Playing sound in slot %d\n", this->nextSoundIndex);
 			if (
@@ -16,6 +25,7 @@ namespace r3 {
 			}
 
 			this->soundArray[this->nextSoundIndex].setBuffer(soundBuffer);
+			this->soundArray[this->nextSoundIndex].setVolume((float)this->volume);
 			this->soundArray[this->nextSoundIndex].play();
 
 			this->nextSoundIndex++;

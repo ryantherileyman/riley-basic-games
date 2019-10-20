@@ -223,6 +223,13 @@ namespace r3 {
 					renderTarget.draw(mapSprite);
 				}
 			}
+
+			if (
+				(renderState.storyCutscene->getSnake() != nullptr) &&
+				(!renderState.storyCutscene->getActiveScreenViewList().empty())
+			) {
+				this->renderCutsceneSnake(renderTarget, renderState);
+			}
 		}
 
 		void StoryGameRenderer::renderCutscenePlayingField(sf::RenderTarget& renderTarget, const StoryLevelAssetBundle& levelAssetBundle, const StoryCutsceneScreenView& screenView) {
@@ -269,6 +276,21 @@ namespace r3 {
 						renderTarget.draw(tileSprite);
 					}
 				}
+			}
+		}
+
+		void StoryGameRenderer::renderCutsceneSnake(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			const StoryCutsceneScreenView& lastScreenView = renderState.storyCutscene->getActiveScreenViewList().back();
+			if (lastScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+				const StoryMapDefn& mapDefn = renderState.levelAssetBundle->getCutsceneMapDefn(lastScreenView.mapFilename);
+
+				RenderUtils::RenderSnakeInput renderSnakeInput;
+				renderSnakeInput.fieldSize = mapDefn.fieldSize;
+				renderSnakeInput.texture = &renderState.levelAssetBundle->getSnakeTexture();
+				renderSnakeInput.snake = renderState.storyCutscene->getSnake();
+				renderSnakeInput.snakeHurtFlag = false;
+
+				RenderUtils::renderSnake(renderTarget, renderSnakeInput);
 			}
 		}
 

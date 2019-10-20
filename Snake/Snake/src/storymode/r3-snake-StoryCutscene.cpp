@@ -10,10 +10,21 @@ namespace r3 {
 			this->currFrame = 0;
 			this->framesSinceLastEvent = 0;
 			this->nextEventIndex = 0;
+			this->snake = nullptr;
+		}
+
+		StoryCutscene::~StoryCutscene() {
+			if (this->snake != nullptr) {
+				delete this->snake;
+			}
 		}
 
 		const std::vector<StoryCutsceneScreenView>& StoryCutscene::getActiveScreenViewList() const {
 			return this->activeScreenViewList;
+		}
+
+		const Snake* StoryCutscene::getSnake() const {
+			return this->snake;
 		}
 
 		bool StoryCutscene::update() {
@@ -76,6 +87,15 @@ namespace r3 {
 			case StoryCutsceneEventType::SHOW_MAP:
 				this->processShowMapEvent(eventDefn.mapEvent);
 				break;
+			case StoryCutsceneEventType::SHOW_SNAKE:
+				this->processShowSnakeEvent(eventDefn.snakeEvent);
+				break;
+			case StoryCutsceneEventType::MOVE_SNAKE:
+				this->processMoveSnakeEvent(eventDefn.snakeEvent);
+				break;
+			case StoryCutsceneEventType::HIDE_SNAKE:
+				this->processHideSnakeEvent(eventDefn.snakeEvent);
+				break;
 			}
 		}
 
@@ -115,6 +135,49 @@ namespace r3 {
 			}
 
 			this->activeScreenViewList.push_back(screenView);
+		}
+
+		void StoryCutscene::processShowSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn) {
+			if (this->snake != nullptr) {
+				delete this->snake;
+				this->snake = nullptr;
+
+				printf("Cut-scene:  Teleporting the snake to a new position %d, %d\n", snakeEventDefn.snakeStart.headPosition.x, snakeEventDefn.snakeStart.headPosition.y);
+			}
+
+			if (
+				!this->activeScreenViewList.empty() &&
+				(this->activeScreenViewList.back().screenEventType == StoryCutsceneScreenViewType::MAP)
+			) {
+				this->snake = new Snake(snakeEventDefn.snakeStart);
+			}
+			else {
+				printf("Cut-scene:  The \"showSnake\" event will be ignored, as no map is currently visible\n");
+			}
+		}
+
+		void StoryCutscene::processMoveSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn) {
+			if (this->snake == nullptr) {
+				printf("Cut-scene:  The \"moveSnake\" event will be ignored, as the snake is not currently visible\n");
+			}
+			else {
+				if (snakeEventDefn.snakeGrowFlag) {
+					this->snake->growForward(snakeEventDefn.snakeDirection);
+				}
+				else {
+					this->snake->moveForward(snakeEventDefn.snakeDirection);
+				}
+			}
+		}
+
+		void StoryCutscene::processHideSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn) {
+			if (this->snake == nullptr) {
+				printf("Cut-scene:  The \"hideSnake\" event will be ignored, as the snake is not currently visible\n");
+			}
+			else {
+				delete this->snake;
+				this->snake = nullptr;
+			}
 		}
 
 	}

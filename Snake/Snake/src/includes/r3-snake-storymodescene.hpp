@@ -331,12 +331,17 @@ namespace r3 {
 
 		private:
 			std::vector<StoryCutsceneScreenView> activeScreenViewList;
+			Snake* snake;
 
 		public:
 			StoryCutscene(const StoryCutsceneDefn& cutsceneDefn);
 
 		public:
+			~StoryCutscene();
+
+		public:
 			const std::vector<StoryCutsceneScreenView>& getActiveScreenViewList() const;
+			const Snake* getSnake() const;
 
 		public:
 			bool update();
@@ -353,6 +358,11 @@ namespace r3 {
 			void processTextureEvent(const StoryCutsceneTextureEventDefn& textureEventDefn);
 			void processShowMapEvent(const StoryCutsceneMapEventDefn& showMapEventDefn);
 			void addScreenView(const StoryCutsceneScreenView& screenView);
+
+		private:
+			void processShowSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn);
+			void processMoveSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn);
+			void processHideSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn);
 
 		};
 
@@ -454,6 +464,7 @@ namespace r3 {
 			void renderLoadLevelError(sf::RenderTarget& renderTarget);
 			void renderCutscene(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState);
 			void renderCutscenePlayingField(sf::RenderTarget& renderTarget, const StoryLevelAssetBundle& levelAssetBundle, const StoryCutsceneScreenView& screenView);
+			void renderCutsceneSnake(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState);
 			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);

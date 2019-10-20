@@ -18,7 +18,52 @@
                         "map": "map-level-01"
                     },
                     {
-                        "framesSinceLastEvent": 180,
+                        "framesSinceLastEvent": 15,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 4, "y": 10 },
+                            "direction": "right",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": true
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "hideSnake"
+                    },
+                    {
+                        "framesSinceLastEvent": 120,
                         "eventType": "color",
                         "fadeFrames": 15,
                         "color": { "red": 0, "green": 255, "blue": 0 }

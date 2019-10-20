@@ -75,6 +75,17 @@ namespace r3 {
 				return result;
 			}
 
+			void setFoodSpriteTextureRect(sf::Sprite& sprite, StoryFoodType foodType) {
+				switch (foodType) {
+				case StoryFoodType::APPLE:
+					sprite.setTextureRect(sf::IntRect(0, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::CARROT:
+					sprite.setTextureRect(sf::IntRect(75, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				}
+			}
+
 		}
 
 		namespace StoryCutsceneRenderUtils {
@@ -224,11 +235,12 @@ namespace r3 {
 				}
 			}
 
-			if (
-				(renderState.storyCutscene->getSnake() != nullptr) &&
-				(!renderState.storyCutscene->getActiveScreenViewList().empty())
-			) {
-				this->renderCutsceneSnake(renderTarget, renderState);
+			if (!renderState.storyCutscene->getActiveScreenViewList().empty()) {
+				if (renderState.storyCutscene->getSnake() != nullptr) {
+					this->renderCutsceneSnake(renderTarget, renderState);
+				}
+
+				this->renderCutsceneFood(renderTarget, renderState);
 			}
 		}
 
@@ -291,6 +303,28 @@ namespace r3 {
 				renderSnakeInput.snakeHurtFlag = false;
 
 				RenderUtils::renderSnake(renderTarget, renderSnakeInput);
+			}
+		}
+
+		void StoryGameRenderer::renderCutsceneFood(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			const StoryCutsceneScreenView& lastScreenView = renderState.storyCutscene->getActiveScreenViewList().back();
+			if (lastScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+				const StoryMapDefn& mapDefn = renderState.levelAssetBundle->getCutsceneMapDefn(lastScreenView.mapFilename);
+
+				sf::Vector2i fieldSize = mapDefn.fieldSize;
+				float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+				sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+				sf::Sprite foodSprite;
+				foodSprite.setTexture(renderState.levelAssetBundle->getFoodTexture());
+				foodSprite.setScale(tileSize / (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE, tileSize / (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE);
+
+				for (auto const& currFoodInstancePair : renderState.storyCutscene->getFoodInstanceMap()) {
+					StoryGameRenderUtils::setFoodSpriteTextureRect(foodSprite, currFoodInstancePair.second.foodType);
+					foodSprite.setPosition(fieldPosition.x + currFoodInstancePair.second.position.x * tileSize, fieldPosition.y + currFoodInstancePair.second.position.y * tileSize);
+
+					renderTarget.draw(foodSprite);
+				}
 			}
 		}
 
@@ -467,14 +501,7 @@ namespace r3 {
 			for (auto const& currFoodSpawnTracker : renderState.storyGame->getFoodSpawnTrackerList()) {
 				const StoryFoodDefn& foodDefn = currFoodSpawnTracker.getFoodDefn();
 
-				switch (foodDefn.foodType) {
-				case StoryFoodType::APPLE:
-					foodSprite.setTextureRect(sf::IntRect(0, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
-					break;
-				case StoryFoodType::CARROT:
-					foodSprite.setTextureRect(sf::IntRect(75, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
-					break;
-				}
+				StoryGameRenderUtils::setFoodSpriteTextureRect(foodSprite, foodDefn.foodType);
 
 				for (auto const& currFoodInstance : currFoodSpawnTracker.getFoodInstanceList()) {
 					foodSprite.setPosition(fieldPosition.x + currFoodInstance.position.x * tileSize, fieldPosition.y + currFoodInstance.position.y * tileSize);

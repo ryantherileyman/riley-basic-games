@@ -27,6 +27,10 @@ namespace r3 {
 			return this->snake;
 		}
 
+		const std::unordered_map<int, StoryFoodInstance>& StoryCutscene::getFoodInstanceMap() const {
+			return this->foodInstanceMap;
+		}
+
 		bool StoryCutscene::update() {
 			this->updateActiveScreenViews();
 
@@ -95,6 +99,12 @@ namespace r3 {
 				break;
 			case StoryCutsceneEventType::HIDE_SNAKE:
 				this->processHideSnakeEvent(eventDefn.snakeEvent);
+				break;
+			case StoryCutsceneEventType::SHOW_FOOD:
+				this->processShowFoodEvent(eventDefn.foodEvent);
+				break;
+			case StoryCutsceneEventType::HIDE_FOOD:
+				this->processHideFoodEvent(eventDefn.foodEvent);
 				break;
 			}
 		}
@@ -177,6 +187,28 @@ namespace r3 {
 			else {
 				delete this->snake;
 				this->snake = nullptr;
+			}
+		}
+
+		void StoryCutscene::processShowFoodEvent(const StoryCutsceneFoodEventDefn& foodEventDefn) {
+			if (this->foodInstanceMap.count(foodEventDefn.instanceId) > 0) {
+				printf("Cut-scene:  Food instance %d already exists\n", foodEventDefn.instanceId);
+			}
+
+			StoryFoodInstance newFoodInstance;
+			newFoodInstance.foodInstanceId = foodEventDefn.instanceId;
+			newFoodInstance.foodType = foodEventDefn.foodType;
+			newFoodInstance.position = foodEventDefn.position;
+
+			this->foodInstanceMap[foodEventDefn.instanceId] = newFoodInstance;
+		}
+
+		void StoryCutscene::processHideFoodEvent(const StoryCutsceneFoodEventDefn& foodEventDefn) {
+			if (this->foodInstanceMap.count(foodEventDefn.instanceId) == 0) {
+				printf("Cut-scene:  The \"hideFood\" event will be ignored, as the instance ID is not currently visible.\n");
+			}
+			else {
+				this->foodInstanceMap.erase(foodEventDefn.instanceId);
 			}
 		}
 

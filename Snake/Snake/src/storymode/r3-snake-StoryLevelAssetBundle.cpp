@@ -148,6 +148,21 @@ namespace r3 {
 			return result;
 		}
 
+		const StoryMapDefn& StoryLevelAssetBundle::getCutsceneMapDefn(const std::string& mapFilename) const {
+			const StoryMapDefn& result = this->cutsceneMapAssetBundleMap.at(mapFilename).mapDefn;
+			return result;
+		}
+
+		const sf::Texture& StoryLevelAssetBundle::getCutsceneMapFloorTexture(const std::string& mapFilename, int floorId) const {
+			const sf::Texture& result = *this->cutsceneMapAssetBundleMap.at(mapFilename).floorTextureRefMap.at(floorId);
+			return result;
+		}
+
+		const sf::Texture& StoryLevelAssetBundle::getCutsceneMapBarrierTexture(const std::string& mapFilename, int barrierId) const {
+			const sf::Texture& result = *this->cutsceneMapAssetBundleMap.at(mapFilename).barrierTextureRefMap.at(barrierId);
+			return result;
+		}
+
 		sf::Music& StoryLevelAssetBundle::getMusic() {
 			return this->music;
 		}

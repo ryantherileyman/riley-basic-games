@@ -91,6 +91,11 @@ namespace r3 {
 			const sf::Texture& getBarrierTexture(int barrierId) const;
 
 		public:
+			const StoryMapDefn& getCutsceneMapDefn(const std::string& mapFilename) const;
+			const sf::Texture& getCutsceneMapFloorTexture(const std::string& mapFilename, int floorId) const;
+			const sf::Texture& getCutsceneMapBarrierTexture(const std::string& mapFilename, int barrierId) const;
+
+		public:
 			sf::Music& getMusic();
 			sf::Music& getOpeningCutsceneMusic();
 			sf::Music& getWinCutsceneMusic();

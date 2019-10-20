@@ -13,6 +13,12 @@
                     },
                     {
                         "framesSinceLastEvent": 60,
+                        "eventType": "showMap",
+                        "fadeFrames": 15,
+                        "map": "map-level-01"
+                    },
+                    {
+                        "framesSinceLastEvent": 180,
                         "eventType": "color",
                         "fadeFrames": 15,
                         "color": { "red": 0, "green": 255, "blue": 0 }

@@ -211,6 +211,64 @@ namespace r3 {
 					sf::Sprite textureSprite = StoryCutsceneRenderUtils::createScreenViewTextureSprite(currScreenView, texture);
 					renderTarget.draw(textureSprite);
 				}
+				else if ( currScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+					sf::RenderTexture mapTexture;
+					mapTexture.create((unsigned int)ViewUtils::VIEW_SIZE.x, (unsigned int)ViewUtils::VIEW_SIZE.y);
+					mapTexture.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+					this->renderCutscenePlayingField(mapTexture, *renderState.levelAssetBundle, currScreenView);
+
+					sf::Sprite mapSprite = StoryCutsceneRenderUtils::createScreenViewTextureSprite(currScreenView, mapTexture.getTexture());
+					mapSprite.setPosition(0.0f, ViewUtils::VIEW_SIZE.y);
+					mapSprite.setScale(1.0f, -1.0f);
+					renderTarget.draw(mapSprite);
+				}
+			}
+		}
+
+		void StoryGameRenderer::renderCutscenePlayingField(sf::RenderTarget& renderTarget, const StoryLevelAssetBundle& levelAssetBundle, const StoryCutsceneScreenView& screenView) {
+			const StoryMapDefn& mapDefn = levelAssetBundle.getCutsceneMapDefn(screenView.mapFilename);
+			StoryMap map(mapDefn);
+
+			sf::Vector2i fieldSize = map.getFieldSize();
+			float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+			sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+			const sf::Texture& primaryFloorTexture = levelAssetBundle.getCutsceneMapFloorTexture(screenView.mapFilename, 0);
+
+			// Draw primary grass tile (floorId = 0) under entire playing field
+			sf::Sprite grassSprite;
+			grassSprite.setTexture(primaryFloorTexture);
+			grassSprite.setScale(tileSize / (float)primaryFloorTexture.getSize().x, tileSize / (float)primaryFloorTexture.getSize().y);
+			grassSprite.setPosition(fieldPosition.x, fieldPosition.y);
+			grassSprite.setTextureRect(sf::IntRect(0, 0, fieldSize.x * primaryFloorTexture.getSize().x, fieldSize.y * primaryFloorTexture.getSize().y));
+			renderTarget.draw(grassSprite);
+
+			// Create a generic sprite for drawing a single tile at a time
+			sf::Sprite tileSprite;
+
+			for (int y = 0; y < fieldSize.y; y++) {
+				for (int x = 0; x < fieldSize.x; x++) {
+					int floorId = map.getFloorId(x, y);
+					int barrierId = map.getBarrierId(x, y);
+
+					// Draw the floor tile if it is not the primary
+					if (floorId > 0) {
+						const sf::Texture& floorTexture = levelAssetBundle.getCutsceneMapFloorTexture(screenView.mapFilename, floorId);
+						tileSprite.setTexture(floorTexture);
+						tileSprite.setScale(tileSize / (float)floorTexture.getSize().x, tileSize / (float)floorTexture.getSize().y);
+						tileSprite.setPosition(fieldPosition.x + (x * tileSize), fieldPosition.y + (y * tileSize));
+						renderTarget.draw(tileSprite);
+					}
+
+					// Draw the barrier tile if it does not indicate no barrier exists in this location
+					if (barrierId > 0) {
+						const sf::Texture& barrierTexture = levelAssetBundle.getCutsceneMapBarrierTexture(screenView.mapFilename, barrierId);
+						tileSprite.setTexture(barrierTexture);
+						tileSprite.setScale(tileSize / (float)barrierTexture.getSize().x, tileSize / (float)barrierTexture.getSize().y);
+						tileSprite.setPosition(fieldPosition.x + (x * tileSize), fieldPosition.y + (y * tileSize));
+						renderTarget.draw(tileSprite);
+					}
+				}
 			}
 		}
 

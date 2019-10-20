@@ -86,6 +86,15 @@ namespace r3 {
 				}
 			}
 
+			void setDangerSpriteTextureRect(sf::Sprite& sprite, StoryDangerType dangerType, bool snakeOccupiesPosition) {
+				switch (dangerType) {
+				case StoryDangerType::SPIKE_TRAP:
+					int textureRectXPos = (snakeOccupiesPosition ? 75 : 0);
+					sprite.setTextureRect(sf::IntRect(textureRectXPos, 0, StoryGameRenderConstants::DANGER_PIXEL_SIZE, StoryGameRenderConstants::DANGER_PIXEL_SIZE));
+					break;
+				}
+			}
+
 		}
 
 		namespace StoryCutsceneRenderUtils {
@@ -241,6 +250,7 @@ namespace r3 {
 				}
 
 				this->renderCutsceneFood(renderTarget, renderState);
+				this->renderCutsceneDangers(renderTarget, renderState);
 			}
 		}
 
@@ -324,6 +334,33 @@ namespace r3 {
 					foodSprite.setPosition(fieldPosition.x + currFoodInstancePair.second.position.x * tileSize, fieldPosition.y + currFoodInstancePair.second.position.y * tileSize);
 
 					renderTarget.draw(foodSprite);
+				}
+			}
+		}
+
+		void StoryGameRenderer::renderCutsceneDangers(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			const StoryCutsceneScreenView& lastScreenView = renderState.storyCutscene->getActiveScreenViewList().back();
+			if (lastScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+				const StoryMapDefn& mapDefn = renderState.levelAssetBundle->getCutsceneMapDefn(lastScreenView.mapFilename);
+
+				sf::Vector2i fieldSize = mapDefn.fieldSize;
+				float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+				sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+				sf::Sprite dangerSprite;
+				dangerSprite.setTexture(renderState.levelAssetBundle->getDangerTexture());
+				dangerSprite.setScale(tileSize / (float)StoryGameRenderConstants::DANGER_PIXEL_SIZE, tileSize / (float)StoryGameRenderConstants::DANGER_PIXEL_SIZE);
+
+				for (auto const& currDangerInstancePair : renderState.storyCutscene->getDangerInstanceMap()) {
+					bool snakeOccupiesPosition = false;
+					if (renderState.storyCutscene->getSnake() != nullptr) {
+						snakeOccupiesPosition = renderState.storyCutscene->getSnake()->occupiesPosition(currDangerInstancePair.second.position);
+					}
+					StoryGameRenderUtils::setDangerSpriteTextureRect(dangerSprite, currDangerInstancePair.second.dangerType, snakeOccupiesPosition);
+
+					dangerSprite.setPosition(fieldPosition.x + currDangerInstancePair.second.position.x * tileSize, fieldPosition.y + currDangerInstancePair.second.position.y * tileSize);
+
+					renderTarget.draw(dangerSprite);
 				}
 			}
 		}

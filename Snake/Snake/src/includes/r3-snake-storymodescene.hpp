@@ -333,6 +333,7 @@ namespace r3 {
 			std::vector<StoryCutsceneScreenView> activeScreenViewList;
 			Snake* snake;
 			std::unordered_map<int, StoryFoodInstance> foodInstanceMap;
+			std::unordered_map<int, StoryDangerInstance> dangerInstanceMap;
 
 		public:
 			StoryCutscene(const StoryCutsceneDefn& cutsceneDefn);
@@ -344,6 +345,7 @@ namespace r3 {
 			const std::vector<StoryCutsceneScreenView>& getActiveScreenViewList() const;
 			const Snake* getSnake() const;
 			const std::unordered_map<int, StoryFoodInstance>& getFoodInstanceMap() const;
+			const std::unordered_map<int, StoryDangerInstance>& getDangerInstanceMap() const;
 
 		public:
 			bool update();
@@ -369,6 +371,10 @@ namespace r3 {
 		private:
 			void processShowFoodEvent(const StoryCutsceneFoodEventDefn& foodEventDefn);
 			void processHideFoodEvent(const StoryCutsceneFoodEventDefn& foodEventDefn);
+
+		private:
+			void processShowDangerEvent(const StoryCutsceneDangerEventDefn& dangerEventDefn);
+			void processHideDangerEvent(const StoryCutsceneDangerEventDefn& dangerEventDefn);
 
 		};
 
@@ -473,6 +479,7 @@ namespace r3 {
 			void renderCutscenePlayingField(sf::RenderTarget& renderTarget, const StoryLevelAssetBundle& levelAssetBundle, const StoryCutsceneScreenView& screenView);
 			void renderCutsceneSnake(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState);
 			void renderCutsceneFood(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState);
+			void renderCutsceneDangers(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState);
 			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);

@@ -31,6 +31,10 @@ namespace r3 {
 			return this->foodInstanceMap;
 		}
 
+		const std::unordered_map<int, StoryDangerInstance>& StoryCutscene::getDangerInstanceMap() const {
+			return this->dangerInstanceMap;
+		}
+
 		bool StoryCutscene::update() {
 			this->updateActiveScreenViews();
 
@@ -105,6 +109,12 @@ namespace r3 {
 				break;
 			case StoryCutsceneEventType::HIDE_FOOD:
 				this->processHideFoodEvent(eventDefn.foodEvent);
+				break;
+			case StoryCutsceneEventType::SHOW_DANGER:
+				this->processShowDangerEvent(eventDefn.dangerEvent);
+				break;
+			case StoryCutsceneEventType::HIDE_DANGER:
+				this->processHideDangerEvent(eventDefn.dangerEvent);
 				break;
 			}
 		}
@@ -209,6 +219,28 @@ namespace r3 {
 			}
 			else {
 				this->foodInstanceMap.erase(foodEventDefn.instanceId);
+			}
+		}
+
+		void StoryCutscene::processShowDangerEvent(const StoryCutsceneDangerEventDefn& dangerEventDefn) {
+			if (this->dangerInstanceMap.count(dangerEventDefn.instanceId) > 0) {
+				printf("Cut-scene:  Danger instance %d already exists\n", dangerEventDefn.instanceId);
+			}
+
+			StoryDangerInstance newDangerInstance;
+			newDangerInstance.dangerInstanceId = dangerEventDefn.instanceId;
+			newDangerInstance.dangerType = dangerEventDefn.dangerType;
+			newDangerInstance.position = dangerEventDefn.position;
+
+			this->dangerInstanceMap[dangerEventDefn.instanceId] = newDangerInstance;
+		}
+
+		void StoryCutscene::processHideDangerEvent(const StoryCutsceneDangerEventDefn& dangerEventDefn) {
+			if (this->dangerInstanceMap.count(dangerEventDefn.instanceId) == 0) {
+				printf("Cut-scene:  The \"hideDanger\" event will be ignored, as the instance ID is not currently visible.\n");
+			}
+			else {
+				this->dangerInstanceMap.erase(dangerEventDefn.instanceId);
 			}
 		}
 

@@ -44,6 +44,15 @@
                         }
                     },
                     {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showDanger",
+                        "showObject": {
+                            "instanceId": 1,
+                            "dangerType": "Spike",
+                            "position": { "x": 11, "y": 2 }
+                        }
+                    },
+                    {
                         "framesSinceLastEvent": 10,
                         "eventType": "moveSnake",
                         "snakeMovement": {
@@ -83,6 +92,13 @@
                     {
                         "framesSinceLastEvent": 0,
                         "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 1
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideDanger",
                         "hideObject": {
                             "instanceId": 1
                         }

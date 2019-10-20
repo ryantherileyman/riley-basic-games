@@ -60,9 +60,9 @@ namespace r3 {
 			int getLength() const;
 
 		public:
-			bool isValidMovementDirection(ObjectDirection direction);
-			bool occupiesPosition(sf::Vector2i position);
-			bool bodyOccupiesPosition(sf::Vector2i position);
+			bool isValidMovementDirection(ObjectDirection direction) const;
+			bool occupiesPosition(sf::Vector2i position) const;
+			bool bodyOccupiesPosition(sf::Vector2i position) const;
 
 		public:
 			void moveForward(ObjectDirection direction);

@@ -86,7 +86,7 @@ namespace r3 {
 			return result;
 		}
 
-		bool Snake::isValidMovementDirection(ObjectDirection direction) {
+		bool Snake::isValidMovementDirection(ObjectDirection direction) const {
 			bool result = false;
 
 			switch (this->head.enterDirection) {
@@ -107,7 +107,7 @@ namespace r3 {
 			return result;
 		}
 
-		bool Snake::occupiesPosition(sf::Vector2i position) {
+		bool Snake::occupiesPosition(sf::Vector2i position) const {
 			bool result =
 				(this->head.position == position) ||
 				this->bodyOccupiesPosition(position) ||
@@ -116,7 +116,7 @@ namespace r3 {
 			return result;
 		}
 
-		bool Snake::bodyOccupiesPosition(sf::Vector2i position) {
+		bool Snake::bodyOccupiesPosition(sf::Vector2i position) const {
 			bool result = false;
 
 			int bodyLength = this->bodyList.size();

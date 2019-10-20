@@ -55,6 +55,9 @@ namespace r3 {
 				case StoryGameMode::LOAD_LEVEL_ERROR:
 					result = this->processLoadErrorKeyEvent(event);
 					break;
+				case StoryGameMode::PLAY_OPENING_CUTSCENE:
+					result = this->processPlayOpeningCutsceneKeyEvent(event);
+					break;
 				case StoryGameMode::WAIT_TO_START:
 					result = this->processWaitToStartKeyEvent(event);
 					break;
@@ -232,6 +235,24 @@ namespace r3 {
 				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
+				break;
+			}
+
+			return result;
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processPlayOpeningCutsceneKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+			case sf::Keyboard::Key::Enter:
+				this->mode = StoryGameMode::WAIT_TO_START;
+
+				this->levelAssetBundle->getOpeningCutsceneMusic().stop();
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
 				break;
 			}
 

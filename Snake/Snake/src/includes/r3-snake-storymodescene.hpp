@@ -411,6 +411,7 @@ namespace r3 {
 
 		private:
 			StoryGameSceneClientRequest processLoadErrorKeyEvent(sf::Event& event);
+			StoryGameSceneClientRequest processPlayOpeningCutsceneKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processLevelLostKeyEvent(sf::Event& event);

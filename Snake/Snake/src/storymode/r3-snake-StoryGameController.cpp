@@ -69,6 +69,9 @@ namespace r3 {
 				case StoryGameMode::PLAY_WIN_CUTSCENE:
 					result = this->processPlayWinCutsceneKeyEvent(event);
 					break;
+				case StoryGameMode::PLAY_LOSS_CUTSCENE:
+					result = this->processPlayLossCutsceneKeyEvent(event);
+					break;
 				case StoryGameMode::LEVEL_LOST:
 					result = this->processLevelLostKeyEvent(event);
 					break;
@@ -97,6 +100,9 @@ namespace r3 {
 				break;
 			case StoryGameMode::PLAY_WIN_CUTSCENE:
 				this->updateWinCutscene();
+				break;
+			case StoryGameMode::PLAY_LOSS_CUTSCENE:
+				this->updateLossCutscene();
 				break;
 			}
 		}
@@ -128,6 +134,7 @@ namespace r3 {
 				break;
 			case StoryGameMode::PLAY_OPENING_CUTSCENE:
 			case StoryGameMode::PLAY_WIN_CUTSCENE:
+			case StoryGameMode::PLAY_LOSS_CUTSCENE:
 			{
 				StoryCutsceneRenderState renderState;
 				renderState.levelAssetBundle = this->levelAssetBundle;
@@ -322,7 +329,25 @@ namespace r3 {
 			case sf::Keyboard::Key::Enter:
 				this->moveToNextLevel();
 
-				this->levelAssetBundle->getOpeningCutsceneMusic().stop();
+				this->levelAssetBundle->getWinCutsceneMusic().stop();
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+				break;
+			}
+
+			return result;
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processPlayLossCutsceneKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+			case sf::Keyboard::Key::Enter:
+				this->mode = StoryGameMode::LEVEL_LOST;
+
+				this->levelAssetBundle->getLossCutsceneMusic().stop();
 
 				delete this->storyCutscene;
 				this->storyCutscene = nullptr;
@@ -390,6 +415,15 @@ namespace r3 {
 			}
 		}
 
+		void StoryGameController::updateLossCutscene() {
+			if (this->storyCutscene->update()) {
+				this->mode = StoryGameMode::LEVEL_LOST;
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+			}
+		}
+
 		void StoryGameController::updateGameRunning() {
 			StoryGameInputRequest inputRequest;
 			inputRequest.snakeMovementList = this->snakeMovementInputQueue;
@@ -427,7 +461,14 @@ namespace r3 {
 			if (updateResult.snakeDiedFlag) {
 				this->stopRunningLevel();
 
-				this->mode = StoryGameMode::LEVEL_LOST;
+				if (this->levelDefnList[this->currLevelIndex].lossCutsceneDefn.existsFlag) {
+					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].lossCutsceneDefn, this->levelAssetBundle->getLossCutsceneMusic());
+
+					this->mode = StoryGameMode::PLAY_LOSS_CUTSCENE;
+				}
+				else {
+					this->mode = StoryGameMode::LEVEL_LOST;
+				}
 			}
 
 			if (updateResult.completedLevelFlag) {

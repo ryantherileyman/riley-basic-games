@@ -3,7 +3,7 @@
     "menuDescription": "Adam has trapped you in his diabolical gauntlet!",
     "levelList": [
         {
-            "winCutscene": {
+            "lossCutscene": {
                 "eventList": [
                     {
                         "framesSinceLastEvent": 0,
@@ -141,7 +141,7 @@
             "winCondition": {
                 "conditionType": "onFoodEaten",
                 "foodType": "Apple",
-                "foodCount": 5
+                "foodCount": 50
             },
             "foodList": [
                 {

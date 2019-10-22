@@ -56,6 +56,20 @@ namespace r3 {
 			std::vector<std::vector<int>> barrierGrid;
 		} StoryMapDefn;
 
+		typedef enum class Snake_StoryCutsceneEventType {
+			COLOR,
+			TEXTURE,
+			SHOW_MAP,
+			HIDE_MAP,
+			SHOW_SNAKE,
+			MOVE_SNAKE,
+			HIDE_SNAKE,
+			SHOW_FOOD,
+			HIDE_FOOD,
+			SHOW_DANGER,
+			HIDE_DANGER,
+		} StoryCutsceneEventType;
+		
 		typedef enum class Snake_StoryFoodType {
 			APPLE,
 			CARROT,
@@ -64,6 +78,56 @@ namespace r3 {
 		typedef enum class Snake_StoryDangerType {
 			SPIKE_TRAP,
 		} StoryDangerType;
+
+		typedef struct Snake_StoryCutsceneColorEventDefn {
+			int fadeFrames;
+			sf::Color color;
+		} StoryCutsceneColorEventDefn;
+
+		typedef struct Snake_StoryCutsceneTextureEventDefn {
+			int fadeFrames;
+			std::string textureFilename;
+		} StoryCutsceneTextureEventDefn;
+
+		typedef struct Snake_StoryCutsceneMapEventDefn {
+			int fadeFrames;
+			std::string mapFilename;
+		} StoryCutsceneMapEventDefn;
+
+		typedef struct Snake_StoryCutsceneSnakeEventDefn {
+			SnakeStartDefn snakeStart;
+			ObjectDirection snakeDirection;
+			bool snakeGrowFlag;
+		} StoryCutsceneSnakeEventDefn;
+
+		typedef struct Snake_StoryCutsceneFoodEventDefn {
+			int instanceId;
+			StoryFoodType foodType;
+			sf::Vector2i position;
+		} StoryCutsceneFoodEventDefn;
+
+		typedef struct Snake_StoryCutsceneDangerEventDefn {
+			int instanceId;
+			StoryDangerType dangerType;
+			sf::Vector2i position;
+		} StoryCutsceneDangerEventDefn;
+
+		typedef struct Snake_StoryCutsceneEventDefn {
+			int framesSinceLastEvent;
+			StoryCutsceneEventType eventType;
+			StoryCutsceneColorEventDefn colorEvent;
+			StoryCutsceneTextureEventDefn textureEvent;
+			StoryCutsceneMapEventDefn mapEvent;
+			StoryCutsceneSnakeEventDefn snakeEvent;
+			StoryCutsceneFoodEventDefn foodEvent;
+			StoryCutsceneDangerEventDefn dangerEvent;
+		} StoryCutsceneEventDefn;
+
+		typedef struct Snake_StoryCutsceneDefn {
+			bool existsFlag;
+			std::string soundTrackFilename;
+			std::vector<StoryCutsceneEventDefn> eventDefnList;
+		} StoryCutsceneDefn;
 
 		typedef enum class Snake_StoryWinConditionType {
 			ON_FOOD_EATEN,
@@ -109,6 +173,9 @@ namespace r3 {
 		} StoryDangerDefn;
 
 		typedef struct Snake_StoryLevelDefn {
+			StoryCutsceneDefn openingCutsceneDefn;
+			StoryCutsceneDefn winCutsceneDefn;
+			StoryCutsceneDefn lossCutsceneDefn;
 			std::string musicFilename;
 			std::string mapFilename;
 			SnakeStartDefn snakeStart;

@@ -15,6 +15,7 @@ namespace r3 {
 			this->currLevelIndex = 0;
 			this->levelAssetBundle = nullptr;
 			this->storyGame = new StoryGame();
+			this->storyCutscene = nullptr;
 
 			this->timeSnakeLastDamaged = sf::seconds(-0.5f);
 		}
@@ -26,6 +27,9 @@ namespace r3 {
 				delete this->levelAssetBundle;
 			}
 			delete this->storyGame;
+			if (this->storyCutscene != nullptr) {
+				delete this->storyCutscene;
+			}
 		}
 
 		void StoryGameController::setCampaignFolder(const std::string& campaignFolder) {
@@ -34,6 +38,8 @@ namespace r3 {
 
 		void StoryGameController::setSystemOptions(const SystemOptionsDefn& systemOptions) {
 			this->systemOptions = systemOptions;
+
+			this->soundManager.setVolume(systemOptions.soundEffectsVolume);
 		}
 
 		StoryGameSceneClientRequest StoryGameController::processEvent(sf::Event& event) {
@@ -51,11 +57,20 @@ namespace r3 {
 				case StoryGameMode::LOAD_LEVEL_ERROR:
 					result = this->processLoadErrorKeyEvent(event);
 					break;
+				case StoryGameMode::PLAY_OPENING_CUTSCENE:
+					result = this->processPlayOpeningCutsceneKeyEvent(event);
+					break;
 				case StoryGameMode::WAIT_TO_START:
 					result = this->processWaitToStartKeyEvent(event);
 					break;
 				case StoryGameMode::GAME_RUNNING:
 					result = this->processGameRunningKeyEvent(event);
+					break;
+				case StoryGameMode::PLAY_WIN_CUTSCENE:
+					result = this->processPlayWinCutsceneKeyEvent(event);
+					break;
+				case StoryGameMode::PLAY_LOSS_CUTSCENE:
+					result = this->processPlayLossCutsceneKeyEvent(event);
 					break;
 				case StoryGameMode::LEVEL_LOST:
 					result = this->processLevelLostKeyEvent(event);
@@ -77,8 +92,17 @@ namespace r3 {
 			case StoryGameMode::LOAD_LEVEL:
 				this->updateBasedOnLoadLevelStatus();
 				break;
+			case StoryGameMode::PLAY_OPENING_CUTSCENE:
+				this->updateOpeningCutscene();
+				break;
 			case StoryGameMode::GAME_RUNNING:
 				this->updateGameRunning();
+				break;
+			case StoryGameMode::PLAY_WIN_CUTSCENE:
+				this->updateWinCutscene();
+				break;
+			case StoryGameMode::PLAY_LOSS_CUTSCENE:
+				this->updateLossCutscene();
 				break;
 			}
 		}
@@ -106,6 +130,19 @@ namespace r3 {
 
 				this->renderer->renderWaitToStart(*this->window, renderState);
 				this->window->display();
+			}
+				break;
+			case StoryGameMode::PLAY_OPENING_CUTSCENE:
+			case StoryGameMode::PLAY_WIN_CUTSCENE:
+			case StoryGameMode::PLAY_LOSS_CUTSCENE:
+			{
+				StoryCutsceneRenderState renderState;
+				renderState.levelAssetBundle = this->levelAssetBundle;
+				renderState.storyCutscene = this->storyCutscene;
+
+				this->renderer->renderCutscene(*this->window, renderState);
+				this->window->display();
+
 			}
 				break;
 			case StoryGameMode::GAME_RUNNING:
@@ -191,7 +228,14 @@ namespace r3 {
 			else if ( assetLoadingStatus.completionStatus == StoryLevelAssetLoadingCompletionStatus::COMPLETE) {
 				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 
-				this->mode = StoryGameMode::WAIT_TO_START;
+				if (this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.existsFlag) {
+					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn, this->levelAssetBundle->getOpeningCutsceneMusic());
+
+					this->mode = StoryGameMode::PLAY_OPENING_CUTSCENE;
+				}
+				else {
+					this->mode = StoryGameMode::WAIT_TO_START;
+				}
 			}
 		}
 
@@ -204,6 +248,24 @@ namespace r3 {
 				this->mode = StoryGameMode::LOAD_CAMPAIGN;
 
 				result = StoryGameSceneClientRequest::RETURN_TO_SPLASH_SCREEN;
+				break;
+			}
+
+			return result;
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processPlayOpeningCutsceneKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+			case sf::Keyboard::Key::Enter:
+				this->mode = StoryGameMode::WAIT_TO_START;
+
+				this->levelAssetBundle->getOpeningCutsceneMusic().stop();
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
 				break;
 			}
 
@@ -259,6 +321,42 @@ namespace r3 {
 			return result;
 		}
 
+		StoryGameSceneClientRequest StoryGameController::processPlayWinCutsceneKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+			case sf::Keyboard::Key::Enter:
+				this->moveToNextLevel();
+
+				this->levelAssetBundle->getWinCutsceneMusic().stop();
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+				break;
+			}
+
+			return result;
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processPlayLossCutsceneKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+			case sf::Keyboard::Key::Enter:
+				this->mode = StoryGameMode::LEVEL_LOST;
+
+				this->levelAssetBundle->getLossCutsceneMusic().stop();
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+				break;
+			}
+
+			return result;
+		}
+
 		StoryGameSceneClientRequest StoryGameController::processLevelLostKeyEvent(sf::Event& event) {
 			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
 
@@ -299,12 +397,40 @@ namespace r3 {
 			return result;
 		}
 
+		void StoryGameController::updateOpeningCutscene() {
+			if (this->storyCutscene->update()) {
+				this->mode = StoryGameMode::WAIT_TO_START;
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+			}
+		}
+
+		void StoryGameController::updateWinCutscene() {
+			if (this->storyCutscene->update()) {
+				this->moveToNextLevel();
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+			}
+		}
+
+		void StoryGameController::updateLossCutscene() {
+			if (this->storyCutscene->update()) {
+				this->mode = StoryGameMode::LEVEL_LOST;
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+			}
+		}
+
 		void StoryGameController::updateGameRunning() {
 			StoryGameInputRequest inputRequest;
 			inputRequest.snakeMovementList = this->snakeMovementInputQueue;
 
 			sf::Music& music = this->levelAssetBundle->getMusic();
 			if (music.getStatus() == sf::SoundSource::Status::Stopped) {
+				music.setVolume((float)this->systemOptions.musicVolume);
 				music.play();
 			}
 
@@ -333,26 +459,57 @@ namespace r3 {
 			}
 
 			if (updateResult.snakeDiedFlag) {
-				this->storyGame->stopRunningLevel();
-				music.stop();
+				this->stopRunningLevel();
 
-				this->mode = StoryGameMode::LEVEL_LOST;
+				if (this->levelDefnList[this->currLevelIndex].lossCutsceneDefn.existsFlag) {
+					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].lossCutsceneDefn, this->levelAssetBundle->getLossCutsceneMusic());
+
+					this->mode = StoryGameMode::PLAY_LOSS_CUTSCENE;
+				}
+				else {
+					this->mode = StoryGameMode::LEVEL_LOST;
+				}
 			}
 
 			if (updateResult.completedLevelFlag) {
-				this->storyGame->stopRunningLevel();
-				music.stop();
+				this->stopRunningLevel();
 
-				if (this->currLevelIndex == (this->levelDefnList.size() - 1)) {
-					this->mode = StoryGameMode::CAMPAIGN_WON;
-				} else {
-					this->currLevelIndex++;
-					this->mode = StoryGameMode::LOAD_LEVEL;
-					this->initiateLoadLevel();
+				if (this->levelDefnList[this->currLevelIndex].winCutsceneDefn.existsFlag) {
+					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].winCutsceneDefn, this->levelAssetBundle->getWinCutsceneMusic());
+
+					this->mode = StoryGameMode::PLAY_WIN_CUTSCENE;
+				}
+				else {
+					this->moveToNextLevel();
 				}
 			}
 
 			this->snakeMovementInputQueue.clear();
+		}
+
+		void StoryGameController::startRunningCutscene(const StoryCutsceneDefn& cutsceneDefn, sf::Music& cutsceneSoundTrack) {
+			this->storyCutscene = new StoryCutscene(cutsceneDefn);
+
+			if (!cutsceneDefn.soundTrackFilename.empty()) {
+				cutsceneSoundTrack.setVolume((float)this->systemOptions.soundEffectsVolume);
+				cutsceneSoundTrack.play();
+			}
+		}
+
+		void StoryGameController::stopRunningLevel() {
+			this->storyGame->stopRunningLevel();
+			this->levelAssetBundle->getMusic().stop();
+		}
+
+		void StoryGameController::moveToNextLevel() {
+			if (this->currLevelIndex == (this->levelDefnList.size() - 1)) {
+				this->mode = StoryGameMode::CAMPAIGN_WON;
+			}
+			else {
+				this->currLevelIndex++;
+				this->mode = StoryGameMode::LOAD_LEVEL;
+				this->initiateLoadLevel();
+			}
 		}
 
 	}

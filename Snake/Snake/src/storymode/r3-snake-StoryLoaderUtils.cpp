@@ -35,16 +35,40 @@ namespace r3 {
 
 			}
 
+			namespace StoryCutsceneProperties {
+
+				const char* SOUND_TRACK = "soundTrack";
+				const char* EVENT_LIST = "eventList";
+
+				const char* FRAMES_SINCE_LAST_EVENT = "framesSinceLastEvent";
+				const char* EVENT_TYPE = "eventType";
+				const char* FADE_FRAMES = "fadeFrames";
+				const char* COLOR = "color";
+				const char* COLOR_RED = "red";
+				const char* COLOR_GREEN = "green";
+				const char* COLOR_BLUE = "blue";
+				const char* TEXTURE = "texture";
+				const char* SNAKE_MOVEMENT = "snakeMovement";
+				const char* SNAKE_MOVEMENT_GROW = "grow";
+				const char* SHOW_OBJECT = "showObject";
+				const char* HIDE_OBJECT = "hideObject";
+				const char* OBJECT_INSTANCE_ID = "instanceId";
+
+			}
+
 			namespace StoryLevelProperties {
 
+				const char* POSITION = "position";
 				const char* POSITION_X = "x";
 				const char* POSITION_Y = "y";
 				const char* TIME_PASSED = "timePassed";
 
+				const char* OPENING_CUTSCENE = "openingCutscene";
+				const char* WIN_CUTSCENE = "winCutscene";
+				const char* LOSS_CUTSCENE = "lossCutscene";
 				const char* MUSIC_FILENAME = "music";
 				const char* MAP_FILENAME = "map";
 				const char* SNAKE_START = "snakeStart";
-				const char* SNAKE_START_POSITION = "position";
 				const char* SNAKE_START_DIRECTION = "direction";
 				const char* SNAKE_START_LENGTH = "length";
 				const char* SNAKE_SPEED = "snakeSpeed";
@@ -74,6 +98,21 @@ namespace r3 {
 				const char* DOWN = "down";
 				const char* LEFT = "left";
 				const char* RIGHT = "right";
+
+			}
+
+			namespace CutsceneEventTypeValues {
+
+				const char* COLOR = "color";
+				const char* TEXTURE = "texture";
+				const char* SHOW_MAP = "showMap";
+				const char* SHOW_SNAKE = "showSnake";
+				const char* MOVE_SNAKE = "moveSnake";
+				const char* HIDE_SNAKE = "hideSnake";
+				const char* SHOW_FOOD = "showFood";
+				const char* HIDE_FOOD = "hideFood";
+				const char* SHOW_DANGER = "showDanger";
+				const char* HIDE_DANGER = "hideDanger";
 
 			}
 
@@ -111,6 +150,7 @@ namespace r3 {
 			const char* PATH_CAMPAIGNS = "resources/campaigns/";
 			const char* PATH_TEXTURES = "textures";
 			const char* PATH_MUSIC = "music";
+			const char* PATH_SOUND = "sound";
 			const char* CAMPAIGN_FILENAME = "campaign.json";
 
 			typedef struct Json_LoadJsonFromFileResult {
@@ -156,6 +196,16 @@ namespace r3 {
 				result.append(PATH_TEXTURES);
 				result.append(PATH_SLASH);
 				result.append(imageFilename);
+				return result;
+			}
+
+			std::string resolveSoundFilePath(const std::string& campaignFolderName, const std::string& soundFilename) {
+				std::string result(PATH_CAMPAIGNS);
+				result.append(campaignFolderName);
+				result.append(PATH_SLASH);
+				result.append(PATH_SOUND);
+				result.append(PATH_SLASH);
+				result.append(soundFilename);
 				return result;
 			}
 
@@ -440,8 +490,159 @@ namespace r3 {
 				return result;
 			}
 
+			StoryCutsceneEventType convertJsonValueToCutsceneEventType(const Json::Value& jsonValue) {
+				StoryCutsceneEventType result = StoryCutsceneEventType::COLOR;
+
+				std::string jsonValueStr = jsonValue.asString();
+				if (jsonValueStr.compare(CutsceneEventTypeValues::COLOR) == 0) {
+					result = StoryCutsceneEventType::COLOR;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::TEXTURE) == 0) {
+					result = StoryCutsceneEventType::TEXTURE;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::SHOW_MAP) == 0) {
+					result = StoryCutsceneEventType::SHOW_MAP;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::SHOW_SNAKE) == 0) {
+					result = StoryCutsceneEventType::SHOW_SNAKE;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::MOVE_SNAKE) == 0) {
+					result = StoryCutsceneEventType::MOVE_SNAKE;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::HIDE_SNAKE) == 0) {
+					result = StoryCutsceneEventType::HIDE_SNAKE;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::SHOW_FOOD) == 0) {
+					result = StoryCutsceneEventType::SHOW_FOOD;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::HIDE_FOOD) == 0) {
+					result = StoryCutsceneEventType::HIDE_FOOD;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::SHOW_DANGER) == 0) {
+					result = StoryCutsceneEventType::SHOW_DANGER;
+				}
+				else if (jsonValueStr.compare(CutsceneEventTypeValues::HIDE_DANGER) == 0) {
+					result = StoryCutsceneEventType::HIDE_DANGER;
+				}
+
+				return result;
+			}
+
+			StoryCutsceneEventDefn loadStoryCutsceneEvent(const Json::Value& jsonValue) {
+				StoryCutsceneEventDefn result;
+
+				result.framesSinceLastEvent = jsonValue[StoryCutsceneProperties::FRAMES_SINCE_LAST_EVENT].asInt();
+				result.eventType = convertJsonValueToCutsceneEventType(jsonValue[StoryCutsceneProperties::EVENT_TYPE]);
+				
+				if (result.eventType == StoryCutsceneEventType::COLOR) {
+					result.colorEvent.fadeFrames = jsonValue[StoryCutsceneProperties::FADE_FRAMES].asInt();
+
+					Json::Value colorValue = jsonValue[StoryCutsceneProperties::COLOR];
+					int red = colorValue[StoryCutsceneProperties::COLOR_RED].asInt();
+					int green = colorValue[StoryCutsceneProperties::COLOR_GREEN].asInt();
+					int blue = colorValue[StoryCutsceneProperties::COLOR_BLUE].asInt();
+
+					result.colorEvent.color = sf::Color(red, green, blue, 255);
+				}
+				else if (result.eventType == StoryCutsceneEventType::TEXTURE) {
+					result.textureEvent.fadeFrames = jsonValue[StoryCutsceneProperties::FADE_FRAMES].asInt();
+					result.textureEvent.textureFilename = jsonValue[StoryCutsceneProperties::TEXTURE].asString();
+				}
+				else if (result.eventType == StoryCutsceneEventType::SHOW_MAP) {
+					result.mapEvent.fadeFrames = jsonValue[StoryCutsceneProperties::FADE_FRAMES].asInt();
+					result.mapEvent.mapFilename = jsonValue[StoryLevelProperties::MAP_FILENAME].asString();
+				}
+				else if (result.eventType == StoryCutsceneEventType::SHOW_SNAKE) {
+					Json::Value snakeStartValue = jsonValue[StoryLevelProperties::SNAKE_START];
+
+					Json::Value snakeStartPositionValue = snakeStartValue[StoryLevelProperties::POSITION];
+					result.snakeEvent.snakeStart.headPosition.x = snakeStartPositionValue[StoryLevelProperties::POSITION_X].asInt();
+					result.snakeEvent.snakeStart.headPosition.y = snakeStartPositionValue[StoryLevelProperties::POSITION_Y].asInt();
+
+					result.snakeEvent.snakeStart.facingDirection = convertJsonValueToObjectDirection(snakeStartValue[StoryLevelProperties::SNAKE_START_DIRECTION]);
+
+					result.snakeEvent.snakeStart.length = snakeStartValue[StoryLevelProperties::SNAKE_START_LENGTH].asInt();
+				}
+				else if (result.eventType == StoryCutsceneEventType::MOVE_SNAKE) {
+					Json::Value snakeMovementValue = jsonValue[StoryCutsceneProperties::SNAKE_MOVEMENT];
+					result.snakeEvent.snakeDirection = convertJsonValueToObjectDirection(snakeMovementValue[StoryLevelProperties::SNAKE_START_DIRECTION]);
+					result.snakeEvent.snakeGrowFlag = snakeMovementValue[StoryCutsceneProperties::SNAKE_MOVEMENT_GROW].asBool();
+				}
+				else if (result.eventType == StoryCutsceneEventType::SHOW_FOOD) {
+					Json::Value showObjectValue = jsonValue[StoryCutsceneProperties::SHOW_OBJECT];
+
+					result.foodEvent.instanceId = showObjectValue[StoryCutsceneProperties::OBJECT_INSTANCE_ID].asInt();
+
+					result.foodEvent.foodType = convertJsonValueToFoodType(showObjectValue[StoryLevelProperties::FOOD_TYPE]);
+
+					Json::Value positionValue = showObjectValue[StoryLevelProperties::POSITION];
+					result.foodEvent.position.x = positionValue[StoryLevelProperties::POSITION_X].asInt();
+					result.foodEvent.position.y = positionValue[StoryLevelProperties::POSITION_Y].asInt();
+				}
+				else if (result.eventType == StoryCutsceneEventType::HIDE_FOOD) {
+					Json::Value hideObjectValue = jsonValue[StoryCutsceneProperties::HIDE_OBJECT];
+					result.foodEvent.instanceId = hideObjectValue[StoryCutsceneProperties::OBJECT_INSTANCE_ID].asInt();
+				}
+				else if (result.eventType == StoryCutsceneEventType::SHOW_DANGER) {
+					Json::Value showObjectValue = jsonValue[StoryCutsceneProperties::SHOW_OBJECT];
+
+					result.dangerEvent.instanceId = showObjectValue[StoryCutsceneProperties::OBJECT_INSTANCE_ID].asInt();
+
+					result.dangerEvent.dangerType = convertJsonValueToDangerType(showObjectValue[StoryLevelProperties::DANGER_TYPE]);
+
+					Json::Value positionValue = showObjectValue[StoryLevelProperties::POSITION];
+					result.dangerEvent.position.x = positionValue[StoryLevelProperties::POSITION_X].asInt();
+					result.dangerEvent.position.y = positionValue[StoryLevelProperties::POSITION_Y].asInt();
+				}
+				else if (result.eventType == StoryCutsceneEventType::HIDE_DANGER) {
+					Json::Value hideObjectValue = jsonValue[StoryCutsceneProperties::HIDE_OBJECT];
+					result.dangerEvent.instanceId = hideObjectValue[StoryCutsceneProperties::OBJECT_INSTANCE_ID].asInt();
+				}
+
+				return result;
+			}
+
+			StoryCutsceneDefn loadStoryCutscene(const Json::Value& jsonValue) {
+				StoryCutsceneDefn result;
+
+				result.existsFlag = true;
+				result.soundTrackFilename = jsonValue.get(StoryCutsceneProperties::SOUND_TRACK, "").asString();
+
+				Json::Value eventListValue = jsonValue[StoryCutsceneProperties::EVENT_LIST];
+				for (Json::ArrayIndex index = 0; index < eventListValue.size(); index++) {
+					Json::Value currEventValue = eventListValue[index];
+					result.eventDefnList.push_back(loadStoryCutsceneEvent(currEventValue));
+				}
+
+				return result;
+			}
+
 			LoadStoryLevelResult loadStoryLevel(const std::string& campaignFolderName, const Json::Value& jsonValue) {
 				LoadStoryLevelResult result;
+
+				result.levelDefn.openingCutsceneDefn.existsFlag = jsonValue.isMember(StoryLevelProperties::OPENING_CUTSCENE);
+				if (result.levelDefn.openingCutsceneDefn.existsFlag) {
+					result.validationResult.openingCutsceneValidationResult = LoadStoryCutsceneValidation::validate(jsonValue, StoryLevelProperties::OPENING_CUTSCENE);
+					if (result.validationResult.openingCutsceneValidationResult.valid()) {
+						result.levelDefn.openingCutsceneDefn = loadStoryCutscene(jsonValue[StoryLevelProperties::OPENING_CUTSCENE]);
+					}
+				}
+
+				result.levelDefn.winCutsceneDefn.existsFlag = jsonValue.isMember(StoryLevelProperties::WIN_CUTSCENE);
+				if (result.levelDefn.winCutsceneDefn.existsFlag) {
+					result.validationResult.winCutsceneValidationResult = LoadStoryCutsceneValidation::validate(jsonValue, StoryLevelProperties::WIN_CUTSCENE);
+					if (result.validationResult.winCutsceneValidationResult.valid()) {
+						result.levelDefn.winCutsceneDefn = loadStoryCutscene(jsonValue[StoryLevelProperties::WIN_CUTSCENE]);
+					}
+				}
+
+				result.levelDefn.lossCutsceneDefn.existsFlag = jsonValue.isMember(StoryLevelProperties::LOSS_CUTSCENE);
+				if (result.levelDefn.lossCutsceneDefn.existsFlag) {
+					result.validationResult.lossCutsceneValidationResult = LoadStoryCutsceneValidation::validate(jsonValue, StoryLevelProperties::LOSS_CUTSCENE);
+					if (result.validationResult.lossCutsceneValidationResult.valid()) {
+						result.levelDefn.lossCutsceneDefn = loadStoryCutscene(jsonValue[StoryLevelProperties::LOSS_CUTSCENE]);
+					}
+				}
 
 				result.validationResult.musicValid = r3::json::ValidationUtils::optionalString(jsonValue, StoryLevelProperties::MUSIC_FILENAME);
 				if (result.validationResult.musicValid) {
@@ -457,9 +658,9 @@ namespace r3 {
 				if (result.validationResult.snakeStartValid) {
 					Json::Value snakeStartValue = jsonValue[StoryLevelProperties::SNAKE_START];
 
-					result.validationResult.snakeStartPositionValid = LoadStoryLevelValidation::snakeStartPositionValid(snakeStartValue);
+					result.validationResult.snakeStartPositionValid = LoadStoryLevelValidation::positionValid(snakeStartValue);
 					if (result.validationResult.snakeStartPositionValid) {
-						Json::Value snakeStartPositionValue = snakeStartValue[StoryLevelProperties::SNAKE_START_POSITION];
+						Json::Value snakeStartPositionValue = snakeStartValue[StoryLevelProperties::POSITION];
 						result.levelDefn.snakeStart.headPosition.x = snakeStartPositionValue[StoryLevelProperties::POSITION_X].asInt();
 						result.levelDefn.snakeStart.headPosition.y = snakeStartPositionValue[StoryLevelProperties::POSITION_Y].asInt();
 					}

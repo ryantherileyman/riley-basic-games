@@ -23,6 +23,13 @@ namespace r3 {
 			std::string currFilename;
 		} StoryLevelAssetLoadingStatus;
 
+		typedef struct Snake_StoryMapAssetBundle {
+			StoryMapDefn mapDefn;
+			LoadStoryMapValidationResult loadMapValidationResult;
+			std::unordered_map<int, sf::Texture*> floorTextureRefMap;
+			std::unordered_map<int, sf::Texture*> barrierTextureRefMap;
+		} StoryMapAssetBundle;
+
 		class StoryLevelAssetBundle {
 
 		private:
@@ -38,19 +45,23 @@ namespace r3 {
 			std::string currFilenameBeingLoaded;
 
 		private:
-			LoadStoryMapValidationResult loadMapValidationResult;
 			std::vector<std::string> failedFilenameList;
 
 		private:
-			StoryMapDefn mapDefn;
 			sf::Texture snakeTexture;
 			sf::Texture foodTexture;
 			sf::Texture dangerTexture;
-			std::unordered_map<int, sf::Texture> floorTextureMap;
-			std::unordered_map<int, sf::Texture> barrierTextureMap;
+			std::unordered_map<std::string, sf::Texture> textureMap;
+
+		private:
+			StoryMapAssetBundle mapAssetBundle;
+			std::unordered_map<std::string, StoryMapAssetBundle> cutsceneMapAssetBundleMap;
 
 		private:
 			sf::Music music;
+			sf::Music openingCutsceneMusic;
+			sf::Music winCutsceneMusic;
+			sf::Music lossCutsceneMusic;
 			sf::SoundBuffer foodSpawnedSoundBuffer;
 			sf::SoundBuffer eatFoodSoundBuffer;
 			sf::SoundBuffer hitBarrierSoundBuffer;
@@ -72,6 +83,7 @@ namespace r3 {
 
 		public:
 			const StoryMapDefn& getMapDefn() const;
+			const sf::Texture& getTexture(const std::string& filename) const;
 			const sf::Texture& getSnakeTexture() const;
 			const sf::Texture& getFoodTexture() const;
 			const sf::Texture& getDangerTexture() const;
@@ -79,7 +91,15 @@ namespace r3 {
 			const sf::Texture& getBarrierTexture(int barrierId) const;
 
 		public:
+			const StoryMapDefn& getCutsceneMapDefn(const std::string& mapFilename) const;
+			const sf::Texture& getCutsceneMapFloorTexture(const std::string& mapFilename, int floorId) const;
+			const sf::Texture& getCutsceneMapBarrierTexture(const std::string& mapFilename, int barrierId) const;
+
+		public:
 			sf::Music& getMusic();
+			sf::Music& getOpeningCutsceneMusic();
+			sf::Music& getWinCutsceneMusic();
+			sf::Music& getLossCutsceneMusic();
 			const sf::SoundBuffer& getFoodSpawnedSoundBuffer() const;
 			const sf::SoundBuffer& getEatFoodSoundBuffer() const;
 			const sf::SoundBuffer& getHitBarrierSoundBuffer() const;
@@ -87,13 +107,18 @@ namespace r3 {
 
 		private:
 			void loadLevel();
+			void loadCutsceneSoundTrack(sf::Music& targetMusic, const StoryCutsceneDefn& cutsceneDefn);
+			void loadCutsceneTextures(const StoryCutsceneDefn& cutsceneDefn);
+			void loadCutsceneMaps(const StoryCutsceneDefn& cutsceneDefn);
+			LoadStoryMapResult loadMap(const std::string& filename);
 
 		private:
 			void loadSnakeTexture();
 			void loadFoodTexture();
 			void loadDangerTexture();
-			void loadFloorTextureMap(const StoryMapDefn& mapDefn);
-			void loadBarrierTextureMap(const StoryMapDefn& mapDefn);
+			void loadFloorTextureMap(StoryMapAssetBundle& mapAssetBundle);
+			void loadBarrierTextureMap(StoryMapAssetBundle& mapAssetBundle);
+			void loadTexture(const std::string& filename, bool repeatFlag);
 
 		private:
 			void loadMusic();

@@ -75,6 +75,65 @@ namespace r3 {
 				return result;
 			}
 
+			void setFoodSpriteTextureRect(sf::Sprite& sprite, StoryFoodType foodType) {
+				switch (foodType) {
+				case StoryFoodType::APPLE:
+					sprite.setTextureRect(sf::IntRect(0, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::CARROT:
+					sprite.setTextureRect(sf::IntRect(75, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				}
+			}
+
+			void setDangerSpriteTextureRect(sf::Sprite& sprite, StoryDangerType dangerType, bool snakeOccupiesPosition) {
+				switch (dangerType) {
+				case StoryDangerType::SPIKE_TRAP:
+					int textureRectXPos = (snakeOccupiesPosition ? 75 : 0);
+					sprite.setTextureRect(sf::IntRect(textureRectXPos, 0, StoryGameRenderConstants::DANGER_PIXEL_SIZE, StoryGameRenderConstants::DANGER_PIXEL_SIZE));
+					break;
+				}
+			}
+
+		}
+
+		namespace StoryCutsceneRenderUtils {
+
+			int resolveScreenViewAlpha(const StoryCutsceneScreenView& screenView) {
+				float percent = 1.0f;
+				if (screenView.fadeFrames > 0) {
+					percent = (float)(screenView.fadeFrames - screenView.fadeFramesRemaining) / (float)screenView.fadeFrames;
+				}
+
+				int result = (int)(255 * percent);
+				return result;
+			}
+
+			sf::RectangleShape createScreenViewColorShape(const StoryCutsceneScreenView& screenView) {
+				int alpha = resolveScreenViewAlpha(screenView);
+
+				sf::Color color = screenView.color;
+				color.a = alpha;
+
+				printf("Screen view color %d,%d,%d,%d\n", color.r, color.g, color.b, color.a);
+
+				sf::RectangleShape result = sf::RectangleShape(sf::Vector2f(ViewUtils::VIEW_SIZE.x, ViewUtils::VIEW_SIZE.y));
+				result.setFillColor(color);
+				return result;
+			}
+
+			sf::Sprite createScreenViewTextureSprite(const StoryCutsceneScreenView& screenView, const sf::Texture& texture) {
+				int alpha = resolveScreenViewAlpha(screenView);
+
+				printf("Screen view texture <%s> at %d alpha\n", screenView.textureFilename.c_str(), alpha);
+
+				sf::Sprite result;
+				result.setTexture(texture);
+				result.setColor(sf::Color(255, 255, 255, alpha));
+				result.setScale(ViewUtils::VIEW_SIZE.x / texture.getSize().x, ViewUtils::VIEW_SIZE.y / texture.getSize().y);
+				return result;
+			}
+
 		}
 
 		StoryGameRenderer::StoryGameRenderer() {
@@ -157,6 +216,153 @@ namespace r3 {
 			renderTarget.draw(seeLogText);
 
 			this->renderExitInstructions(renderTarget);
+		}
+
+		void StoryGameRenderer::renderCutscene(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+
+			for (auto const& currScreenView : renderState.storyCutscene->getActiveScreenViewList()) {
+				if (currScreenView.screenEventType == StoryCutsceneScreenViewType::COLOR) {
+					sf::RectangleShape colorShape = StoryCutsceneRenderUtils::createScreenViewColorShape(currScreenView);
+					renderTarget.draw(colorShape);
+				}
+				else if (currScreenView.screenEventType == StoryCutsceneScreenViewType::TEXTURE) {
+					const sf::Texture& texture = renderState.levelAssetBundle->getTexture(currScreenView.textureFilename);
+					sf::Sprite textureSprite = StoryCutsceneRenderUtils::createScreenViewTextureSprite(currScreenView, texture);
+					renderTarget.draw(textureSprite);
+				}
+				else if ( currScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+					sf::RenderTexture mapTexture;
+					mapTexture.create((unsigned int)ViewUtils::VIEW_SIZE.x, (unsigned int)ViewUtils::VIEW_SIZE.y);
+					mapTexture.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+					this->renderCutscenePlayingField(mapTexture, *renderState.levelAssetBundle, currScreenView);
+
+					sf::Sprite mapSprite = StoryCutsceneRenderUtils::createScreenViewTextureSprite(currScreenView, mapTexture.getTexture());
+					mapSprite.setPosition(0.0f, ViewUtils::VIEW_SIZE.y);
+					mapSprite.setScale(1.0f, -1.0f);
+					renderTarget.draw(mapSprite);
+				}
+			}
+
+			if (!renderState.storyCutscene->getActiveScreenViewList().empty()) {
+				if (renderState.storyCutscene->getSnake() != nullptr) {
+					this->renderCutsceneSnake(renderTarget, renderState);
+				}
+
+				this->renderCutsceneFood(renderTarget, renderState);
+				this->renderCutsceneDangers(renderTarget, renderState);
+			}
+		}
+
+		void StoryGameRenderer::renderCutscenePlayingField(sf::RenderTarget& renderTarget, const StoryLevelAssetBundle& levelAssetBundle, const StoryCutsceneScreenView& screenView) {
+			const StoryMapDefn& mapDefn = levelAssetBundle.getCutsceneMapDefn(screenView.mapFilename);
+			StoryMap map(mapDefn);
+
+			sf::Vector2i fieldSize = map.getFieldSize();
+			float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+			sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+			const sf::Texture& primaryFloorTexture = levelAssetBundle.getCutsceneMapFloorTexture(screenView.mapFilename, 0);
+
+			// Draw primary grass tile (floorId = 0) under entire playing field
+			sf::Sprite grassSprite;
+			grassSprite.setTexture(primaryFloorTexture);
+			grassSprite.setScale(tileSize / (float)primaryFloorTexture.getSize().x, tileSize / (float)primaryFloorTexture.getSize().y);
+			grassSprite.setPosition(fieldPosition.x, fieldPosition.y);
+			grassSprite.setTextureRect(sf::IntRect(0, 0, fieldSize.x * primaryFloorTexture.getSize().x, fieldSize.y * primaryFloorTexture.getSize().y));
+			renderTarget.draw(grassSprite);
+
+			// Create a generic sprite for drawing a single tile at a time
+			sf::Sprite tileSprite;
+
+			for (int y = 0; y < fieldSize.y; y++) {
+				for (int x = 0; x < fieldSize.x; x++) {
+					int floorId = map.getFloorId(x, y);
+					int barrierId = map.getBarrierId(x, y);
+
+					// Draw the floor tile if it is not the primary
+					if (floorId > 0) {
+						const sf::Texture& floorTexture = levelAssetBundle.getCutsceneMapFloorTexture(screenView.mapFilename, floorId);
+						tileSprite.setTexture(floorTexture);
+						tileSprite.setScale(tileSize / (float)floorTexture.getSize().x, tileSize / (float)floorTexture.getSize().y);
+						tileSprite.setPosition(fieldPosition.x + (x * tileSize), fieldPosition.y + (y * tileSize));
+						renderTarget.draw(tileSprite);
+					}
+
+					// Draw the barrier tile if it does not indicate no barrier exists in this location
+					if (barrierId > 0) {
+						const sf::Texture& barrierTexture = levelAssetBundle.getCutsceneMapBarrierTexture(screenView.mapFilename, barrierId);
+						tileSprite.setTexture(barrierTexture);
+						tileSprite.setScale(tileSize / (float)barrierTexture.getSize().x, tileSize / (float)barrierTexture.getSize().y);
+						tileSprite.setPosition(fieldPosition.x + (x * tileSize), fieldPosition.y + (y * tileSize));
+						renderTarget.draw(tileSprite);
+					}
+				}
+			}
+		}
+
+		void StoryGameRenderer::renderCutsceneSnake(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			const StoryCutsceneScreenView& lastScreenView = renderState.storyCutscene->getActiveScreenViewList().back();
+			if (lastScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+				const StoryMapDefn& mapDefn = renderState.levelAssetBundle->getCutsceneMapDefn(lastScreenView.mapFilename);
+
+				RenderUtils::RenderSnakeInput renderSnakeInput;
+				renderSnakeInput.fieldSize = mapDefn.fieldSize;
+				renderSnakeInput.texture = &renderState.levelAssetBundle->getSnakeTexture();
+				renderSnakeInput.snake = renderState.storyCutscene->getSnake();
+				renderSnakeInput.snakeHurtFlag = false;
+
+				RenderUtils::renderSnake(renderTarget, renderSnakeInput);
+			}
+		}
+
+		void StoryGameRenderer::renderCutsceneFood(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			const StoryCutsceneScreenView& lastScreenView = renderState.storyCutscene->getActiveScreenViewList().back();
+			if (lastScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+				const StoryMapDefn& mapDefn = renderState.levelAssetBundle->getCutsceneMapDefn(lastScreenView.mapFilename);
+
+				sf::Vector2i fieldSize = mapDefn.fieldSize;
+				float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+				sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+				sf::Sprite foodSprite;
+				foodSprite.setTexture(renderState.levelAssetBundle->getFoodTexture());
+				foodSprite.setScale(tileSize / (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE, tileSize / (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE);
+
+				for (auto const& currFoodInstancePair : renderState.storyCutscene->getFoodInstanceMap()) {
+					StoryGameRenderUtils::setFoodSpriteTextureRect(foodSprite, currFoodInstancePair.second.foodType);
+					foodSprite.setPosition(fieldPosition.x + currFoodInstancePair.second.position.x * tileSize, fieldPosition.y + currFoodInstancePair.second.position.y * tileSize);
+
+					renderTarget.draw(foodSprite);
+				}
+			}
+		}
+
+		void StoryGameRenderer::renderCutsceneDangers(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState) {
+			const StoryCutsceneScreenView& lastScreenView = renderState.storyCutscene->getActiveScreenViewList().back();
+			if (lastScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+				const StoryMapDefn& mapDefn = renderState.levelAssetBundle->getCutsceneMapDefn(lastScreenView.mapFilename);
+
+				sf::Vector2i fieldSize = mapDefn.fieldSize;
+				float tileSize = RenderUtils::resolveViewportTileSize(fieldSize);
+				sf::Vector2f fieldPosition = RenderUtils::resolveViewportFieldTopLeftPosition(fieldSize, tileSize);
+
+				sf::Sprite dangerSprite;
+				dangerSprite.setTexture(renderState.levelAssetBundle->getDangerTexture());
+				dangerSprite.setScale(tileSize / (float)StoryGameRenderConstants::DANGER_PIXEL_SIZE, tileSize / (float)StoryGameRenderConstants::DANGER_PIXEL_SIZE);
+
+				for (auto const& currDangerInstancePair : renderState.storyCutscene->getDangerInstanceMap()) {
+					bool snakeOccupiesPosition = false;
+					if (renderState.storyCutscene->getSnake() != nullptr) {
+						snakeOccupiesPosition = renderState.storyCutscene->getSnake()->occupiesPosition(currDangerInstancePair.second.position);
+					}
+					StoryGameRenderUtils::setDangerSpriteTextureRect(dangerSprite, currDangerInstancePair.second.dangerType, snakeOccupiesPosition);
+
+					dangerSprite.setPosition(fieldPosition.x + currDangerInstancePair.second.position.x * tileSize, fieldPosition.y + currDangerInstancePair.second.position.y * tileSize);
+
+					renderTarget.draw(dangerSprite);
+				}
+			}
 		}
 
 		void StoryGameRenderer::renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
@@ -275,7 +481,7 @@ namespace r3 {
 
 			// Draw primary grass tile (floorId = 0) under entire playing field
 			sf::Sprite grassSprite;
-			grassSprite.setTexture(renderState.levelAssetBundle->getFloorTexture(0));
+			grassSprite.setTexture(primaryFloorTexture);
 			grassSprite.setScale(tileSize / (float)primaryFloorTexture.getSize().x, tileSize / (float)primaryFloorTexture.getSize().y);
 			grassSprite.setPosition(fieldPosition.x, fieldPosition.y);
 			grassSprite.setTextureRect(sf::IntRect(0, 0, fieldSize.x * primaryFloorTexture.getSize().x, fieldSize.y * primaryFloorTexture.getSize().y));
@@ -332,14 +538,7 @@ namespace r3 {
 			for (auto const& currFoodSpawnTracker : renderState.storyGame->getFoodSpawnTrackerList()) {
 				const StoryFoodDefn& foodDefn = currFoodSpawnTracker.getFoodDefn();
 
-				switch (foodDefn.foodType) {
-				case StoryFoodType::APPLE:
-					foodSprite.setTextureRect(sf::IntRect(0, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
-					break;
-				case StoryFoodType::CARROT:
-					foodSprite.setTextureRect(sf::IntRect(75, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
-					break;
-				}
+				StoryGameRenderUtils::setFoodSpriteTextureRect(foodSprite, foodDefn.foodType);
 
 				for (auto const& currFoodInstance : currFoodSpawnTracker.getFoodInstanceList()) {
 					foodSprite.setPosition(fieldPosition.x + currFoodInstance.position.x * tileSize, fieldPosition.y + currFoodInstance.position.y * tileSize);

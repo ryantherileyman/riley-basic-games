@@ -20,6 +20,7 @@ namespace r3 {
 			PLAY_OPENING_CUTSCENE,
 			WAIT_TO_START,
 			GAME_RUNNING,
+			PLAY_WIN_CUTSCENE,
 			LEVEL_LOST,
 			CAMPAIGN_WON,
 		} StoryGameMode;
@@ -426,12 +427,19 @@ namespace r3 {
 			StoryGameSceneClientRequest processPlayOpeningCutsceneKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processWaitToStartKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
+			StoryGameSceneClientRequest processPlayWinCutsceneKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processLevelLostKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processCampaignWonKeyEvent(sf::Event& event);
 
 		private:
-			void updateCutscene();
+			void updateOpeningCutscene();
+			void updateWinCutscene();
 			void updateGameRunning();
+		
+		private:
+			void startRunningCutscene(const StoryCutsceneDefn& cutsceneDefn, sf::Music& cutsceneSoundTrack);
+			void stopRunningLevel();
+			void moveToNextLevel();
 			
 		};
 

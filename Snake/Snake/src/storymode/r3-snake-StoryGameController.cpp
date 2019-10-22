@@ -66,6 +66,9 @@ namespace r3 {
 				case StoryGameMode::GAME_RUNNING:
 					result = this->processGameRunningKeyEvent(event);
 					break;
+				case StoryGameMode::PLAY_WIN_CUTSCENE:
+					result = this->processPlayWinCutsceneKeyEvent(event);
+					break;
 				case StoryGameMode::LEVEL_LOST:
 					result = this->processLevelLostKeyEvent(event);
 					break;
@@ -87,10 +90,13 @@ namespace r3 {
 				this->updateBasedOnLoadLevelStatus();
 				break;
 			case StoryGameMode::PLAY_OPENING_CUTSCENE:
-				this->updateCutscene();
+				this->updateOpeningCutscene();
 				break;
 			case StoryGameMode::GAME_RUNNING:
 				this->updateGameRunning();
+				break;
+			case StoryGameMode::PLAY_WIN_CUTSCENE:
+				this->updateWinCutscene();
 				break;
 			}
 		}
@@ -121,6 +127,7 @@ namespace r3 {
 			}
 				break;
 			case StoryGameMode::PLAY_OPENING_CUTSCENE:
+			case StoryGameMode::PLAY_WIN_CUTSCENE:
 			{
 				StoryCutsceneRenderState renderState;
 				renderState.levelAssetBundle = this->levelAssetBundle;
@@ -215,11 +222,7 @@ namespace r3 {
 				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 
 				if (this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.existsFlag) {
-					this->storyCutscene = new StoryCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn);
-					if (!this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.soundTrackFilename.empty()) {
-						this->levelAssetBundle->getOpeningCutsceneMusic().setVolume((float)this->systemOptions.soundEffectsVolume);
-						this->levelAssetBundle->getOpeningCutsceneMusic().play();
-					}
+					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn, this->levelAssetBundle->getOpeningCutsceneMusic());
 
 					this->mode = StoryGameMode::PLAY_OPENING_CUTSCENE;
 				}
@@ -311,6 +314,24 @@ namespace r3 {
 			return result;
 		}
 
+		StoryGameSceneClientRequest StoryGameController::processPlayWinCutsceneKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Escape:
+			case sf::Keyboard::Key::Enter:
+				this->moveToNextLevel();
+
+				this->levelAssetBundle->getOpeningCutsceneMusic().stop();
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+				break;
+			}
+
+			return result;
+		}
+
 		StoryGameSceneClientRequest StoryGameController::processLevelLostKeyEvent(sf::Event& event) {
 			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
 
@@ -351,9 +372,18 @@ namespace r3 {
 			return result;
 		}
 
-		void StoryGameController::updateCutscene() {
+		void StoryGameController::updateOpeningCutscene() {
 			if (this->storyCutscene->update()) {
 				this->mode = StoryGameMode::WAIT_TO_START;
+
+				delete this->storyCutscene;
+				this->storyCutscene = nullptr;
+			}
+		}
+
+		void StoryGameController::updateWinCutscene() {
+			if (this->storyCutscene->update()) {
+				this->moveToNextLevel();
 
 				delete this->storyCutscene;
 				this->storyCutscene = nullptr;
@@ -395,26 +425,50 @@ namespace r3 {
 			}
 
 			if (updateResult.snakeDiedFlag) {
-				this->storyGame->stopRunningLevel();
-				music.stop();
+				this->stopRunningLevel();
 
 				this->mode = StoryGameMode::LEVEL_LOST;
 			}
 
 			if (updateResult.completedLevelFlag) {
-				this->storyGame->stopRunningLevel();
-				music.stop();
+				this->stopRunningLevel();
 
-				if (this->currLevelIndex == (this->levelDefnList.size() - 1)) {
-					this->mode = StoryGameMode::CAMPAIGN_WON;
-				} else {
-					this->currLevelIndex++;
-					this->mode = StoryGameMode::LOAD_LEVEL;
-					this->initiateLoadLevel();
+				if (this->levelDefnList[this->currLevelIndex].winCutsceneDefn.existsFlag) {
+					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].winCutsceneDefn, this->levelAssetBundle->getWinCutsceneMusic());
+
+					this->mode = StoryGameMode::PLAY_WIN_CUTSCENE;
+				}
+				else {
+					this->moveToNextLevel();
 				}
 			}
 
 			this->snakeMovementInputQueue.clear();
+		}
+
+		void StoryGameController::startRunningCutscene(const StoryCutsceneDefn& cutsceneDefn, sf::Music& cutsceneSoundTrack) {
+			this->storyCutscene = new StoryCutscene(cutsceneDefn);
+
+			if (!cutsceneDefn.soundTrackFilename.empty()) {
+				cutsceneSoundTrack.setVolume((float)this->systemOptions.soundEffectsVolume);
+				cutsceneSoundTrack.play();
+			}
+		}
+
+		void StoryGameController::stopRunningLevel() {
+			this->storyGame->stopRunningLevel();
+			this->levelAssetBundle->getMusic().stop();
+		}
+
+		void StoryGameController::moveToNextLevel() {
+			if (this->currLevelIndex == (this->levelDefnList.size() - 1)) {
+				this->mode = StoryGameMode::CAMPAIGN_WON;
+			}
+			else {
+				this->currLevelIndex++;
+				this->mode = StoryGameMode::LOAD_LEVEL;
+				this->initiateLoadLevel();
+			}
 		}
 
 	}

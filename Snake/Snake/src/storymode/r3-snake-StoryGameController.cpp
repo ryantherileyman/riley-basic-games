@@ -229,7 +229,7 @@ namespace r3 {
 				this->storyGame->startNewLevel(this->levelAssetBundle->getMapDefn(), this->levelDefnList[this->currLevelIndex]);
 
 				if (this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.existsFlag) {
-					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn, this->levelAssetBundle->getOpeningCutsceneMusic());
+					this->storyCutscene = new StoryCutscene(this->levelDefnList[this->currLevelIndex].openingCutsceneDefn);
 
 					this->mode = StoryGameMode::PLAY_OPENING_CUTSCENE;
 				}
@@ -398,8 +398,18 @@ namespace r3 {
 		}
 
 		void StoryGameController::updateOpeningCutscene() {
+			if (
+				!this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.soundTrackFilename.empty() &&
+				this->storyCutscene->getCurrFrame() == 0
+			) {
+				this->levelAssetBundle->getOpeningCutsceneMusic().setVolume((float)this->systemOptions.soundEffectsVolume);
+				this->levelAssetBundle->getOpeningCutsceneMusic().play();
+			}
+
 			if (this->storyCutscene->update()) {
 				this->mode = StoryGameMode::WAIT_TO_START;
+
+				this->levelAssetBundle->getOpeningCutsceneMusic().stop();
 
 				delete this->storyCutscene;
 				this->storyCutscene = nullptr;
@@ -410,6 +420,8 @@ namespace r3 {
 			if (this->storyCutscene->update()) {
 				this->moveToNextLevel();
 
+				this->levelAssetBundle->getWinCutsceneMusic().stop();
+
 				delete this->storyCutscene;
 				this->storyCutscene = nullptr;
 			}
@@ -418,6 +430,8 @@ namespace r3 {
 		void StoryGameController::updateLossCutscene() {
 			if (this->storyCutscene->update()) {
 				this->mode = StoryGameMode::LEVEL_LOST;
+
+				this->levelAssetBundle->getLossCutsceneMusic().stop();
 
 				delete this->storyCutscene;
 				this->storyCutscene = nullptr;
@@ -462,7 +476,7 @@ namespace r3 {
 				this->stopRunningLevel();
 
 				if (this->levelDefnList[this->currLevelIndex].lossCutsceneDefn.existsFlag) {
-					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].lossCutsceneDefn, this->levelAssetBundle->getLossCutsceneMusic());
+					this->storyCutscene = new StoryCutscene(this->levelDefnList[this->currLevelIndex].lossCutsceneDefn);
 
 					this->mode = StoryGameMode::PLAY_LOSS_CUTSCENE;
 				}
@@ -475,7 +489,7 @@ namespace r3 {
 				this->stopRunningLevel();
 
 				if (this->levelDefnList[this->currLevelIndex].winCutsceneDefn.existsFlag) {
-					this->startRunningCutscene(this->levelDefnList[this->currLevelIndex].winCutsceneDefn, this->levelAssetBundle->getWinCutsceneMusic());
+					this->storyCutscene = new StoryCutscene(this->levelDefnList[this->currLevelIndex].winCutsceneDefn);
 
 					this->mode = StoryGameMode::PLAY_WIN_CUTSCENE;
 				}
@@ -485,15 +499,6 @@ namespace r3 {
 			}
 
 			this->snakeMovementInputQueue.clear();
-		}
-
-		void StoryGameController::startRunningCutscene(const StoryCutsceneDefn& cutsceneDefn, sf::Music& cutsceneSoundTrack) {
-			this->storyCutscene = new StoryCutscene(cutsceneDefn);
-
-			if (!cutsceneDefn.soundTrackFilename.empty()) {
-				cutsceneSoundTrack.setVolume((float)this->systemOptions.soundEffectsVolume);
-				cutsceneSoundTrack.play();
-			}
 		}
 
 		void StoryGameController::stopRunningLevel() {

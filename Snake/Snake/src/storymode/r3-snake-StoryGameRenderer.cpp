@@ -252,6 +252,26 @@ namespace r3 {
 				this->renderCutsceneFood(renderTarget, renderState);
 				this->renderCutsceneDangers(renderTarget, renderState);
 			}
+
+			wchar_t frameStr[32];
+			swprintf_s(frameStr, L"%d", renderState.storyCutscene->getCurrFrame());
+
+			sf::Text frameText;
+			frameText.setFont(*this->uiFont);
+			frameText.setCharacterSize(48);
+			frameText.setString(frameStr);
+			frameText.setPosition(24.0f, 24.0f);
+			renderTarget.draw(frameText);
+
+			wchar_t secondsElapsedStr[32];
+			swprintf_s(secondsElapsedStr, L"%f", renderState.storyCutscene->getSecondsElapsed());
+
+			sf::Text secondsElapsedText;
+			secondsElapsedText.setFont(*this->uiFont);
+			secondsElapsedText.setCharacterSize(48);
+			secondsElapsedText.setString(secondsElapsedStr);
+			secondsElapsedText.setPosition(24.0f, 72.0f);
+			renderTarget.draw(secondsElapsedText);
 		}
 
 		void StoryGameRenderer::renderCutscenePlayingField(sf::RenderTarget& renderTarget, const StoryLevelAssetBundle& levelAssetBundle, const StoryCutsceneScreenView& screenView) {

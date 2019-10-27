@@ -6,7 +6,7 @@ namespace r3 {
 
 	namespace snake {
 		
-		typedef enum Snake_ClientMode {
+		typedef enum class Snake_ClientMode {
 			SPLASH_SCREEN,
 			QUICK_GAME,
 			STORY_GAME,

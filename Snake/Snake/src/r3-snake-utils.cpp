@@ -5,6 +5,12 @@ namespace r3 {
 
 	namespace snake {
 
+		namespace GameLoopUtils {
+
+			const sf::Int64 MICROSECONDS_PER_FRAME = 1000000 / 60;
+
+		}
+
 		namespace ViewUtils {
 
 			const float VIEW_ASPECT_RATIO = 1.77777778f;

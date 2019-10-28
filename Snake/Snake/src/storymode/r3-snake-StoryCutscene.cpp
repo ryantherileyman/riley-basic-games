@@ -1,15 +1,10 @@
 
+#include "../includes/r3-snake-utils.hpp"
 #include "../includes/r3-snake-storymodescene.hpp"
 
 namespace r3 {
 
 	namespace snake {
-
-		namespace StoryCutsceneConstants {
-
-			const sf::Int64 MICROSECONDS_PER_FRAME = 1000000 / 60;
-
-		}
 
 		StoryCutscene::StoryCutscene(const StoryCutsceneDefn& cutsceneDefn) {
 			this->cutsceneDefn = &cutsceneDefn;
@@ -56,7 +51,7 @@ namespace r3 {
 				this->clock.restart();
 			}
 
-			sf::Int64 framesElapsed = this->clock.getElapsedTime().asMicroseconds() / StoryCutsceneConstants::MICROSECONDS_PER_FRAME;
+			sf::Int64 framesElapsed = this->clock.getElapsedTime().asMicroseconds() / GameLoopUtils::MICROSECONDS_PER_FRAME;
 
 			this->updateActiveScreenViews();
 

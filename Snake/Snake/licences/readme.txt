@@ -30,6 +30,7 @@ Music from https://filmmusic.io
 "At The Shore" by Kevin MacLeod (https://incompetech.com)
 "Whimsey Groove" by Kevin MacLeod (https://incompetech.com)
 "AngloZulu" by Kevin MacLeod (https://incompetech.com)
+"Monkoto" by Kevin MacLeod (https://incompetech.com)
 "Artifact" by Kevin MacLeod (https://incompetech.com)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 
@@ -54,6 +55,9 @@ https://www.goodtextures.com/image/13455/seamless-and-tileable-grass-texture-134
 https://www.goodtextures.com/image/13513/seamless-and-tileable-grass-texture-13513
 https://www.goodtextures.com/image/13886/seamless-and-tileable-grass-texture-13886
 https://www.goodtextures.com/image/13896/seamless-and-tileable-grass-texture-13896
+
+Tileable Sand Texture from https://www.deviantart.com/
+https://www.deviantart.com/marlborolt/art/Sand-Ripples-439027940
 
 
 Additional artwork created by rileyman can be found in the /artwork/ folder:

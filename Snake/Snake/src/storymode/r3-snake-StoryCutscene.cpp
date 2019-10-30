@@ -1,4 +1,5 @@
 
+#include "../includes/r3-snake-utils.hpp"
 #include "../includes/r3-snake-storymodescene.hpp"
 
 namespace r3 {
@@ -8,6 +9,7 @@ namespace r3 {
 		StoryCutscene::StoryCutscene(const StoryCutsceneDefn& cutsceneDefn) {
 			this->cutsceneDefn = &cutsceneDefn;
 			this->currFrame = 0;
+			this->lastEventFrame = 0;
 			this->framesSinceLastEvent = 0;
 			this->nextEventIndex = 0;
 			this->snake = nullptr;
@@ -17,6 +19,15 @@ namespace r3 {
 			if (this->snake != nullptr) {
 				delete this->snake;
 			}
+		}
+
+		int StoryCutscene::getCurrFrame() const {
+			return this->currFrame;
+		}
+
+		float StoryCutscene::getSecondsElapsed() const {
+			float result = this->clock.getElapsedTime().asSeconds();
+			return result;
 		}
 
 		const std::vector<StoryCutsceneScreenView>& StoryCutscene::getActiveScreenViewList() const {
@@ -36,12 +47,18 @@ namespace r3 {
 		}
 
 		bool StoryCutscene::update() {
+			if (this->currFrame == 0) {
+				this->clock.restart();
+			}
+
+			sf::Int64 framesElapsed = this->clock.getElapsedTime().asMicroseconds() / GameLoopUtils::MICROSECONDS_PER_FRAME;
+
 			this->updateActiveScreenViews();
 
 			this->processEvents();
 
-			this->currFrame++;
-			this->framesSinceLastEvent++;
+			this->currFrame = (int)framesElapsed + 1;
+			this->framesSinceLastEvent = this->currFrame - this->lastEventFrame;
 
 			printf("Now at frame %d\n", this->currFrame);
 
@@ -76,6 +93,7 @@ namespace r3 {
 					this->nextEventIndex++;
 					doneProcessingEvents = (this->nextEventIndex >= this->cutsceneDefn->eventDefnList.size());
 
+					this->lastEventFrame = this->currFrame;
 					this->framesSinceLastEvent = 0;
 				}
 				else {

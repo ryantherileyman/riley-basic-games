@@ -3,25 +3,38 @@
     "menuDescription": "Adam has trapped you in his diabolical gauntlet!",
     "levelList": [
         {
-            "lossCutscene": {
+            "openingCutscene": {
+                "soundTrack": "level-01-opening.wav",
                 "eventList": [
                     {
                         "framesSinceLastEvent": 0,
                         "eventType": "color",
                         "fadeFrames": 0,
-                        "color": { "red": 255, "green": 0, "blue": 0 }
+                        "color": { "red": 0, "green": 0, "blue": 0 }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "texture",
+                        "fadeFrames": 30,
+                        "texture": "opening-01-riley-entertainment.png"
+                    },
+                    {
+                        "framesSinceLastEvent": 330,
+                        "eventType": "texture",
+                        "fadeFrames": 30,
+                        "texture": "opening-02-adams-revenge.png"
+                    },
+                    {
+                        "framesSinceLastEvent": 330,
+                        "eventType": "showMap",
+                        "fadeFrames": 30,
+                        "map": "map-opening-01"
                     },
                     {
                         "framesSinceLastEvent": 60,
-                        "eventType": "showMap",
-                        "fadeFrames": 15,
-                        "map": "map-level-01"
-                    },
-                    {
-                        "framesSinceLastEvent": 15,
                         "eventType": "showSnake",
                         "snakeStart": {
-                            "position": { "x": 4, "y": 10 },
+                            "position": { "x": 4, "y": 11 },
                             "direction": "right",
                             "length": 3
                         }
@@ -35,24 +48,6 @@
                         }
                     },
                     {
-                        "framesSinceLastEvent": 0,
-                        "eventType": "showFood",
-                        "showObject": {
-                            "instanceId": 1,
-                            "foodType": "Apple",
-                            "position": { "x": 1, "y": 1 }
-                        }
-                    },
-                    {
-                        "framesSinceLastEvent": 0,
-                        "eventType": "showDanger",
-                        "showObject": {
-                            "instanceId": 1,
-                            "dangerType": "Spike",
-                            "position": { "x": 11, "y": 2 }
-                        }
-                    },
-                    {
                         "framesSinceLastEvent": 10,
                         "eventType": "moveSnake",
                         "snakeMovement": {
@@ -61,20 +56,11 @@
                         }
                     },
                     {
-                        "framesSinceLastEvent": 0,
-                        "eventType": "showFood",
-                        "showObject": {
-                            "instanceId": 2,
-                            "foodType": "Apple",
-                            "position": { "x": 23, "y": 1 }
-                        }
-                    },
-                    {
                         "framesSinceLastEvent": 10,
                         "eventType": "moveSnake",
                         "snakeMovement": {
-                            "direction": "right",
-                            "grow": true
+                            "direction": "up",
+                            "grow": false
                         }
                     },
                     {
@@ -87,7 +73,156 @@
                     },
                     {
                         "framesSinceLastEvent": 10,
-                        "eventType": "hideSnake"
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 300,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 1,
+                            "foodType": "Apple",
+                            "position": { "x": 12, "y": 1 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 120,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
                     },
                     {
                         "framesSinceLastEvent": 0,
@@ -97,35 +232,1114 @@
                         }
                     },
                     {
-                        "framesSinceLastEvent": 0,
-                        "eventType": "hideDanger",
-                        "hideObject": {
-                            "instanceId": 1
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
                         }
                     },
                     {
-                        "framesSinceLastEvent": 120,
-                        "eventType": "color",
-                        "fadeFrames": 15,
-                        "color": { "red": 0, "green": 255, "blue": 0 }
+                        "framesSinceLastEvent": 10,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-opening-02a"
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 24, "y": 21 },
+                            "direction": "up",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-opening-02b"
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 210,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 2,
+                            "foodType": "Apple",
+                            "position": { "x": 17, "y": 15 }
+                        }
                     },
                     {
                         "framesSinceLastEvent": 60,
-                        "eventType": "color",
-                        "fadeFrames": 15,
-                        "color": { "red": 0, "green": 0, "blue": 255 }
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 3,
+                            "foodType": "Apple",
+                            "position": { "x": 12, "y": 12 }
+                        }
                     },
                     {
                         "framesSinceLastEvent": 60,
-                        "eventType": "texture",
-                        "fadeFrames": 60,
-                        "texture": "brown-grass.png"
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 4,
+                            "foodType": "Apple",
+                            "position": { "x": 17, "y": 9 }
+                        }
                     },
                     {
-                        "framesSinceLastEvent": 180,
-                        "eventType": "color",
-                        "fadeFrames": 15,
-                        "color": { "red": 0, "green": 0, "blue": 0 }
+                        "framesSinceLastEvent": 30,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 5,
+                            "foodType": "Apple",
+                            "position": { "x": 23, "y": 9 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 2
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 6,
+                            "foodType": "Apple",
+                            "position": { "x": 29, "y": 9 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 7,
+                            "foodType": "Apple",
+                            "position": { "x": 33, "y": 12 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 8,
+                            "foodType": "Apple",
+                            "position": { "x": 33, "y": 18 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 4
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 9,
+                            "foodType": "Apple",
+                            "position": { "x": 40, "y": 18 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 5
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 10,
+                            "foodType": "Apple",
+                            "position": { "x": 45, "y": 15 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 6
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 11,
+                            "foodType": "Apple",
+                            "position": { "x": 39, "y": 12 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 7
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 12,
+                            "foodType": "Apple",
+                            "position": { "x": 39, "y": 3 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 8
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showFood",
+                        "showObject": {
+                            "instanceId": 13,
+                            "foodType": "Apple",
+                            "position": { "x": 24, "y": 3 }
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 9
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 10
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 11
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 12
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-opening-02c"
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 960,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "left",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "hideFood",
+                        "hideObject": {
+                            "instanceId": 13
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-opening-03"
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 3, "y": 9 },
+                            "direction": "up",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-01"
+                    },
+                    {
+                        "framesSinceLastEvent": 330,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-01"
                     }
                 ]
             },

@@ -327,7 +327,9 @@ namespace r3 {
 			const StoryCutsceneDefn* cutsceneDefn;
 
 		private:
+			sf::Clock clock;
 			int currFrame;
+			int lastEventFrame;
 			int framesSinceLastEvent;
 			size_t nextEventIndex;
 
@@ -344,6 +346,8 @@ namespace r3 {
 			~StoryCutscene();
 
 		public:
+			int getCurrFrame() const;
+			float getSecondsElapsed() const;
 			const std::vector<StoryCutsceneScreenView>& getActiveScreenViewList() const;
 			const Snake* getSnake() const;
 			const std::unordered_map<int, StoryFoodInstance>& getFoodInstanceMap() const;
@@ -440,7 +444,6 @@ namespace r3 {
 			void updateGameRunning();
 		
 		private:
-			void startRunningCutscene(const StoryCutsceneDefn& cutsceneDefn, sf::Music& cutsceneSoundTrack);
 			void stopRunningLevel();
 			void moveToNextLevel();
 			

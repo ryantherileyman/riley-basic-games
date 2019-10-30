@@ -6,6 +6,12 @@ namespace r3 {
 
 	namespace snake {
 
+		namespace GameLoopUtils {
+
+			extern const sf::Int64 MICROSECONDS_PER_FRAME;
+
+		}
+
 		namespace ViewUtils {
 
 			extern const float VIEW_ASPECT_RATIO;

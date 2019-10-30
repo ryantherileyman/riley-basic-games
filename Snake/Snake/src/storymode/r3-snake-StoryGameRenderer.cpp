@@ -115,8 +115,6 @@ namespace r3 {
 				sf::Color color = screenView.color;
 				color.a = alpha;
 
-				printf("Screen view color %d,%d,%d,%d\n", color.r, color.g, color.b, color.a);
-
 				sf::RectangleShape result = sf::RectangleShape(sf::Vector2f(ViewUtils::VIEW_SIZE.x, ViewUtils::VIEW_SIZE.y));
 				result.setFillColor(color);
 				return result;
@@ -124,8 +122,6 @@ namespace r3 {
 
 			sf::Sprite createScreenViewTextureSprite(const StoryCutsceneScreenView& screenView, const sf::Texture& texture) {
 				int alpha = resolveScreenViewAlpha(screenView);
-
-				printf("Screen view texture <%s> at %d alpha\n", screenView.textureFilename.c_str(), alpha);
 
 				sf::Sprite result;
 				result.setTexture(texture);
@@ -223,15 +219,21 @@ namespace r3 {
 
 			for (auto const& currScreenView : renderState.storyCutscene->getActiveScreenViewList()) {
 				if (currScreenView.screenEventType == StoryCutsceneScreenViewType::COLOR) {
+					printf("Screen view color %d,%d,%d,%d\n", currScreenView.color.r, currScreenView.color.g, currScreenView.color.b, currScreenView.color.a);
+
 					sf::RectangleShape colorShape = StoryCutsceneRenderUtils::createScreenViewColorShape(currScreenView);
 					renderTarget.draw(colorShape);
 				}
 				else if (currScreenView.screenEventType == StoryCutsceneScreenViewType::TEXTURE) {
+					printf("Screen view texture <%s> at %d alpha\n", currScreenView.textureFilename.c_str(), StoryCutsceneRenderUtils::resolveScreenViewAlpha(currScreenView));
+
 					const sf::Texture& texture = renderState.levelAssetBundle->getTexture(currScreenView.textureFilename);
 					sf::Sprite textureSprite = StoryCutsceneRenderUtils::createScreenViewTextureSprite(currScreenView, texture);
 					renderTarget.draw(textureSprite);
 				}
 				else if ( currScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
+					printf("Screen view map <%s> at %d alpha\n", currScreenView.mapFilename.c_str(), StoryCutsceneRenderUtils::resolveScreenViewAlpha(currScreenView));
+
 					sf::RenderTexture mapTexture;
 					mapTexture.create((unsigned int)ViewUtils::VIEW_SIZE.x, (unsigned int)ViewUtils::VIEW_SIZE.y);
 					mapTexture.clear(StoryGameRenderConstants::BACKGROUND_COLOR);

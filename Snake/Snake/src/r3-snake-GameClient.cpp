@@ -17,8 +17,6 @@ namespace r3 {
 		const unsigned int WINDOW_INITIAL_WIDTH = 800;
 		const unsigned int WINDOW_INITIAL_HEIGHT = 450;
 
-		const sf::Int64 MICROSECONDS_PER_FRAME = 1000000 / 60;
-
 		static const struct {
 			unsigned int 	 width;
 			unsigned int 	 height;
@@ -245,8 +243,8 @@ namespace r3 {
 
 				sf::Int64 microSecondsElapsed = clock.getElapsedTime().asMicroseconds();
 				// TODO printf("microseconds elapsed this frame = %lld\n", microSecondsElapsed);
-				if (microSecondsElapsed < MICROSECONDS_PER_FRAME) {
-					std::this_thread::sleep_for(std::chrono::microseconds(MICROSECONDS_PER_FRAME - microSecondsElapsed));
+				if (microSecondsElapsed < GameLoopUtils::MICROSECONDS_PER_FRAME) {
+					std::this_thread::sleep_for(std::chrono::microseconds(GameLoopUtils::MICROSECONDS_PER_FRAME - microSecondsElapsed));
 				}
 			}
 		}

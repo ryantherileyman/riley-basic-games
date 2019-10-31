@@ -134,6 +134,7 @@ namespace r3 {
 			bool maxSpawnCountValid = false;
 			bool growthRateValid = false;
 			bool timePassedValid = true;
+			bool intervalValid = true;
 			bool lengthReachedValid = true;
 			bool floorIdRangeValid = false;
 
@@ -146,6 +147,7 @@ namespace r3 {
 					maxSpawnCountValid &&
 					growthRateValid &&
 					timePassedValid &&
+					intervalValid &&
 					lengthReachedValid &&
 					floorIdRangeValid;
 				return result;
@@ -347,6 +349,7 @@ namespace r3 {
 				extern const char* FOOD_LIST;
 				extern const char* FOOD_TYPE;
 				extern const char* FOOD_GROWTH_RATE;
+				extern const char* FOOD_INTERVAL;
 				extern const char* DANGER_LIST;
 				extern const char* DANGER_TYPE;
 

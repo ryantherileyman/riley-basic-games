@@ -47,7 +47,16 @@ namespace r3 {
 			case StoryObjectSpawnType::ON_TIMER:
 				conditionsMet =
 					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
-					(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->timePassed) &&
+					(
+						(
+							(this->spawnCount == 0) &&
+							(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->timePassed)
+						) ||
+						(
+							(this->spawnCount > 0) &&
+							(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->interval)
+						)
+					) &&
 					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
 				break;
 			case StoryObjectSpawnType::ON_LENGTH_REACHED:

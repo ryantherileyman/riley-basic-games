@@ -87,6 +87,7 @@ namespace r3 {
 				const char* FOOD_LIST = "foodList";
 				const char* FOOD_TYPE = "foodType";
 				const char* FOOD_GROWTH_RATE = "growthRate";
+				const char* FOOD_INTERVAL = "interval";
 				const char* DANGER_LIST = "dangerList";
 				const char* DANGER_TYPE = "dangerType";
 
@@ -461,6 +462,7 @@ namespace r3 {
 
 				if (result.spawnType == StoryObjectSpawnType::ON_TIMER) {
 					result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
+					result.interval = jsonValue[StoryLevelProperties::FOOD_INTERVAL].asInt();
 				}
 
 				Json::Value floorIdRangeValue = jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE];

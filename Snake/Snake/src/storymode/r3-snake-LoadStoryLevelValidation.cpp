@@ -184,6 +184,7 @@ namespace r3 {
 
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_TIMER) == 0) {
 								result.timePassedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::TIME_PASSED, 1);
+								result.intervalValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::FOOD_INTERVAL, 1);
 							}
 
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) {
@@ -221,11 +222,15 @@ namespace r3 {
 					}
 
 					if (!foodValidationResult.growthRateValid) {
-						errorMessages.push_back("The \"growthRate\" is invalid.  It must be an integer or 0 or higher.");
+						errorMessages.push_back("The \"growthRate\" is invalid.  It must be an integer of 0 or higher.");
 					}
 
 					if (!foodValidationResult.timePassedValid) {
-						errorMessages.push_back("The \"timePassed\" is invalid.  It must be an integer or 1 or higher.");
+						errorMessages.push_back("The \"timePassed\" is invalid.  It must be an integer of 1 or higher.");
+					}
+
+					if (!foodValidationResult.intervalValid) {
+						errorMessages.push_back("The \"interval\" is invalid.  It must be an integer of 1 or higher.");
 					}
 
 					if (!foodValidationResult.lengthReachedValid) {

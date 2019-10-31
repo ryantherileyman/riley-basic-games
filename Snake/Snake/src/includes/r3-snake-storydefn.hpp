@@ -157,6 +157,7 @@ namespace r3 {
 			int growthRate;
 			int lengthReached;
 			int timePassed;
+			int interval;
 			int minFloorId;
 			int maxFloorId;
 		} StoryFoodDefn;

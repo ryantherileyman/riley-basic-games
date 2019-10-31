@@ -22,6 +22,7 @@ namespace r3 {
 
 			const wchar_t* HUD_FOOD_APPLES = L"Apples";
 			const wchar_t* HUD_FOOD_CARROTS = L"Carrots";
+			const wchar_t* HUD_FOOD_GREEN_APPLES = L"Green Apples";
 
 			const wchar_t* SCORE_FOOD_EATEN_NO_BONUS = L"+%d";
 			const wchar_t* SCORE_FOOD_EATEN_WITH_BONUS = L"+%d Bonus Path!";
@@ -57,6 +58,9 @@ namespace r3 {
 				case StoryFoodType::CARROT:
 					result = StoryGameRenderConstants::HUD_FOOD_CARROTS;
 					break;
+				case StoryFoodType::GREEN_APPLE:
+					result = StoryGameRenderConstants::HUD_FOOD_GREEN_APPLES;
+					break;
 				}
 
 				return result;
@@ -82,6 +86,9 @@ namespace r3 {
 					break;
 				case StoryFoodType::CARROT:
 					sprite.setTextureRect(sf::IntRect(75, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::GREEN_APPLE:
+					sprite.setTextureRect(sf::IntRect(150, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
 					break;
 				}
 			}
@@ -413,7 +420,6 @@ namespace r3 {
 			scoreText.setPosition(24.0f, 24.0f);
 			renderTarget.draw(scoreText);
 
-			// TODO: support additional win condition types...
 			wchar_t winConditionStr[48];
 			switch (renderState.storyGame->getWinCondition().conditionType) {
 			case StoryWinConditionType::ON_FOOD_EATEN:

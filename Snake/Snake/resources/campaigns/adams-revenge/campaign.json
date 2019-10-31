@@ -1409,6 +1409,16 @@
                     "floorIdRange": { "minId": 4, "maxId": 5 }
                 },
                 {
+                    "foodType": "Green Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 1,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 1,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 0, "maxId": 0 }
+                },
+                {
                     "foodType": "Carrot",
                     "spawnType": "onTimer",
                     "timePassed": 20,

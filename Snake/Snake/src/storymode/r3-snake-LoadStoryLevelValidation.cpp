@@ -27,7 +27,8 @@ namespace r3 {
 
 					bool result =
 						(foodTypeString.compare(FoodTypeValues::APPLE) == 0) ||
-						(foodTypeString.compare(FoodTypeValues::CARROT) == 0);
+						(foodTypeString.compare(FoodTypeValues::CARROT) == 0) ||
+						(foodTypeString.compare(FoodTypeValues::GREEN_APPLE) == 0);
 
 					return result;
 				}

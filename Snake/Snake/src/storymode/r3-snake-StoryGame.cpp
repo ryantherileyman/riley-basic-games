@@ -19,6 +19,9 @@ namespace r3 {
 				case StoryFoodType::CARROT:
 					result = 2;
 					break;
+				case StoryFoodType::GREEN_APPLE:
+					result = 20;
+					break;
 				}
 
 				return result;
@@ -221,6 +224,9 @@ namespace r3 {
 
 						if (currEatenFood.foodType == StoryFoodType::CARROT) {
 							this->updateHealthBy(0.1f);
+						}
+						else if (currEatenFood.foodType == StoryFoodType::GREEN_APPLE) {
+							this->updateHealthBy(1.0f);
 						}
 					}
 

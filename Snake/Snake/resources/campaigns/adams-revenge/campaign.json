@@ -1410,11 +1410,10 @@
                 },
                 {
                     "foodType": "Green Apple",
-                    "spawnType": "onTimer",
-                    "timePassed": 1,
-                    "interval": 1,
+                    "spawnType": "onHealthFell",
+                    "health": 2,
                     "chancePct": 100,
-                    "maxSpawnCount": 1,
+                    "maxSpawnCount": 3,
                     "growthRate": 5,
                     "floorIdRange": { "minId": 0, "maxId": 0 }
                 },

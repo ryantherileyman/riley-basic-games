@@ -60,7 +60,8 @@ namespace r3 {
 					bool result =
 						(spawnTypeString.compare(SpawnTypeValues::ON_DESPAWN) == 0) ||
 						(spawnTypeString.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) ||
-						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0);
+						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0) ||
+						(spawnTypeString.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0);
 
 					return result;
 				}
@@ -192,6 +193,10 @@ namespace r3 {
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) {
 								result.lengthReachedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_LENGTH_REACHED, 2);
 							}
+
+							if (spawnTypeStr.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0) {
+								result.healthValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::FOOD_HEALTH, 1);
+							}
 						}
 					}
 
@@ -237,6 +242,10 @@ namespace r3 {
 
 					if (!foodValidationResult.lengthReachedValid) {
 						errorMessages.push_back("The \"lengthReached\" is invalid.  It must be an integer of 2 or higher.");
+					}
+
+					if (!foodValidationResult.healthValid) {
+						errorMessages.push_back("The \"health\" is invalid.  It must be an integer of 1 or higher.");
 					}
 
 					if (!foodValidationResult.floorIdRangeValid) {

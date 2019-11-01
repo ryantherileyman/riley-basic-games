@@ -136,6 +136,7 @@ namespace r3 {
 			bool timePassedValid = true;
 			bool intervalValid = true;
 			bool lengthReachedValid = true;
+			bool healthValid = true;
 			bool floorIdRangeValid = false;
 
 			bool valid() const {
@@ -149,6 +150,7 @@ namespace r3 {
 					timePassedValid &&
 					intervalValid &&
 					lengthReachedValid &&
+					healthValid &&
 					floorIdRangeValid;
 				return result;
 			}
@@ -350,6 +352,7 @@ namespace r3 {
 				extern const char* FOOD_TYPE;
 				extern const char* FOOD_GROWTH_RATE;
 				extern const char* FOOD_INTERVAL;
+				extern const char* FOOD_HEALTH;
 				extern const char* DANGER_LIST;
 				extern const char* DANGER_TYPE;
 
@@ -407,6 +410,7 @@ namespace r3 {
 				extern const char* ON_DESPAWN;
 				extern const char* ON_TIMER;
 				extern const char* ON_LENGTH_REACHED;
+				extern const char* ON_HEALTH_FELL;
 
 			}
 

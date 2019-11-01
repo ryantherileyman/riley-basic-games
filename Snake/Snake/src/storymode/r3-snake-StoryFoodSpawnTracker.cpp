@@ -39,32 +39,16 @@ namespace r3 {
 
 			switch (this->foodDefn->spawnType) {
 			case StoryObjectSpawnType::ON_DESPAWN:
-				conditionsMet =
-					(this->foodInstanceList.empty()) &&
-					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
-					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+				conditionsMet = this->areDespawnConditionsMet(input);
 				break;
 			case StoryObjectSpawnType::ON_TIMER:
-				conditionsMet =
-					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
-					(
-						(
-							(this->spawnCount == 0) &&
-							(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->timePassed)
-						) ||
-						(
-							(this->spawnCount > 0) &&
-							(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->interval)
-						)
-					) &&
-					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+				conditionsMet = this->areTimerConditionsMet(input);
 				break;
 			case StoryObjectSpawnType::ON_LENGTH_REACHED:
-				conditionsMet =
-					(input.snakeLength >= this->foodDefn->lengthReached) &&
-					(this->foodInstanceList.empty()) &&
-					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
-					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+				conditionsMet = this->areLengthReachedConditionsMet(input);
+				break;
+			case StoryObjectSpawnType::ON_HEALTH_FELL:
+				conditionsMet = this->areHealthFellConditionsMet(input);
 				break;
 			}
 
@@ -110,6 +94,62 @@ namespace r3 {
 			assert(index >= 0);
 
 			this->foodInstanceList.erase(this->foodInstanceList.begin() + index);
+		}
+
+		bool StoryFoodSpawnTracker::areDespawnConditionsMet(const StoryFoodSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+
+			bool result =
+				(this->foodInstanceList.empty()) &&
+				(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return result;
+		}
+
+		bool StoryFoodSpawnTracker::areTimerConditionsMet(const StoryFoodSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+			sf::Time timeSinceLastSpawn = input.timeSinceLevelStarted - this->timeOfLastSpawn;
+
+			bool result =
+				(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+				(
+					(
+						(this->spawnCount == 0) &&
+						(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->timePassed)
+					) ||
+					(
+						(this->spawnCount > 0) &&
+						(timeSinceLastSpawn.asSeconds() >= (float)this->foodDefn->interval)
+					)
+				) &&
+				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return result;
+		}
+
+		bool StoryFoodSpawnTracker::areLengthReachedConditionsMet(const StoryFoodSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+
+			bool result =
+				(input.snakeLength >= this->foodDefn->lengthReached) &&
+				(this->foodInstanceList.empty()) &&
+				(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return result;
+		}
+
+		bool StoryFoodSpawnTracker::areHealthFellConditionsMet(const StoryFoodSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+
+			bool result =
+				(input.snakeHealth <= (float)this->foodDefn->health) &&
+				(this->foodInstanceList.empty()) &&
+				(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return result;
 		}
 
 		int StoryFoodSpawnTracker::findFoodInstanceIndex(int foodInstanceId) const {

@@ -394,6 +394,7 @@ namespace r3 {
 				checkInput.timeSinceLevelStarted = this->clock.getElapsedTime();
 				checkInput.randomizer = &this->randomizer;
 				checkInput.snakeLength = this->getSnake()->getLength();
+				checkInput.snakeHealth = this->snakeHealth;
 
 				if (currFoodSpawnTracker.shouldFoodSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableFoodSpawnPositionList(currFoodSpawnTracker.getFoodDefn());

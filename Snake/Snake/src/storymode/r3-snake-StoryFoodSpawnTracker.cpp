@@ -66,6 +66,13 @@ namespace r3 {
 					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
 					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
 				break;
+			case StoryObjectSpawnType::ON_HEALTH_FELL:
+				conditionsMet =
+					(input.snakeHealth <= (float)this->foodDefn->health) &&
+					(this->foodInstanceList.empty()) &&
+					(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+				break;
 			}
 
 			bool result = false;

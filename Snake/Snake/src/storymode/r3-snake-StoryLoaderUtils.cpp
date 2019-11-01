@@ -88,6 +88,7 @@ namespace r3 {
 				const char* FOOD_TYPE = "foodType";
 				const char* FOOD_GROWTH_RATE = "growthRate";
 				const char* FOOD_INTERVAL = "interval";
+				const char* FOOD_HEALTH = "health";
 				const char* DANGER_LIST = "dangerList";
 				const char* DANGER_TYPE = "dangerType";
 
@@ -145,6 +146,7 @@ namespace r3 {
 				const char* ON_DESPAWN = "onDespawn";
 				const char* ON_TIMER = "onTimer";
 				const char* ON_LENGTH_REACHED = "onLengthReached";
+				const char* ON_HEALTH_FELL = "onHealthFell";
 
 			}
 
@@ -451,6 +453,9 @@ namespace r3 {
 				else if (jsonValueStr.compare(SpawnTypeValues::ON_TIMER) == 0) {
 					result = StoryObjectSpawnType::ON_TIMER;
 				}
+				else if (jsonValueStr.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0) {
+					result = StoryObjectSpawnType::ON_HEALTH_FELL;
+				}
 
 				return result;
 			}
@@ -471,6 +476,10 @@ namespace r3 {
 				if (result.spawnType == StoryObjectSpawnType::ON_TIMER) {
 					result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
 					result.interval = jsonValue[StoryLevelProperties::FOOD_INTERVAL].asInt();
+				}
+
+				if (result.spawnType == StoryObjectSpawnType::ON_HEALTH_FELL) {
+					result.health = jsonValue[StoryLevelProperties::FOOD_HEALTH].asInt();
 				}
 
 				Json::Value floorIdRangeValue = jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE];

@@ -46,6 +46,7 @@ namespace r3 {
 			sf::Time timeSinceLevelStarted;
 			std::default_random_engine* randomizer;
 			int snakeLength;
+			float snakeHealth;
 		} StoryFoodSpawnCheckInput;
 
 		typedef struct Snake_StoryFoodPositionCheckResult {

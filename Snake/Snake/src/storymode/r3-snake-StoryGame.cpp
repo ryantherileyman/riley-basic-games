@@ -22,6 +22,9 @@ namespace r3 {
 				case StoryFoodType::GREEN_APPLE:
 					result = 20;
 					break;
+				case StoryFoodType::CHILI_PEPPER:
+					result = 30;
+					break;
 				}
 
 				return result;
@@ -67,10 +70,10 @@ namespace r3 {
 			this->levelDefn = nullptr;
 			this->map = nullptr;
 			this->snake = nullptr;
-			this->snakeSpeedTilesPerSecond = 0.0f;
 			this->snakeHealth = 0.0f;
 			this->framesSinceSnakeMoved = 0;
 			this->queuedSnakeGrowth = 0;
+			this->nextSnakeMovementModifierId = 1;
 			this->nextFoodInstanceId = 1;
 			this->nextDangerInstanceId = 1;
 			this->score = 0;
@@ -93,13 +96,15 @@ namespace r3 {
 			this->map = new StoryMap(mapDefn);
 			this->snake = new Snake(levelDefn.snakeStart);
 
-			this->snakeSpeedTilesPerSecond = (float)levelDefn.snakeSpeedTilesPerSecond;
 			this->snakeHealth = (float)levelDefn.maxSnakeHealth;
 			this->framesSinceSnakeMoved = 0;
 			while (!this->snakeMovementQueue.empty()) {
 				this->snakeMovementQueue.pop();
 			}
 			this->queuedSnakeGrowth = 0;
+
+			this->nextSnakeMovementModifierId = 1;
+			this->snakeMovementModifierMap.clear();
 
 			this->nextFoodInstanceId = 1;
 			this->foodSpawnTrackerList.clear();
@@ -196,6 +201,9 @@ namespace r3 {
 			result.spawnedFoodInstanceList = this->checkForFoodSpawns();
 			result.spawnedDangerInstanceList = this->checkForDangerSpawns();
 
+			this->updateSnakeMovementModifierMap();
+			float snakeSpeedTilesPerSecond = this->resolveSnakeSpeedTilesPerSecond();
+
 			this->checkForDangerDespawns();
 
 			this->addNewFoodSpawnsToFoodTileDistanceTrackingMap(result.spawnedFoodInstanceList);
@@ -205,7 +213,7 @@ namespace r3 {
 			this->consumeAllUnusableSnakeInputs();
 
 			this->framesSinceSnakeMoved++;
-			if (this->framesSinceSnakeMoved >= (60.0f / this->snakeSpeedTilesPerSecond)) {
+			if (this->framesSinceSnakeMoved >= (60.0f / snakeSpeedTilesPerSecond)) {
 				ObjectDirection directionToMoveSnake = this->resolveDirectionToMoveSnake();
 				if (this->snakeWouldHitBarrier(directionToMoveSnake)) {
 					result.snakeHitBarrierFlag = true;
@@ -227,6 +235,9 @@ namespace r3 {
 						}
 						else if (currEatenFood.foodType == StoryFoodType::GREEN_APPLE) {
 							this->updateHealthBy(1.0f);
+						}
+						else if (currEatenFood.foodType == StoryFoodType::CHILI_PEPPER) {
+							this->addNewSnakeMovementModifier(1.33f, 2.0f);
 						}
 					}
 
@@ -251,7 +262,7 @@ namespace r3 {
 
 				result.snakeDiedFlag = (this->snakeHealth <= 0.0f);
 
-				this->framesSinceSnakeMoved -= (int)(60.0f / this->snakeSpeedTilesPerSecond);
+				this->framesSinceSnakeMoved -= (int)(60.0f / snakeSpeedTilesPerSecond);
 			}
 
 			return result;
@@ -334,6 +345,47 @@ namespace r3 {
 			return result;
 		}
 
+		void StoryGame::updateSnakeMovementModifierMap() {
+			std::vector<int> modifierIdListToRemove;
+			for (auto const& currSnakeMovementModifierPair : this->snakeMovementModifierMap) {
+				float timeModifierEnds = currSnakeMovementModifierPair.second.timeModifierBegan.asSeconds() + currSnakeMovementModifierPair.second.secondsToModify;
+				if (this->clock.getElapsedTime().asSeconds() > timeModifierEnds) {
+					modifierIdListToRemove.push_back(currSnakeMovementModifierPair.first);
+				}
+			}
+
+			for (int currModifierId : modifierIdListToRemove) {
+				printf("Removing movement multiplier of %f\n", this->snakeMovementModifierMap[currModifierId].movementMultiplier);
+
+				this->snakeMovementModifierMap.erase(currModifierId);
+			}
+
+			if (!modifierIdListToRemove.empty()) {
+				printf("New speed will be %f\n", this->resolveSnakeSpeedTilesPerSecond());
+			}
+		}
+
+		float StoryGame::resolveSnakeSpeedTilesPerSecond() {
+			float result = (float)this->levelDefn->snakeSpeedTilesPerSecond;
+			for (auto const& currSnakeMovementModifierPair : this->snakeMovementModifierMap) {
+				result *= currSnakeMovementModifierPair.second.movementMultiplier;
+			}
+			return result;
+		}
+
+		void StoryGame::addNewSnakeMovementModifier(float movementMultiplier, float secondsToApply) {
+			printf("Adding movement multiplier of %f\n", movementMultiplier);
+
+			this->snakeMovementModifierMap[this->nextSnakeMovementModifierId] = StorySnakeMovementModifier();
+			this->snakeMovementModifierMap[this->nextSnakeMovementModifierId].movementMultiplier = movementMultiplier;
+			this->snakeMovementModifierMap[this->nextSnakeMovementModifierId].secondsToModify = secondsToApply;
+			this->snakeMovementModifierMap[this->nextSnakeMovementModifierId].timeModifierBegan = this->clock.getElapsedTime();
+
+			this->nextSnakeMovementModifierId++;
+
+			printf("New speed will be %f\n", this->resolveSnakeSpeedTilesPerSecond());
+		}
+
 		std::vector<StoryFoodInstance> StoryGame::checkForFoodSpawns() {
 			std::vector<StoryFoodInstance> result;
 
@@ -345,7 +397,7 @@ namespace r3 {
 
 				if (currFoodSpawnTracker.shouldFoodSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableFoodSpawnPositionList(currFoodSpawnTracker.getFoodDefn());
-					printf("There are %d positions on the map that the food can spawn\n", availablePositionList.size());
+					// TODO printf("There are %d positions on the map that the food can spawn\n", availablePositionList.size());
 					if (availablePositionList.size() > 0) {
 						StoryFoodInstance newFoodInstance = this->createFoodInstance(currFoodSpawnTracker.getFoodDefn().foodType, availablePositionList);
 						currFoodSpawnTracker.spawnFood(newFoodInstance);
@@ -471,7 +523,7 @@ namespace r3 {
 
 				if (currDangerSpawnTracker.shouldDangerSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableDangerSpawnPositionList(currDangerSpawnTracker.getDangerDefn());
-					printf("There are %d positions on the map that the danger can spawn\n", availablePositionList.size());
+					// TODO printf("There are %d positions on the map that the danger can spawn\n", availablePositionList.size());
 					if (availablePositionList.size() > 0) {
 						StoryDangerInstance newDangerInstance = this->createDangerInstance(currDangerSpawnTracker.getDangerDefn().dangerType, availablePositionList);
 						currDangerSpawnTracker.spawnDanger(newDangerInstance);

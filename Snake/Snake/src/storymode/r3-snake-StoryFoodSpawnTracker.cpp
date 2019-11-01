@@ -70,10 +70,10 @@ namespace r3 {
 
 			bool result = false;
 			if (conditionsMet) {
-				printf("Checking if food with growth of %d will spawn...\n", this->foodDefn->growthRate);
+				// TODO printf("Checking if food with growth of %d will spawn...\n", this->foodDefn->growthRate);
 				float chanceComparison = this->chancePctDistribution(*input.randomizer);
-				printf("Time since last chance check is %f seconds\n", timeSinceLastChanceCheck.asSeconds());
-				printf("Rolled %f, with chance of %f\n", chanceComparison, this->foodDefn->chancePct);
+				// TODO printf("Time since last chance check is %f seconds\n", timeSinceLastChanceCheck.asSeconds());
+				// TODO printf("Rolled %f, with chance of %f\n", chanceComparison, this->foodDefn->chancePct);
 				this->timeOfLastChanceCheck = input.timeSinceLevelStarted;
 				result = (chanceComparison <= this->foodDefn->chancePct);
 				if (result) {

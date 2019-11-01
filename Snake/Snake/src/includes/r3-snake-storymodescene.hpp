@@ -97,6 +97,12 @@ namespace r3 {
 			sf::Time timeSinceLevelStarted;
 		} StoryDangerDespawnCheckInput;
 
+		typedef struct Snake_StorySnakeMovementModifier {
+			float movementMultiplier;
+			float secondsToModify;
+			sf::Time timeModifierBegan;
+		} StorySnakeMovementModifier;
+
 		typedef struct Snake_StoryGameUpdateResult {
 			ObjectDirection snakeMovementResult;
 			bool snakeHitBarrierFlag;
@@ -216,13 +222,16 @@ namespace r3 {
 			const StoryLevelDefn* levelDefn;
 			StoryMap* map;
 			Snake* snake;
-			float snakeSpeedTilesPerSecond;
 			float snakeHealth;
 
 		private:
 			int framesSinceSnakeMoved;
 			std::queue<ObjectDirection> snakeMovementQueue;
 			int queuedSnakeGrowth;
+
+		private:
+			int nextSnakeMovementModifierId;
+			std::unordered_map<int, StorySnakeMovementModifier> snakeMovementModifierMap;
 
 		private:
 			int nextFoodInstanceId;
@@ -274,6 +283,11 @@ namespace r3 {
 			ObjectDirection resolveDirectionToMoveSnake();
 			bool snakeWouldHitBarrier(ObjectDirection direction);
 			bool moveSnakeForward(ObjectDirection directionToMoveSnake);
+
+		private:
+			void updateSnakeMovementModifierMap();
+			float resolveSnakeSpeedTilesPerSecond();
+			void addNewSnakeMovementModifier(float movementMultiplier, float secondsToApply);
 
 		private:
 			std::vector<StoryFoodInstance> checkForFoodSpawns();

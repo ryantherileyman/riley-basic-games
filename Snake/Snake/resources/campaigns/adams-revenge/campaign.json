@@ -1419,6 +1419,16 @@
                     "floorIdRange": { "minId": 0, "maxId": 0 }
                 },
                 {
+                    "foodType": "Chili Pepper",
+                    "spawnType": "onTimer",
+                    "timePassed": 1,
+                    "interval": 2,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 0, "maxId": 0 }
+                },
+                {
                     "foodType": "Carrot",
                     "spawnType": "onTimer",
                     "timePassed": 20,

@@ -163,6 +163,12 @@ namespace r3 {
 			void despawnFood(int foodInstanceId);
 
 		private:
+			bool areDespawnConditionsMet(const StoryFoodSpawnCheckInput& input);
+			bool areTimerConditionsMet(const StoryFoodSpawnCheckInput& input);
+			bool areLengthReachedConditionsMet(const StoryFoodSpawnCheckInput& input);
+			bool areHealthFellConditionsMet(const StoryFoodSpawnCheckInput& input);
+
+		private:
 			int findFoodInstanceIndex(int foodInstanceId) const;
 
 		};

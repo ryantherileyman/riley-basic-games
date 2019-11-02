@@ -91,6 +91,9 @@ namespace r3 {
 				const char* FOOD_HEALTH = "health";
 				const char* DANGER_LIST = "dangerList";
 				const char* DANGER_TYPE = "dangerType";
+				const char* SOUND_FX_LIST = "soundFxList";
+				const char* SOUND_FX_TRIGGER_TYPE = "triggerType";
+				const char* SOUND_FILENAME = "sound";
 
 			}
 
@@ -147,6 +150,16 @@ namespace r3 {
 				const char* ON_TIMER = "onTimer";
 				const char* ON_LENGTH_REACHED = "onLengthReached";
 				const char* ON_HEALTH_FELL = "onHealthFell";
+
+			}
+
+			namespace SoundTriggerTypeValues {
+
+				const char* ON_TIMER = "onTimer";
+				const char* ON_FIRST_FOOD_SPAWN = "onFirstFoodSpawn";
+				const char* ON_FIRST_DANGER_SPAWN = "onFirstDangerSpawn";
+				const char* ON_LENGTH_REACHED = "onLengthReached";
+				const char* ON_DAMAGED = "onDamaged";
 
 			}
 
@@ -509,6 +522,54 @@ namespace r3 {
 				return result;
 			}
 
+			StorySoundFxTriggerType convertJsonValueToSoundFxTriggerType(const Json::Value& jsonValue) {
+				StorySoundFxTriggerType result = StorySoundFxTriggerType::ON_TIMER;
+
+				std::string jsonValueStr = jsonValue.asString();
+				if (jsonValueStr.compare(SoundTriggerTypeValues::ON_TIMER) == 0) {
+					result = StorySoundFxTriggerType::ON_TIMER;
+				}
+				else if (jsonValueStr.compare(SoundTriggerTypeValues::ON_FIRST_FOOD_SPAWN) == 0) {
+					result = StorySoundFxTriggerType::ON_FIRST_FOOD_SPAWN;
+				}
+				else if (jsonValueStr.compare(SoundTriggerTypeValues::ON_FIRST_DANGER_SPAWN) == 0) {
+					result = StorySoundFxTriggerType::ON_FIRST_DANGER_SPAWN;
+				}
+				else if (jsonValueStr.compare(SoundTriggerTypeValues::ON_LENGTH_REACHED) == 0) {
+					result = StorySoundFxTriggerType::ON_LENGTH_REACHED;
+				}
+				else if (jsonValueStr.compare(SoundTriggerTypeValues::ON_DAMAGED) == 0) {
+					result = StorySoundFxTriggerType::ON_DAMAGED;
+				}
+
+				return result;
+			}
+
+			StorySoundFxDefn loadStorySoundFx(const Json::Value& jsonValue) {
+				StorySoundFxDefn result;
+
+				result.triggerType = convertJsonValueToSoundFxTriggerType(jsonValue[StoryLevelProperties::SOUND_FX_TRIGGER_TYPE]);
+				result.soundFilename = jsonValue[StoryLevelProperties::SOUND_FILENAME].asString();
+
+				if (result.triggerType == StorySoundFxTriggerType::ON_TIMER) {
+					result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
+				}
+
+				if (result.triggerType == StorySoundFxTriggerType::ON_FIRST_FOOD_SPAWN) {
+					result.foodType = convertJsonValueToFoodType(jsonValue[StoryLevelProperties::FOOD_TYPE]);
+				}
+
+				if (result.triggerType == StorySoundFxTriggerType::ON_FIRST_DANGER_SPAWN) {
+					result.dangerType = convertJsonValueToDangerType(jsonValue[StoryLevelProperties::DANGER_TYPE]);
+				}
+
+				if (result.triggerType == StorySoundFxTriggerType::ON_LENGTH_REACHED) {
+					result.lengthReached = jsonValue[StoryLevelProperties::OBJECT_LENGTH_REACHED].asInt();
+				}
+
+				return result;
+			}
+
 			StoryCutsceneEventType convertJsonValueToCutsceneEventType(const Json::Value& jsonValue) {
 				StoryCutsceneEventType result = StoryCutsceneEventType::COLOR;
 
@@ -767,6 +828,21 @@ namespace r3 {
 
 						if (currDangerValidationResult.valid()) {
 							result.levelDefn.dangerDefnList.push_back(loadStoryDanger(currDangerValue));
+						}
+					}
+				}
+
+				result.validationResult.soundFxListValid = r3::json::ValidationUtils::requiredArray(jsonValue, StoryLevelProperties::SOUND_FX_LIST);
+				if (result.validationResult.soundFxListValid) {
+					Json::Value soundFxListValue = jsonValue[StoryLevelProperties::SOUND_FX_LIST];
+					for (Json::ArrayIndex index = 0; index < soundFxListValue.size(); index++) {
+						Json::Value currSoundFxValue = soundFxListValue[index];
+
+						LoadStoryLevelSoundFxValidationResult currSoundFxValidationResult = LoadStoryLevelValidation::validateSoundFxEntry(currSoundFxValue);
+						result.validationResult.soundFxValidationResultList.push_back(currSoundFxValidationResult);
+
+						if (currSoundFxValidationResult.valid()) {
+							result.levelDefn.soundFxDefnList.push_back(loadStorySoundFx(currSoundFxValue));
 						}
 					}
 				}

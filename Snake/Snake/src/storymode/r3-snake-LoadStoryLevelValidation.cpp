@@ -76,6 +76,19 @@ namespace r3 {
 					return result;
 				}
 
+				bool soundTriggerTypeValueValid(const Json::Value& jsonValue) {
+					std::string triggerTypeValue = jsonValue.asString();
+
+					bool result =
+						(triggerTypeValue.compare(SoundTriggerTypeValues::ON_TIMER) == 0) ||
+						(triggerTypeValue.compare(SoundTriggerTypeValues::ON_FIRST_FOOD_SPAWN) == 0) ||
+						(triggerTypeValue.compare(SoundTriggerTypeValues::ON_FIRST_DANGER_SPAWN) == 0) ||
+						(triggerTypeValue.compare(SoundTriggerTypeValues::ON_LENGTH_REACHED) == 0) ||
+						(triggerTypeValue.compare(SoundTriggerTypeValues::ON_DAMAGED) == 0);
+
+					return result;
+				}
+
 				bool positionValid(const Json::Value& jsonValue) {
 					bool result = r3::json::ValidationUtils::requiredObject(jsonValue, StoryLevelProperties::POSITION);
 
@@ -168,6 +181,13 @@ namespace r3 {
 					return result;
 				}
 
+				bool soundTriggerTypeValid(const Json::Value& jsonValue) {
+					bool result =
+						r3::json::ValidationUtils::requiredString(jsonValue, StoryLevelProperties::SOUND_FX_TRIGGER_TYPE) &&
+						soundTriggerTypeValueValid(jsonValue[StoryLevelProperties::SOUND_FX_TRIGGER_TYPE]);
+					return result;
+				}
+
 				LoadStoryLevelFoodValidationResult validateFoodEntry(const Json::Value& jsonValue) {
 					LoadStoryLevelFoodValidationResult result;
 
@@ -217,7 +237,7 @@ namespace r3 {
 					}
 
 					if (!foodValidationResult.spawnTypeValid) {
-						errorMessages.push_back("The \"spawnType\" is invalid.  It must be one of \"onDespawn\", \"onTimer\", or \"onLengthReached\".");
+						errorMessages.push_back("The \"spawnType\" is invalid.  It must be one of \"onDespawn\", \"onTimer\", \"onLengthReached\", or \"onHealthFell\".");
 					}
 
 					if (!foodValidationResult.chancePctValid) {
@@ -314,6 +334,72 @@ namespace r3 {
 
 					if (!dangerValidationResult.floorIdRangeValid) {
 						errorMessages.push_back("The \"floorIdRange\" is invalid.  It must be an object with \"minId\" and \"maxId\" integer properties of 0 or higher.  The \"minId\" must be less or equal to the \"maxId\".");
+					}
+				}
+
+				LoadStoryLevelSoundFxValidationResult validateSoundFxEntry(const Json::Value& jsonValue) {
+					LoadStoryLevelSoundFxValidationResult result;
+
+					result.rootValid = jsonValue.isObject();
+					if (jsonValue.isObject()) {
+						result.triggerTypeValid = soundTriggerTypeValid(jsonValue);
+						result.soundValid = r3::json::ValidationUtils::requiredString(jsonValue, StoryLevelProperties::SOUND_FILENAME);
+						
+						if (result.triggerTypeValid) {
+							std::string triggerTypeStr = jsonValue[StoryLevelProperties::SOUND_FX_TRIGGER_TYPE].asString();
+
+							if (triggerTypeStr.compare(SoundTriggerTypeValues::ON_TIMER) == 0) {
+								result.timePassedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::TIME_PASSED);
+							}
+
+							if (triggerTypeStr.compare(SoundTriggerTypeValues::ON_FIRST_FOOD_SPAWN) == 0) {
+								result.foodTypeValid = foodTypeValid(jsonValue);
+							}
+
+							if (triggerTypeStr.compare(SoundTriggerTypeValues::ON_FIRST_DANGER_SPAWN) == 0) {
+								result.dangerTypeValid = dangerTypeValid(jsonValue);
+							}
+
+							if (triggerTypeStr.compare(SoundTriggerTypeValues::ON_LENGTH_REACHED) == 0) {
+								result.lengthReachedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_LENGTH_REACHED, 2);
+							}
+						}
+					}
+
+					return result;
+				}
+
+				std::string buildSoundFxEntryErrorMessage(int index) {
+					char resultStr[100];
+					sprintf(resultStr, "Entry %d within the \"soundFxList\" entry is invalid.  Individual error messages follow...", index);
+
+					std::string result(resultStr);
+					return result;
+				}
+
+				void updateErrorMessagesWithSoundFxValidationResult(std::vector<std::string>& errorMessages, const LoadStoryLevelSoundFxValidationResult& soundFxValidationResult) {
+					if (!soundFxValidationResult.triggerTypeValid) {
+						errorMessages.push_back("The \"triggerType\" is invalid.  It must be one of \"onTimer\", \"onFirstFoodSpawn\", \"onFirstDangerSpawn\", \"onLengthReached\", or \"onDamaged\".");
+					}
+
+					if (!soundFxValidationResult.soundValid) {
+						errorMessages.push_back("The \"sound\" is invalid.  It must be a filename, including the extension.");
+					}
+
+					if (!soundFxValidationResult.timePassedValid) {
+						errorMessages.push_back("The \"timePassed\" is invalid.  It must be an integer of 1 or higher.");
+					}
+
+					if (!soundFxValidationResult.foodTypeValid) {
+						errorMessages.push_back("The \"foodType\" is invalid.  It must be a string referencing an available food type.");
+					}
+
+					if (!soundFxValidationResult.dangerTypeValid) {
+						errorMessages.push_back("The \"dangerType\" is invalid.  It must be a string referencing an available danger type.");
+					}
+
+					if (!soundFxValidationResult.lengthReachedValid) {
+						errorMessages.push_back("The \"lengthReached\" is invalid.  It must be an integer of 2 or higher.");
 					}
 				}
 
@@ -423,6 +509,17 @@ namespace r3 {
 						if (!validationResult.dangerValidationResultList[index].valid()) {
 							result.push_back(buildDangerEntryErrorMessage(index));
 							updateErrorMessagesWithDangerValidationResult(result, validationResult.dangerValidationResultList[index]);
+						}
+					}
+
+					if (!validationResult.soundFxListValid) {
+						result.push_back("The \"soundFxList\" property is invalid.  It must be an array of sound fx objects.");
+					}
+
+					for (size_t index = 0; index < validationResult.soundFxValidationResultList.size(); index++) {
+						if (!validationResult.soundFxValidationResultList[index].valid()) {
+							result.push_back(buildSoundFxEntryErrorMessage(index));
+							updateErrorMessagesWithSoundFxValidationResult(result, validationResult.soundFxValidationResultList[index]);
 						}
 					}
 

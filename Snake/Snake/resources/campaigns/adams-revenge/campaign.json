@@ -1509,6 +1509,8 @@
                 }
             ],
             "dangerList": [
+            ],
+            "soundFxList": [
             ]
         },
         {
@@ -1652,6 +1654,8 @@
                 }
             ],
             "dangerList": [
+            ],
+            "soundFxList": [
             ]
         },
         {
@@ -1680,6 +1684,8 @@
                 }
             ],
             "dangerList": [
+            ],
+            "soundFxList": [
             ]
         }
     ]

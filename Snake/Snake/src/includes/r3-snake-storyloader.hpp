@@ -180,6 +180,28 @@ namespace r3 {
 			}
 		} LoadStoryLevelDangerValidationResult;
 
+		typedef struct Snake_LoadStoryLevelSoundFxValidationResult {
+			bool rootValid = false;
+			bool triggerTypeValid = false;
+			bool soundValid = false;
+			bool timePassedValid = true;
+			bool foodTypeValid = true;
+			bool dangerTypeValid = true;
+			bool lengthReachedValid = true;
+
+			bool valid() const {
+				bool result =
+					rootValid &&
+					triggerTypeValid &&
+					soundValid &&
+					timePassedValid &&
+					foodTypeValid &&
+					dangerTypeValid &&
+					lengthReachedValid;
+				return result;
+			}
+		} LoadStoryLevelSoundFxValidationResult;
+
 		typedef struct Snake_LoadStoryLevelValidationResult {
 			LoadStoryCutsceneValidationResult openingCutsceneValidationResult;
 			LoadStoryCutsceneValidationResult winCutsceneValidationResult;
@@ -198,10 +220,13 @@ namespace r3 {
 			bool winConditionFoodCountValid = true;
 			bool winConditionSnakeLengthValid = true;
 			bool winConditionTimePassedValid = true;
+
 			bool foodListValid = false;
 			std::vector<LoadStoryLevelFoodValidationResult> foodValidationResultList;
 			bool dangerListValid = false;
 			std::vector<LoadStoryLevelDangerValidationResult> dangerValidationResultList;
+			bool soundFxListValid = false;
+			std::vector<LoadStoryLevelSoundFxValidationResult> soundFxValidationResultList;
 
 			std::vector<std::string> musicFileInvalidList;
 
@@ -214,6 +239,11 @@ namespace r3 {
 				bool allDangerEntriesValid = true;
 				for (auto const& currDangerValidationResult : dangerValidationResultList) {
 					allDangerEntriesValid = allDangerEntriesValid && currDangerValidationResult.valid();
+				}
+
+				bool allSoundFxEntriesValid = true;
+				for (auto const& currSoundFxValidationResult : soundFxValidationResultList) {
+					allSoundFxEntriesValid = allSoundFxEntriesValid && currSoundFxValidationResult.valid();
 				}
 
 				bool result =
@@ -238,6 +268,8 @@ namespace r3 {
 					allFoodEntriesValid &&
 					dangerListValid &&
 					allDangerEntriesValid &&
+					soundFxListValid &&
+					allSoundFxEntriesValid &&
 					musicFileInvalidList.empty();
 				return result;
 			}
@@ -355,6 +387,9 @@ namespace r3 {
 				extern const char* FOOD_HEALTH;
 				extern const char* DANGER_LIST;
 				extern const char* DANGER_TYPE;
+				extern const char* SOUND_FX_LIST;
+				extern const char* SOUND_FX_TRIGGER_TYPE;
+				extern const char* SOUND_FILENAME;
 
 			}
 
@@ -411,6 +446,16 @@ namespace r3 {
 				extern const char* ON_TIMER;
 				extern const char* ON_LENGTH_REACHED;
 				extern const char* ON_HEALTH_FELL;
+
+			}
+
+			namespace SoundTriggerTypeValues {
+
+				extern const char* ON_TIMER;
+				extern const char* ON_FIRST_FOOD_SPAWN;
+				extern const char* ON_FIRST_DANGER_SPAWN;
+				extern const char* ON_LENGTH_REACHED;
+				extern const char* ON_DAMAGED;
 
 			}
 
@@ -477,6 +522,8 @@ namespace r3 {
 				LoadStoryLevelFoodValidationResult validateFoodEntry(const Json::Value& jsonValue);
 
 				LoadStoryLevelDangerValidationResult validateDangerEntry(const Json::Value& jsonValue);
+
+				LoadStoryLevelSoundFxValidationResult validateSoundFxEntry(const Json::Value& jsonValue);
 
 				std::vector<std::string> buildErrorMessages(const LoadStoryLevelValidationResult& validationResult);
 

@@ -472,6 +472,10 @@ namespace r3 {
 				this->timeSnakeLastDamaged = this->storyGame->getTimeElapsed();
 			}
 
+			for (auto const& currSoundFilename : updateResult.soundFileTriggeredList) {
+				this->soundManager.play(this->levelAssetBundle->getSoundBuffer(currSoundFilename));
+			}
+
 			if (updateResult.snakeDiedFlag) {
 				this->stopRunningLevel();
 

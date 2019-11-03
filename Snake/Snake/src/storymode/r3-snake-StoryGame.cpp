@@ -126,6 +126,11 @@ namespace r3 {
 			}
 
 			this->dangerStruckSnakeMap.clear();
+
+			this->remainingSoundFxDefnSet.clear();
+			for (auto const& currSoundFxDefn : levelDefn.soundFxDefnList) {
+				this->remainingSoundFxDefnSet.insert(&currSoundFxDefn);
+			}
 		}
 
 		void StoryGame::startRunningLevel() {
@@ -264,6 +269,8 @@ namespace r3 {
 
 				this->framesSinceSnakeMoved -= (int)(60.0f / snakeSpeedTilesPerSecond);
 			}
+
+			result.soundFileTriggeredList = this->buildSoundFileTriggeredList(result);
 
 			return result;
 		}
@@ -622,6 +629,48 @@ namespace r3 {
 			for (auto const& currDangerInstance : spawnedDangerInstanceList) {
 				this->dangerStruckSnakeMap[currDangerInstance.dangerInstanceId] = false;
 			}
+		}
+
+		std::vector<std::string> StoryGame::buildSoundFileTriggeredList(const StoryGameUpdateResult& updateResult) {
+			std::vector<std::string> result;
+			std::vector<const StorySoundFxDefn*> soundFxDefnToRemove;
+
+			for (auto currSoundFxDefn : this->remainingSoundFxDefnSet) {
+				bool soundTriggeredFlag = false;
+
+				switch (currSoundFxDefn->triggerType) {
+				case StorySoundFxTriggerType::ON_TIMER:
+					soundTriggeredFlag = (this->clock.getElapsedTime().asSeconds() >= (float)currSoundFxDefn->timePassed);
+					break;
+				case StorySoundFxTriggerType::ON_FIRST_FOOD_SPAWN:
+					for (auto const& currSpawnedFoodInstance : updateResult.spawnedFoodInstanceList) {
+						soundTriggeredFlag = soundTriggeredFlag || (currSpawnedFoodInstance.foodType == currSoundFxDefn->foodType);
+					}
+					break;
+				case StorySoundFxTriggerType::ON_FIRST_DANGER_SPAWN:
+					for (auto const& currSpawnedDangerInstance : updateResult.spawnedDangerInstanceList) {
+						soundTriggeredFlag = soundTriggeredFlag || (currSpawnedDangerInstance.dangerType == currSoundFxDefn->dangerType);
+					}
+					break;
+				case StorySoundFxTriggerType::ON_LENGTH_REACHED:
+					soundTriggeredFlag = (this->snake->getLength() >= currSoundFxDefn->lengthReached);
+					break;
+				case StorySoundFxTriggerType::ON_DAMAGED:
+					soundTriggeredFlag = updateResult.snakeDamaged();
+					break;
+				}
+
+				if (soundTriggeredFlag) {
+					result.push_back(currSoundFxDefn->soundFilename);
+					soundFxDefnToRemove.push_back(currSoundFxDefn);
+				}
+			}
+
+			for (auto currSoundFxDefnToRemove : soundFxDefnToRemove) {
+				this->remainingSoundFxDefnSet.erase(currSoundFxDefnToRemove);
+			}
+
+			return result;
 		}
 
 		void StoryGame::updateHealthBy(float amount) {

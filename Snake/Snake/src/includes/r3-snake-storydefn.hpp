@@ -177,6 +177,23 @@ namespace r3 {
 			int maxFloorId;
 		} StoryDangerDefn;
 
+		typedef enum class Snake_StorySoundFxTriggerType {
+			ON_TIMER,
+			ON_FIRST_FOOD_SPAWN,
+			ON_FIRST_DANGER_SPAWN,
+			ON_LENGTH_REACHED,
+			ON_DAMAGED,
+		} StorySoundFxTriggerType;
+
+		typedef struct Snake_StorySoundFxDefn {
+			StorySoundFxTriggerType triggerType;
+			std::string soundFilename;
+			int timePassed;
+			StoryFoodType foodType;
+			StoryDangerType dangerType;
+			int lengthReached;
+		} StorySoundFxDefn;
+
 		typedef struct Snake_StoryLevelDefn {
 			StoryCutsceneDefn openingCutsceneDefn;
 			StoryCutsceneDefn winCutsceneDefn;
@@ -189,6 +206,7 @@ namespace r3 {
 			StoryWinCondition winCondition;
 			std::vector<StoryFoodDefn> foodDefnList;
 			std::vector<StoryDangerDefn> dangerDefnList;
+			std::vector<StorySoundFxDefn> soundFxDefnList;
 		} StoryLevelDefn;
 
 		class StoryMap;

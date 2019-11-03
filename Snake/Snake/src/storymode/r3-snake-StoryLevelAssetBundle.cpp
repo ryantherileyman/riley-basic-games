@@ -60,6 +60,8 @@ namespace r3 {
 					result += resolveCutsceneAssetCount(levelDefn.lossCutsceneDefn);
 				}
 
+				result += levelDefn.soundFxDefnList.size();
+
 				return result;
 			}
 
@@ -195,6 +197,10 @@ namespace r3 {
 			return this->snakeHissSoundBuffer;
 		}
 
+		const sf::SoundBuffer& StoryLevelAssetBundle::getSoundBuffer(const std::string& filename) const {
+			return this->soundBufferMap.at(filename);
+		}
+
 		void StoryLevelAssetBundle::loadLevel() {
 			LoadStoryMapResult loadMainMapResult = this->loadMap(this->levelDefn->mapFilename);
 			this->mapAssetBundle.mapDefn = loadMainMapResult.mapDefn;
@@ -230,6 +236,10 @@ namespace r3 {
 				this->loadEatFoodSoundBuffer();
 				this->loadHitBarrierSoundBuffer();
 				this->loadSnakeHissSoundBuffer();
+			}
+
+			for (auto const& currSoundFxDefn : this->levelDefn->soundFxDefnList) {
+				this->loadSoundBuffer(currSoundFxDefn.soundFilename);
 			}
 
 			this->indicateLoadingComplete();
@@ -405,6 +415,25 @@ namespace r3 {
 			}
 			else {
 				this->failedFilenameList.push_back(StoryLevelAssetBundleConstants::DEFAULT_SNAKE_HISS_SOUND_PATH);
+			}
+		}
+
+		void StoryLevelAssetBundle::loadSoundBuffer(const std::string& filename) {
+			this->indicateLoadingFilename(filename);
+
+			if (this->soundBufferMap.count(filename) == 0) {
+				std::string fullFilePath = r3::snake::StoryLoaderUtils::resolveSoundFilePath(this->campaignFolderName, filename);
+
+				this->soundBufferMap[filename] = sf::SoundBuffer();
+				if (this->soundBufferMap[filename].loadFromFile(fullFilePath)) {
+					this->incrementLoadedAssetCount();
+				}
+				else {
+					this->failedFilenameList.push_back(filename);
+				}
+			}
+			else {
+				this->incrementLoadedAssetCount();
 			}
 		}
 

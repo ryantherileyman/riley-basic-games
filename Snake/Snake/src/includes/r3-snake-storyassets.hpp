@@ -66,6 +66,7 @@ namespace r3 {
 			sf::SoundBuffer eatFoodSoundBuffer;
 			sf::SoundBuffer hitBarrierSoundBuffer;
 			sf::SoundBuffer snakeHissSoundBuffer;
+			std::unordered_map<std::string, sf::SoundBuffer> soundBufferMap;
 
 		public:
 			StoryLevelAssetBundle();
@@ -104,6 +105,7 @@ namespace r3 {
 			const sf::SoundBuffer& getEatFoodSoundBuffer() const;
 			const sf::SoundBuffer& getHitBarrierSoundBuffer() const;
 			const sf::SoundBuffer& getSnakeHissSoundBuffer() const;
+			const sf::SoundBuffer& getSoundBuffer(const std::string& filename) const;
 
 		private:
 			void loadLevel();
@@ -126,6 +128,7 @@ namespace r3 {
 			void loadEatFoodSoundBuffer();
 			void loadHitBarrierSoundBuffer();
 			void loadSnakeHissSoundBuffer();
+			void loadSoundBuffer(const std::string& filename);
 
 		private:
 			void indicateLoadingFilename(const std::string& filename);

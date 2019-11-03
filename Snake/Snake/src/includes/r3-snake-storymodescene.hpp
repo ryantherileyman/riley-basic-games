@@ -1,6 +1,7 @@
 
 #include <random>
 #include <queue>
+#include <unordered_set>
 #include <SFML/Graphics.hpp>
 #include "r3-snake-storydefn.hpp"
 #include "r3-snake-storyassets.hpp"
@@ -114,8 +115,9 @@ namespace r3 {
 			std::vector<StoryDangerInstance> spawnedDangerInstanceList;
 			std::vector<StoryFoodEatenResult> foodEatenResultList;
 			std::vector<StoryDangerInstance> dangerInstanceStruckSnakeList;
+			std::vector<std::string> soundFileTriggeredList;
 
-			bool snakeDamaged() {
+			bool snakeDamaged() const {
 				bool result =
 					snakeHitBarrierFlag ||
 					!dangerInstanceStruckSnakeList.empty();
@@ -252,6 +254,9 @@ namespace r3 {
 			std::unordered_map<int, bool> dangerStruckSnakeMap;
 
 		private:
+			std::unordered_set<const StorySoundFxDefn*> remainingSoundFxDefnSet;
+
+		private:
 			int score;
 
 		public:
@@ -318,6 +323,9 @@ namespace r3 {
 
 		private:
 			void addNewDangerSpawnsToDangerStruckSnakeMap(const std::vector<StoryDangerInstance>& spawnedDangerInstanceList);
+
+		private:
+			std::vector<std::string> buildSoundFileTriggeredList(const StoryGameUpdateResult& updateResult);
 
 		private:
 			void updateHealthBy(float amount);

@@ -402,6 +402,8 @@ namespace r3 {
 				!this->levelDefnList[this->currLevelIndex].openingCutsceneDefn.soundTrackFilename.empty() &&
 				this->storyCutscene->getCurrFrame() == 0
 			) {
+				this->soundManager.stopAllSounds();
+
 				this->levelAssetBundle->getOpeningCutsceneMusic().setVolume((float)this->systemOptions.soundEffectsVolume);
 				this->levelAssetBundle->getOpeningCutsceneMusic().play();
 			}
@@ -417,6 +419,16 @@ namespace r3 {
 		}
 
 		void StoryGameController::updateWinCutscene() {
+			if (
+				!this->levelDefnList[this->currLevelIndex].winCutsceneDefn.soundTrackFilename.empty() &&
+				this->storyCutscene->getCurrFrame() == 0
+			) {
+				this->soundManager.stopAllSounds();
+
+				this->levelAssetBundle->getWinCutsceneMusic().setVolume((float)this->systemOptions.soundEffectsVolume);
+				this->levelAssetBundle->getWinCutsceneMusic().play();
+			}
+
 			if (this->storyCutscene->update()) {
 				this->moveToNextLevel();
 
@@ -428,6 +440,16 @@ namespace r3 {
 		}
 
 		void StoryGameController::updateLossCutscene() {
+			if (
+				!this->levelDefnList[this->currLevelIndex].lossCutsceneDefn.soundTrackFilename.empty() &&
+				this->storyCutscene->getCurrFrame() == 0
+			) {
+				this->soundManager.stopAllSounds();
+
+				this->levelAssetBundle->getLossCutsceneMusic().setVolume((float)this->systemOptions.soundEffectsVolume);
+				this->levelAssetBundle->getLossCutsceneMusic().play();
+			}
+
 			if (this->storyCutscene->update()) {
 				this->mode = StoryGameMode::LEVEL_LOST;
 
@@ -444,6 +466,7 @@ namespace r3 {
 
 			sf::Music& music = this->levelAssetBundle->getMusic();
 			if (music.getStatus() == sf::SoundSource::Status::Stopped) {
+				music.setLoop(true);
 				music.setVolume((float)this->systemOptions.musicVolume);
 				music.play();
 			}

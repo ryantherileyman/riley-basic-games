@@ -1343,6 +1343,331 @@
                     }
                 ]
             },
+            "map": "map-level-01",
+            "music": "Artifact-level01.ogg",
+            "snakeStart": {
+                "position": { "x": 3, "y": 7 },
+                "direction": "up",
+                "length": 3
+            },
+            "snakeSpeed": 8,
+            "snakeHealth": 3,
+            "winCondition": {
+                "conditionType": "onFoodEaten",
+                "foodType": "Apple",
+                "foodCount": 15
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 0 }
+                }
+            ],
+            "dangerList": [
+            ],
+            "soundFxList": [
+                {
+                    "triggerType": "onTimer",
+                    "sound": "goe-level01-trigger01-timed-the-apples-in-here.wav",
+                    "timePassed": 2
+                },
+                {
+                    "triggerType": "onDamaged",
+                    "sound": "goe-level01-trigger02-damaged-haha-yes.wav"
+                }
+            ],
+            "winCutscene": {
+                "soundTrack": "level-01-win-cutscene.wav",
+                "eventList": [
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-01"
+                    },
+                    {
+                        "framesSinceLastEvent": 40,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 6, "y": 3 },
+                            "direction": "right",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 300,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-winlevel01-openpath"
+                    },
+                    {
+                        "framesSinceLastEvent": 200,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-winlevel01-nextmap"
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 15, "y": 17 },
+                            "direction": "up",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-02"
+                    },
+                    {
+                        "framesSinceLastEvent": 340,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-02"
+                    }
+                ]
+            }
+        },
+        {
+            "map": "map-level-02",
+            "music": "Artifact.ogg",
+            "snakeStart": {
+                "position": { "x": 15, "y": 15 },
+                "direction": "up",
+                "length": 3
+            },
+            "snakeSpeed": 9,
+            "snakeHealth": 5,
+            "winCondition": {
+                "conditionType": "onLengthReached",
+                "snakeLength": 120
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 1, "maxId": 1 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 4,
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 2, "maxId": 2 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 42,
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 45,
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 4, "maxId": 4 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 60,
+                    "chancePct": 5,
+                    "maxSpawnCount": 100,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 5, "maxId": 5 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 30,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 32,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 34,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 36,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 38,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 40,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 42,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 44,
+                    "interval": 5,
+                    "chancePct": 25,
+                    "maxSpawnCount": 100,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                }
+            ],
+            "dangerList": [
+            ],
+            "soundFxList": [
+            ]
+        },
+        {
             "map": "map-level-03",
             "music": "Artifact.ogg",
             "snakeStart": {
@@ -1506,181 +1831,6 @@
                     "maxSpawnCount": 100,
                     "growthRate": 1,
                     "floorIdRange": { "minId": 25, "maxId": 25 }
-                }
-            ],
-            "dangerList": [
-            ],
-            "soundFxList": [
-            ]
-        },
-        {
-            "map": "map-level-02",
-            "music": "Artifact.ogg",
-            "snakeStart": {
-                "position": { "x": 15, "y": 15 },
-                "direction": "up",
-                "length": 3
-            },
-            "snakeSpeed": 9,
-            "snakeHealth": 5,
-            "winCondition": {
-                "conditionType": "onLengthReached",
-                "snakeLength": 120
-            },
-            "foodList": [
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onDespawn",
-                    "chancePct": 100,
-                    "maxSpawnCount": 100,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 1, "maxId": 1 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onLengthReached",
-                    "lengthReached": 4,
-                    "chancePct": 100,
-                    "maxSpawnCount": 100,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 2, "maxId": 2 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onLengthReached",
-                    "lengthReached": 42,
-                    "chancePct": 100,
-                    "maxSpawnCount": 100,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 3, "maxId": 3 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onLengthReached",
-                    "lengthReached": 45,
-                    "chancePct": 100,
-                    "maxSpawnCount": 100,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 4, "maxId": 4 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onLengthReached",
-                    "lengthReached": 60,
-                    "chancePct": 5,
-                    "maxSpawnCount": 100,
-                    "growthRate": 5,
-                    "floorIdRange": { "minId": 5, "maxId": 5 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 30,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 32,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 34,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 36,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 38,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 40,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 42,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                },
-                {
-                    "foodType": "Carrot",
-                    "spawnType": "onTimer",
-                    "timePassed": 44,
-                    "interval": 5,
-                    "chancePct": 25,
-                    "maxSpawnCount": 100,
-                    "growthRate": 1,
-                    "floorIdRange": { "minId": 25, "maxId": 25 }
-                }
-            ],
-            "dangerList": [
-            ],
-            "soundFxList": [
-            ]
-        },
-        {
-            "map": "map-level-01",
-            "music": "Artifact.ogg",
-            "snakeStart": {
-                "position": { "x": 3, "y": 7 },
-                "direction": "up",
-                "length": 3
-            },
-            "snakeSpeed": 8,
-            "snakeHealth": 3,
-            "winCondition": {
-                "conditionType": "onFoodEaten",
-                "foodType": "Apple",
-                "foodCount": 15
-            },
-            "foodList": [
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onDespawn",
-                    "chancePct": 100,
-                    "maxSpawnCount": 100,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 0, "maxId": 0 }
                 }
             ],
             "dangerList": [

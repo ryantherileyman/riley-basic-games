@@ -1336,7 +1336,7 @@
                         "map": "map-level-01"
                     },
                     {
-                        "framesSinceLastEvent": 330,
+                        "framesSinceLastEvent": 240,
                         "eventType": "showMap",
                         "fadeFrames": 0,
                         "map": "map-level-01"

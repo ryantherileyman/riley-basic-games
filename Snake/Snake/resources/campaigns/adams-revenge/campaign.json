@@ -1524,7 +1524,7 @@
         },
         {
             "map": "map-level-02",
-            "music": "Artifact.ogg",
+            "music": "Artifact-level02.ogg",
             "snakeStart": {
                 "position": { "x": 15, "y": 15 },
                 "direction": "up",

@@ -2153,6 +2153,585 @@
             ],
             "soundFxList": [
             ]
+        },
+        {
+            "map": "map-level-05",
+            "music": "Kumasi-Groove-level05.ogg",
+            "snakeStart": {
+                "position": { "x": 5, "y": 21 },
+                "direction": "right",
+                "length": 3
+            },
+            "snakeSpeed": 9,
+            "snakeHealth": 5,
+            "winCondition": {
+                "conditionType": "onTimeSurvived",
+                "timePassed": 600
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 2,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 1,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 1, "maxId": 1 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 1,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 2, "maxId": 2 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 4,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 16,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 60, "maxId": 60 }
+                },
+                {
+                    "foodType": "Chili Pepper",
+                    "spawnType": "onTimer",
+                    "timePassed": 4,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 61, "maxId": 61 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 10,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 4, "maxId": 4 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 9,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 16,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 62, "maxId": 62 }
+                },
+                {
+                    "foodType": "Chili Pepper",
+                    "spawnType": "onTimer",
+                    "timePassed": 9,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 63, "maxId": 63 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 15,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 5, "maxId": 5 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 14,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 8,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 64, "maxId": 64 }
+                },
+                {
+                    "foodType": "Chili Pepper",
+                    "spawnType": "onTimer",
+                    "timePassed": 14,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 65, "maxId": 65 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 20,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 6, "maxId": 6 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 19,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 8,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 66, "maxId": 66 }
+                },
+                {
+                    "foodType": "Chili Pepper",
+                    "spawnType": "onTimer",
+                    "timePassed": 19,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 67, "maxId": 67 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 25,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 7, "maxId": 7 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 24,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 8,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 68, "maxId": 68 }
+                },
+                {
+                    "foodType": "Chili Pepper",
+                    "spawnType": "onTimer",
+                    "timePassed": 24,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 69, "maxId": 69 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 30,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 8, "maxId": 8 }
+                },
+                {
+                    "foodType": "Carrot",
+                    "spawnType": "onTimer",
+                    "timePassed": 29,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 8,
+                    "growthRate": 1,
+                    "floorIdRange": { "minId": 70, "maxId": 70 }
+                },
+                {
+                    "foodType": "Chili Pepper",
+                    "spawnType": "onTimer",
+                    "timePassed": 29,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 71, "maxId": 71 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 36,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 36,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 36,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 36,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 36,
+                    "interval": 1,
+                    "chancePct": 50,
+                    "maxSpawnCount": 1,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Green Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 15,
+                    "chancePct": 50,
+                    "maxSpawnCount": 10,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 2, "maxId": 2 }
+                },
+                {
+                    "foodType": "Green Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 20,
+                    "chancePct": 50,
+                    "maxSpawnCount": 10,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 2, "maxId": 2 }
+                },
+                {
+                    "foodType": "Green Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 30,
+                    "chancePct": 50,
+                    "maxSpawnCount": 10,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Green Apple",
+                    "spawnType": "onLengthReached",
+                    "lengthReached": 35,
+                    "chancePct": 50,
+                    "maxSpawnCount": 10,
+                    "growthRate": 5,
+                    "floorIdRange": { "minId": 3, "maxId": 3 }
+                }
+            ],
+            "dangerList": [
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 20, "maxId": 20 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 21, "maxId": 21 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 22, "maxId": 22 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 23, "maxId": 23 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 24, "maxId": 24 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 25, "maxId": 25 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 26, "maxId": 26 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 27, "maxId": 27 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 28, "maxId": 28 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 29, "maxId": 29 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 30, "maxId": 30 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 31, "maxId": 31 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 32, "maxId": 32 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 33, "maxId": 33 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 34, "maxId": 34 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 35, "maxId": 35 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 36, "maxId": 36 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 37, "maxId": 37 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 38, "maxId": 38 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 39, "maxId": 39 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 40, "maxId": 40 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 41, "maxId": 41 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 42, "maxId": 42 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 43, "maxId": 43 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 44, "maxId": 44 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 45, "maxId": 45 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 46, "maxId": 46 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 47, "maxId": 47 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 48, "maxId": 48 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 49, "maxId": 49 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 50, "maxId": 50 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 51, "maxId": 51 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 52, "maxId": 52 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 53, "maxId": 53 }
+                }
+            ],
+            "soundFxList": [
+            ]
         }
     ]
 }

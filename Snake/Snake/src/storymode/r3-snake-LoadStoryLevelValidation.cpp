@@ -32,7 +32,8 @@ namespace r3 {
 						(foodTypeString.compare(FoodTypeValues::CHILI_PEPPER) == 0) ||
 						(foodTypeString.compare(FoodTypeValues::CHERRIES) == 0) ||
 						(foodTypeString.compare(FoodTypeValues::ORANGE) == 0) ||
-						(foodTypeString.compare(FoodTypeValues::PEAR) == 0);
+						(foodTypeString.compare(FoodTypeValues::PEAR) == 0) ||
+						(foodTypeString.compare(FoodTypeValues::BANANA) == 0);
 
 					return result;
 				}

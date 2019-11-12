@@ -426,6 +426,7 @@ namespace r3 {
 				extern const char* CHERRIES;
 				extern const char* ORANGE;
 				extern const char* PEAR;
+				extern const char* BANANA;
 
 			}
 

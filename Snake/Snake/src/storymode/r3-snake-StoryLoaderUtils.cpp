@@ -130,6 +130,7 @@ namespace r3 {
 				const char* CHERRIES = "Cherries";
 				const char* ORANGE = "Orange";
 				const char* PEAR = "Pear";
+				const char* BANANA = "Banana";
 
 			}
 
@@ -432,6 +433,9 @@ namespace r3 {
 				}
 				else if (jsonValueStr.compare(FoodTypeValues::PEAR) == 0) {
 					result = StoryFoodType::PEAR;
+				}
+				else if (jsonValueStr.compare(FoodTypeValues::BANANA) == 0) {
+					result = StoryFoodType::BANANA;
 				}
 
 				return result;

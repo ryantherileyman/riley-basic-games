@@ -27,6 +27,7 @@ namespace r3 {
 			const wchar_t* HUD_FOOD_CHERRIES = L"Cherries";
 			const wchar_t* HUD_FOOD_ORANGES = L"Oranges";
 			const wchar_t* HUD_FOOD_PEARS = L"Pears";
+			const wchar_t* HUD_FOOD_BANANAS = L"Bananas";
 
 			const wchar_t* SCORE_FOOD_EATEN_NO_BONUS = L"+%d";
 			const wchar_t* SCORE_FOOD_EATEN_WITH_BONUS = L"+%d Bonus Path!";
@@ -77,6 +78,9 @@ namespace r3 {
 				case StoryFoodType::PEAR:
 					result = StoryGameRenderConstants::HUD_FOOD_PEARS;
 					break;
+				case StoryFoodType::BANANA:
+					result = StoryGameRenderConstants::HUD_FOOD_BANANAS;
+					break;
 				}
 
 				return result;
@@ -117,6 +121,9 @@ namespace r3 {
 					break;
 				case StoryFoodType::PEAR:
 					sprite.setTextureRect(sf::IntRect(375, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::BANANA:
+					sprite.setTextureRect(sf::IntRect(75, 75, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
 					break;
 				}
 			}

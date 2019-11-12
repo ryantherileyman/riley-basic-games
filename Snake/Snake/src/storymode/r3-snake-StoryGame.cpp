@@ -34,6 +34,9 @@ namespace r3 {
 				case StoryFoodType::PEAR:
 					result = 10;
 					break;
+				case StoryFoodType::BANANA:
+					result = 20;
+					break;
 				}
 
 				return result;

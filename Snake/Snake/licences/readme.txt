@@ -32,6 +32,7 @@ Music from https://filmmusic.io
 "AngloZulu" by Kevin MacLeod (https://incompetech.com)
 "Monkoto" by Kevin MacLeod (https://incompetech.com)
 "Artifact" by Kevin MacLeod (https://incompetech.com)
+"Kumasi Groove" by Kevin MacLeod (https://incompetech.com)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 
 Sound Effects from https://www.zapsplat.com/
@@ -61,7 +62,7 @@ https://www.deviantart.com/marlborolt/art/Sand-Ripples-439027940
 
 
 Additional artwork created by rileyman can be found in the /artwork/ folder:
-Snake, Shrub, Apple, Carrot, Spike Trap
+Snake, Shrub, Apple, Carrot, Chili Pepper, Cherries, Pear, Orange, Spike Trap
 
 Additional sound effects created by rileyman:
 Snake eating apple

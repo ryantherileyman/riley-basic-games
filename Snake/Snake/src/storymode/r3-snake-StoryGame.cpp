@@ -25,6 +25,15 @@ namespace r3 {
 				case StoryFoodType::CHILI_PEPPER:
 					result = 30;
 					break;
+				case StoryFoodType::CHERRIES:
+					result = 5;
+					break;
+				case StoryFoodType::ORANGE:
+					result = 8;
+					break;
+				case StoryFoodType::PEAR:
+					result = 10;
+					break;
 				}
 
 				return result;

@@ -24,6 +24,9 @@ namespace r3 {
 			const wchar_t* HUD_FOOD_CARROTS = L"Carrots";
 			const wchar_t* HUD_FOOD_GREEN_APPLES = L"Green Apples";
 			const wchar_t* HUD_FOOD_CHILI_PEPPERS = L"Chili Peppers";
+			const wchar_t* HUD_FOOD_CHERRIES = L"Cherries";
+			const wchar_t* HUD_FOOD_ORANGES = L"Oranges";
+			const wchar_t* HUD_FOOD_PEARS = L"Pears";
 
 			const wchar_t* SCORE_FOOD_EATEN_NO_BONUS = L"+%d";
 			const wchar_t* SCORE_FOOD_EATEN_WITH_BONUS = L"+%d Bonus Path!";
@@ -65,6 +68,15 @@ namespace r3 {
 				case StoryFoodType::CHILI_PEPPER:
 					result = StoryGameRenderConstants::HUD_FOOD_CHILI_PEPPERS;
 					break;
+				case StoryFoodType::CHERRIES:
+					result = StoryGameRenderConstants::HUD_FOOD_CHERRIES;
+					break;
+				case StoryFoodType::ORANGE:
+					result = StoryGameRenderConstants::HUD_FOOD_ORANGES;
+					break;
+				case StoryFoodType::PEAR:
+					result = StoryGameRenderConstants::HUD_FOOD_PEARS;
+					break;
 				}
 
 				return result;
@@ -96,6 +108,15 @@ namespace r3 {
 					break;
 				case StoryFoodType::CHILI_PEPPER:
 					sprite.setTextureRect(sf::IntRect(225, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::CHERRIES:
+					sprite.setTextureRect(sf::IntRect(300, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::ORANGE:
+					sprite.setTextureRect(sf::IntRect(0, 75, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
+					break;
+				case StoryFoodType::PEAR:
+					sprite.setTextureRect(sf::IntRect(375, 0, StoryGameRenderConstants::FOOD_PIXEL_SIZE, StoryGameRenderConstants::FOOD_PIXEL_SIZE));
 					break;
 				}
 			}

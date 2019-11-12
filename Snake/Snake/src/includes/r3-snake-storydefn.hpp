@@ -75,6 +75,9 @@ namespace r3 {
 			CARROT,
 			GREEN_APPLE,
 			CHILI_PEPPER,
+			CHERRIES,
+			ORANGE,
+			PEAR,
 		} StoryFoodType;
 
 		typedef enum class Snake_StoryDangerType {

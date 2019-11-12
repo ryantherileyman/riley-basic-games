@@ -423,6 +423,9 @@ namespace r3 {
 				extern const char* CARROT;
 				extern const char* GREEN_APPLE;
 				extern const char* CHILI_PEPPER;
+				extern const char* CHERRIES;
+				extern const char* ORANGE;
+				extern const char* PEAR;
 
 			}
 

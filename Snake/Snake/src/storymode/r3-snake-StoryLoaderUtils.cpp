@@ -127,6 +127,9 @@ namespace r3 {
 				const char* CARROT = "Carrot";
 				const char* GREEN_APPLE = "Green Apple";
 				const char* CHILI_PEPPER = "Chili Pepper";
+				const char* CHERRIES = "Cherries";
+				const char* ORANGE = "Orange";
+				const char* PEAR = "Pear";
 
 			}
 
@@ -420,6 +423,15 @@ namespace r3 {
 				}
 				else if (jsonValueStr.compare(FoodTypeValues::CHILI_PEPPER) == 0) {
 					result = StoryFoodType::CHILI_PEPPER;
+				}
+				else if (jsonValueStr.compare(FoodTypeValues::CHERRIES) == 0) {
+					result = StoryFoodType::CHERRIES;
+				}
+				else if (jsonValueStr.compare(FoodTypeValues::ORANGE) == 0) {
+					result = StoryFoodType::ORANGE;
+				}
+				else if (jsonValueStr.compare(FoodTypeValues::PEAR) == 0) {
+					result = StoryFoodType::PEAR;
 				}
 
 				return result;

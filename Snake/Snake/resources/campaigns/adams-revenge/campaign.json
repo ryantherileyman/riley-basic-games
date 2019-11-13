@@ -3,6 +3,47 @@
     "menuDescription": "Adam has trapped you in his diabolical gauntlet!",
     "levelList": [
         {
+            "map": "map-level-06",
+            "music": "Kumasi-Groove.ogg",
+            "snakeStart": {
+                "position": { "x": 47, "y": 18 },
+                "direction": "up",
+                "length": 3
+            },
+            "snakeSpeed": 9,
+            "snakeHealth": 5,
+            "winCondition": {
+                "conditionType": "onTimeSurvived",
+                "timePassed": 600
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onTimer",
+                    "timePassed": 1,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 0 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onTimer",
+                    "timePassed": 1,
+                    "interval": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 0 }
+                }
+            ],
+            "dangerList": [
+            ],
+            "soundFxList": [
+            ]
+        },
+        {
             "openingCutscene": {
                 "soundTrack": "level-01-opening.wav",
                 "eventList": [

@@ -67,6 +67,7 @@ namespace r3 {
 		public:
 			void moveForward(ObjectDirection direction);
 			void growForward(ObjectDirection direction);
+			void shrinkForward(ObjectDirection direction);
 
 		private:
 			void moveHeadForward(ObjectDirection direction);

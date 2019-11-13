@@ -110,6 +110,8 @@ namespace r3 {
 			bool snakeHitBarrierFlag;
 			bool snakeDiedFlag;
 			bool snakeGrewFlag;
+			bool snakeShrunkFlag;
+			bool snakeShrunkTooSmallFlag;
 			bool completedLevelFlag;
 			std::vector<StoryFoodInstance> spawnedFoodInstanceList;
 			std::vector<StoryDangerInstance> spawnedDangerInstanceList;
@@ -120,6 +122,7 @@ namespace r3 {
 			bool snakeDamaged() const {
 				bool result =
 					snakeHitBarrierFlag ||
+					snakeShrunkTooSmallFlag ||
 					!dangerInstanceStruckSnakeList.empty();
 				return result;
 			}
@@ -294,7 +297,7 @@ namespace r3 {
 			void consumeAllUnusableSnakeInputs();
 			ObjectDirection resolveDirectionToMoveSnake();
 			bool snakeWouldHitBarrier(ObjectDirection direction);
-			bool moveSnakeForward(ObjectDirection directionToMoveSnake);
+			void moveSnakeForward(ObjectDirection directionToMoveSnake);
 
 		private:
 			void updateSnakeMovementModifierMap();

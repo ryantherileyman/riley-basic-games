@@ -214,6 +214,8 @@ namespace r3 {
 			result.snakeHitBarrierFlag = false;
 			result.snakeDiedFlag = false;
 			result.snakeGrewFlag = false;
+			result.snakeShrunkFlag = false;
+			result.snakeShrunkTooSmallFlag = false;
 			result.completedLevelFlag = false;
 			result.spawnedFoodInstanceList = this->checkForFoodSpawns();
 			result.spawnedDangerInstanceList = this->checkForDangerSpawns();
@@ -238,7 +240,11 @@ namespace r3 {
 				}
 				else {
 					result.snakeMovementResult = directionToMoveSnake;
-					result.snakeGrewFlag = this->moveSnakeForward(directionToMoveSnake);
+					result.snakeGrewFlag = (this->queuedSnakeGrowth > 0);
+					result.snakeShrunkFlag = (this->queuedSnakeGrowth < 0);
+					result.snakeShrunkTooSmallFlag = (result.snakeShrunkFlag && (this->snake->getBodyLength() == 0));
+
+					this->moveSnakeForward(directionToMoveSnake);
 					this->updateFoodTileDistanceTrackingMapAfterSnakeMoved();
 
 					StoryCheckForFoodEatenBySnakeResult eatenResult = this->checkForFoodEatenBySnake();
@@ -272,6 +278,10 @@ namespace r3 {
 					result.dangerInstanceStruckSnakeList = this->checkForDangersStrikingSnake();
 					for (auto const& currDangerInstance : result.dangerInstanceStruckSnakeList) {
 						this->updateHealthBy(-1.0f);
+					}
+
+					if (result.snakeShrunkTooSmallFlag) {
+						this->updateHealthBy(-0.1f);
 					}
 
 					result.completedLevelFlag = this->checkLevelCompleted();
@@ -348,20 +358,18 @@ namespace r3 {
 			return result;
 		}
 
-		bool StoryGame::moveSnakeForward(ObjectDirection directionToMoveSnake) {
-			bool result = false;
-
+		void StoryGame::moveSnakeForward(ObjectDirection directionToMoveSnake) {
 			if (this->queuedSnakeGrowth > 0) {
 				this->snake->growForward(directionToMoveSnake);
 				this->queuedSnakeGrowth--;
-
-				result = true;
+			}
+			else if (this->queuedSnakeGrowth < 0) {
+				this->snake->shrinkForward(directionToMoveSnake);
+				this->queuedSnakeGrowth++;
 			}
 			else {
 				this->snake->moveForward(directionToMoveSnake);
 			}
-
-			return result;
 		}
 
 		void StoryGame::updateSnakeMovementModifierMap() {
@@ -441,7 +449,12 @@ namespace r3 {
 				StoryFoodPositionCheckResult checkResult = currFoodSpawnTracker.occupiesPosition(headPosition);
 				if (checkResult.foodExistsFlag) {
 					result.eatenBySnakeFoodInstanceList.push_back(currFoodSpawnTracker.getFoodInstance(checkResult.foodInstanceId));
-					result.snakeGrowth += currFoodSpawnTracker.getFoodDefn().growthRate;
+					if (currFoodSpawnTracker.getFoodDefn().foodType == StoryFoodType::BANANA) {
+						result.snakeGrowth -= currFoodSpawnTracker.getFoodDefn().growthRate;
+					}
+					else {
+						result.snakeGrowth += currFoodSpawnTracker.getFoodDefn().growthRate;
+					}
 
 					currFoodSpawnTracker.despawnFood(checkResult.foodInstanceId);
 				}

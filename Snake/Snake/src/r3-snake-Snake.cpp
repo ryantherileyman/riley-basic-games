@@ -143,7 +143,12 @@ namespace r3 {
 			this->moveHeadForward(direction);
 			this->moveBodyForward();
 
-			SnakeSegment lastBodySegment = this->bodyList.back();
+			SnakeSegment lastBodySegment;
+			if (this->getBodyLength() > 0) {
+				lastBodySegment = this->bodyList.back();
+			} else {
+				lastBodySegment = this->head;
+			}
 
 			SnakeSegment extraBodySegment;
 			extraBodySegment.segmentType = SnakeSegmentType::BODY;
@@ -156,6 +161,25 @@ namespace r3 {
 			}
 
 			this->bodyList.push_back(extraBodySegment);
+
+			this->assertContiguous();
+		}
+
+		void Snake::shrinkForward(ObjectDirection direction) {
+			this->moveHeadForward(direction);
+			if (this->getBodyLength() > 0) {
+				this->moveBodyForward();
+
+				SnakeSegment lastBodySegment = this->bodyList.back();
+
+				this->tail.position = lastBodySegment.position;
+				this->tail.enterDirection = lastBodySegment.enterDirection;
+				this->tail.exitDirection = lastBodySegment.exitDirection;
+
+				this->bodyList.pop_back();
+			} else {
+				this->moveTailForward();
+			}
 
 			this->assertContiguous();
 		}
@@ -180,7 +204,12 @@ namespace r3 {
 		}
 
 		void Snake::moveTailForward() {
-			ObjectDirection newExitDirection = this->bodyList.back().enterDirection;
+			ObjectDirection newExitDirection;
+			if (this->getBodyLength() > 0) {
+				newExitDirection = this->bodyList.back().enterDirection;
+			} else {
+				newExitDirection = this->head.enterDirection;
+			}
 
 			this->tail.position += SnakeUtils::directionToVector(this->tail.exitDirection);
 			this->tail.exitDirection = newExitDirection;

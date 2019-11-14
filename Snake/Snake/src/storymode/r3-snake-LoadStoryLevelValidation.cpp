@@ -211,7 +211,7 @@ namespace r3 {
 
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_TIMER) == 0) {
 								result.timePassedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::TIME_PASSED, 1);
-								result.intervalValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::FOOD_INTERVAL, 1);
+								result.intervalValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::INTERVAL, 1);
 							}
 
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) {
@@ -284,15 +284,19 @@ namespace r3 {
 					if (jsonValue.isObject()) {
 						result.dangerTypeValid = dangerTypeValid(jsonValue);
 						result.spawnTypeValid = dangerSpawnTypeValid(jsonValue);
-						result.timePassedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::TIME_PASSED, 1);
 						result.chancePctValid = chancePctValid(jsonValue);
 						result.maxSpawnCountValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_MAX_SPAWN_COUNT, 1);
+						result.intervalValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::INTERVAL, 1);
 						result.floorIdRangeValid =
 							r3::json::ValidationUtils::requiredObject(jsonValue, StoryLevelProperties::OBJECT_FLOOR_ID_RANGE) &&
 							floorIdRangeValid(jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE]);
 
 						if (result.spawnTypeValid) {
 							std::string spawnTypeStr = jsonValue[StoryLevelProperties::OBJECT_SPAWN_TYPE].asString();
+
+							if (spawnTypeStr.compare(SpawnTypeValues::ON_TIMER) == 0) {
+								result.timePassedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::TIME_PASSED, 1);
+							}
 
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) {
 								result.lengthReachedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_LENGTH_REACHED, 2);
@@ -320,16 +324,20 @@ namespace r3 {
 						errorMessages.push_back("The \"spawnType\" is invalid.  It must be one of \"onTimer\" or \"onLengthReached\".");
 					}
 
-					if (!dangerValidationResult.timePassedValid) {
-						errorMessages.push_back("The \"timePassed\" is invalid.  It must be an integer of 1 or higher.");
-					}
-
 					if (!dangerValidationResult.chancePctValid) {
 						errorMessages.push_back("The \"chancePct\" is invalid.  It must be a real number between 0.01 and 100.00, and is a percentage chance the danger will appear each second.");
 					}
 
 					if (!dangerValidationResult.maxSpawnCountValid) {
 						errorMessages.push_back("The \"maxSpawnCount\" is invalid.  It must be an integer of 1 or higher.");
+					}
+
+					if (!dangerValidationResult.intervalValid) {
+						errorMessages.push_back("The \"interval\" is invalid.  It must be an integer of 1 or higher.");
+					}
+
+					if (!dangerValidationResult.timePassedValid) {
+						errorMessages.push_back("The \"timePassed\" is invalid.  It must be an integer of 1 or higher.");
 					}
 
 					if (!dangerValidationResult.lengthReachedValid) {

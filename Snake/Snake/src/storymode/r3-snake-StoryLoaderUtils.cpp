@@ -62,6 +62,7 @@ namespace r3 {
 				const char* POSITION_X = "x";
 				const char* POSITION_Y = "y";
 				const char* TIME_PASSED = "timePassed";
+				const char* INTERVAL = "interval";
 
 				const char* OPENING_CUTSCENE = "openingCutscene";
 				const char* WIN_CUTSCENE = "winCutscene";
@@ -87,7 +88,6 @@ namespace r3 {
 				const char* FOOD_LIST = "foodList";
 				const char* FOOD_TYPE = "foodType";
 				const char* FOOD_GROWTH_RATE = "growthRate";
-				const char* FOOD_INTERVAL = "interval";
 				const char* FOOD_HEALTH = "health";
 				const char* DANGER_LIST = "dangerList";
 				const char* DANGER_TYPE = "dangerType";
@@ -504,7 +504,7 @@ namespace r3 {
 
 				if (result.spawnType == StoryObjectSpawnType::ON_TIMER) {
 					result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
-					result.interval = jsonValue[StoryLevelProperties::FOOD_INTERVAL].asInt();
+					result.interval = jsonValue[StoryLevelProperties::INTERVAL].asInt();
 				}
 
 				if (result.spawnType == StoryObjectSpawnType::ON_HEALTH_FELL) {
@@ -523,9 +523,13 @@ namespace r3 {
 
 				result.dangerType = convertJsonValueToDangerType(jsonValue[StoryLevelProperties::DANGER_TYPE]);
 				result.spawnType = convertJsonValueToObjectSpawnType(jsonValue[StoryLevelProperties::OBJECT_SPAWN_TYPE]);
-				result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
 				result.chancePct = jsonValue[StoryLevelProperties::OBJECT_CHANCE_PCT].asFloat();
 				result.maxSpawnCount = jsonValue[StoryLevelProperties::OBJECT_MAX_SPAWN_COUNT].asInt();
+				result.interval = jsonValue[StoryLevelProperties::INTERVAL].asInt();
+
+				if (result.spawnType == StoryObjectSpawnType::ON_TIMER) {
+					result.timePassed = jsonValue[StoryLevelProperties::TIME_PASSED].asInt();
+				}
 
 				if (result.spawnType == StoryObjectSpawnType::ON_LENGTH_REACHED) {
 					result.lengthReached = jsonValue[StoryLevelProperties::OBJECT_LENGTH_REACHED].asInt();

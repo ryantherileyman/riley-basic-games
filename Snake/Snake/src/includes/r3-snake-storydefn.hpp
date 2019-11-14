@@ -173,9 +173,10 @@ namespace r3 {
 		typedef struct Snake_StoryDangerDefn {
 			StoryDangerType dangerType;
 			StoryObjectSpawnType spawnType;
-			int timePassed;
 			float chancePct;
 			int maxSpawnCount;
+			int interval;
+			int timePassed;
 			int lengthReached;
 			int minFloorId;
 			int maxFloorId;

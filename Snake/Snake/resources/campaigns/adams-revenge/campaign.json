@@ -2130,7 +2130,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 6,
+                    "timePassed": 3,
+                    "interval": 6,
                     "chancePct": 90,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 20, "maxId": 20 }
@@ -2139,6 +2140,7 @@
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
                     "timePassed": 6,
+                    "interval": 6,
                     "chancePct": 90,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 21, "maxId": 21 }
@@ -2146,7 +2148,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 8,
+                    "timePassed": 2,
+                    "interval": 8,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 22, "maxId": 22 }
@@ -2154,7 +2157,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 8,
+                    "timePassed": 6,
+                    "interval": 8,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 23, "maxId": 23 }
@@ -2162,7 +2166,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 8,
+                    "timePassed": 14,
+                    "interval": 8,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 24, "maxId": 24 }
@@ -2170,7 +2175,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 8,
+                    "timePassed": 10,
+                    "interval": 8,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 25, "maxId": 25 }
@@ -2179,6 +2185,7 @@
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
                     "timePassed": 6,
+                    "interval": 6,
                     "chancePct": 90,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 26, "maxId": 26 }
@@ -2186,7 +2193,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 6,
+                    "timePassed": 3,
+                    "interval": 6,
                     "chancePct": 90,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 27, "maxId": 27 }
@@ -2620,7 +2628,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 2,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 20, "maxId": 20 }
@@ -2628,7 +2637,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 2,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 21, "maxId": 21 }
@@ -2636,7 +2646,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 2,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 22, "maxId": 22 }
@@ -2644,7 +2655,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 2,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 23, "maxId": 23 }
@@ -2652,7 +2664,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 2,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 24, "maxId": 24 }
@@ -2660,7 +2673,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 3,
+                    "interval": 8,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 25, "maxId": 25 }
@@ -2668,7 +2682,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 7,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 26, "maxId": 26 }
@@ -2676,7 +2691,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 7,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 27, "maxId": 27 }
@@ -2684,7 +2700,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 7,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 28, "maxId": 28 }
@@ -2692,7 +2709,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 7,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 29, "maxId": 29 }
@@ -2700,7 +2718,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 7,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 30, "maxId": 30 }
@@ -2708,7 +2727,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 8,
+                    "interval": 8,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 31, "maxId": 31 }
@@ -2716,7 +2736,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 12,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 32, "maxId": 32 }
@@ -2724,7 +2745,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 12,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 33, "maxId": 33 }
@@ -2732,7 +2754,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 12,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 34, "maxId": 34 }
@@ -2740,7 +2763,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 12,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 35, "maxId": 35 }
@@ -2748,7 +2772,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 12,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 36, "maxId": 36 }
@@ -2756,7 +2781,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 17,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 37, "maxId": 37 }
@@ -2764,7 +2790,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 17,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 38, "maxId": 38 }
@@ -2772,7 +2799,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 17,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 39, "maxId": 39 }
@@ -2780,7 +2808,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 17,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 40, "maxId": 40 }
@@ -2788,7 +2817,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 17,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 41, "maxId": 41 }
@@ -2796,7 +2826,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 22,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 42, "maxId": 42 }
@@ -2804,7 +2835,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 22,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 43, "maxId": 43 }
@@ -2812,7 +2844,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 22,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 44, "maxId": 44 }
@@ -2820,7 +2853,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 22,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 45, "maxId": 45 }
@@ -2828,7 +2862,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 27,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 46, "maxId": 46 }
@@ -2836,7 +2871,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 27,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 47, "maxId": 47 }
@@ -2844,7 +2880,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 27,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 48, "maxId": 48 }
@@ -2852,7 +2889,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 27,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 49, "maxId": 49 }
@@ -2860,7 +2898,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 32,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 50, "maxId": 50 }
@@ -2868,7 +2907,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 32,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 51, "maxId": 51 }
@@ -2876,7 +2916,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 32,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 52, "maxId": 52 }
@@ -2884,7 +2925,8 @@
                 {
                     "dangerType": "Spike",
                     "spawnType": "onTimer",
-                    "timePassed": 5,
+                    "timePassed": 32,
+                    "interval": 5,
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 53, "maxId": 53 }

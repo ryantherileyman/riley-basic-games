@@ -160,9 +160,10 @@ namespace r3 {
 			bool rootValid = false;
 			bool dangerTypeValid = false;
 			bool spawnTypeValid = false;
-			bool timePassedValid = false;
 			bool chancePctValid = false;
 			bool maxSpawnCountValid = false;
+			bool intervalValid = false;
+			bool timePassedValid = false;
 			bool lengthReachedValid = true;
 			bool floorIdRangeValid = false;
 
@@ -171,9 +172,10 @@ namespace r3 {
 					rootValid &&
 					dangerTypeValid &&
 					spawnTypeValid &&
-					timePassedValid &&
 					chancePctValid &&
 					maxSpawnCountValid &&
+					intervalValid &&
+					timePassedValid &&
 					lengthReachedValid &&
 					floorIdRangeValid;
 				return result;
@@ -358,6 +360,7 @@ namespace r3 {
 				extern const char* POSITION_X;
 				extern const char* POSITION_Y;
 				extern const char* TIME_PASSED;
+				extern const char* INTERVAL;
 
 				extern const char* OPENING_CUTSCENE;
 				extern const char* WIN_CUTSCENE;
@@ -383,7 +386,6 @@ namespace r3 {
 				extern const char* FOOD_LIST;
 				extern const char* FOOD_TYPE;
 				extern const char* FOOD_GROWTH_RATE;
-				extern const char* FOOD_INTERVAL;
 				extern const char* FOOD_HEALTH;
 				extern const char* DANGER_LIST;
 				extern const char* DANGER_TYPE;

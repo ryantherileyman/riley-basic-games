@@ -13,7 +13,7 @@ namespace r3 {
 
 			this->spawnCount = 0;
 			this->timeOfLastChanceCheck = sf::seconds(-1.0f);
-			this->timeOfLastSpawn = sf::seconds(0.0f - (float)dangerDefn.timePassed);
+			this->timeOfLastSpawn = sf::seconds(0.0f);
 		}
 
 		const StoryDangerDefn& StoryDangerSpawnTracker::getDangerDefn() const {
@@ -41,7 +41,16 @@ namespace r3 {
 				conditionsMet =
 					(this->dangerInstanceList.empty()) &&
 					(this->spawnCount < this->dangerDefn->maxSpawnCount) &&
-					(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->timePassed) &&
+					(
+						(
+							(this->spawnCount == 0) &&
+							(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->timePassed)
+						) ||
+						(
+							(this->spawnCount > 0 ) &&
+							(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->interval)
+						)
+					) &&
 					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
 				break;
 			case StoryObjectSpawnType::ON_LENGTH_REACHED:
@@ -49,7 +58,7 @@ namespace r3 {
 					(this->dangerInstanceList.empty()) &&
 					(input.snakeLength >= this->dangerDefn->lengthReached) &&
 					(this->spawnCount < this->dangerDefn->maxSpawnCount) &&
-					(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->timePassed) &&
+					(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->interval) &&
 					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
 				break;
 			}

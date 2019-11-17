@@ -38,28 +38,13 @@ namespace r3 {
 			bool conditionsMet = false;
 			switch (this->dangerDefn->spawnType) {
 			case StoryObjectSpawnType::ON_TIMER:
-				conditionsMet =
-					(this->dangerInstanceList.empty()) &&
-					(this->spawnCount < this->dangerDefn->maxSpawnCount) &&
-					(
-						(
-							(this->spawnCount == 0) &&
-							(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->timePassed)
-						) ||
-						(
-							(this->spawnCount > 0 ) &&
-							(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->interval)
-						)
-					) &&
-					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+				conditionsMet = this->areTimerConditionsMet(input);
 				break;
 			case StoryObjectSpawnType::ON_LENGTH_REACHED:
-				conditionsMet =
-					(this->dangerInstanceList.empty()) &&
-					(input.snakeLength >= this->dangerDefn->lengthReached) &&
-					(this->spawnCount < this->dangerDefn->maxSpawnCount) &&
-					(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->interval) &&
-					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+				conditionsMet = this->areLengthReachedConditionsMet(input);
+				break;
+			case StoryObjectSpawnType::ON_SNAKE_POSITION:
+				conditionsMet = this->areSnakePositionConditionsMet(input);
 				break;
 			}
 
@@ -113,6 +98,56 @@ namespace r3 {
 			assert(index >= 0);
 
 			this->dangerInstanceList.erase(this->dangerInstanceList.begin() + index);
+		}
+
+		bool StoryDangerSpawnTracker::areTimerConditionsMet(const StoryDangerSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+			sf::Time timeSinceLastSpawn = input.timeSinceLevelStarted - this->timeOfLastSpawn;
+
+			bool conditionsMet =
+				(this->dangerInstanceList.empty()) &&
+				(this->spawnCount < this->dangerDefn->maxSpawnCount) &&
+				(
+				(
+					(this->spawnCount == 0) &&
+					(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->timePassed)
+					) ||
+					(
+					(this->spawnCount > 0) &&
+						(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->interval)
+						)
+					) &&
+					(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return conditionsMet;
+		}
+
+		bool StoryDangerSpawnTracker::areLengthReachedConditionsMet(const StoryDangerSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+			sf::Time timeSinceLastSpawn = input.timeSinceLevelStarted - this->timeOfLastSpawn;
+
+			bool conditionsMet =
+				(this->dangerInstanceList.empty()) &&
+				(input.snake->getLength() >= this->dangerDefn->lengthReached) &&
+				(this->spawnCount < this->dangerDefn->maxSpawnCount) &&
+				(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->interval) &&
+				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return conditionsMet;
+		}
+
+		bool StoryDangerSpawnTracker::areSnakePositionConditionsMet(const StoryDangerSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+			sf::Time timeSinceLastSpawn = input.timeSinceLevelStarted - this->timeOfLastSpawn;
+
+			bool result =
+				(this->dangerInstanceList.empty()) &&
+				(input.snake->bodyOccupiesRect(this->dangerDefn->region)) &&
+				(this->spawnCount < this->dangerDefn->maxSpawnCount) &&
+				(timeSinceLastSpawn.asSeconds() >= (float)this->dangerDefn->interval) &&
+				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return result;
 		}
 
 		int StoryDangerSpawnTracker::findDangerInstanceIndex(int dangerInstanceId) const {

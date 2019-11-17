@@ -65,7 +65,8 @@ namespace r3 {
 						(spawnTypeString.compare(SpawnTypeValues::ON_DESPAWN) == 0) ||
 						(spawnTypeString.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) ||
 						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0) ||
-						(spawnTypeString.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0);
+						(spawnTypeString.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0) ||
+						(spawnTypeString.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0);
 
 					return result;
 				}
@@ -75,7 +76,8 @@ namespace r3 {
 
 					bool result =
 						(spawnTypeString.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) ||
-						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0);
+						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0) ||
+						(spawnTypeString.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0);
 
 					return result;
 				}
@@ -170,6 +172,16 @@ namespace r3 {
 					return result;
 				}
 
+				bool regionValid(const Json::Value& jsonValue) {
+					bool result =
+						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_LEFT, 0) &&
+						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_TOP, 0) &&
+						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_WIDTH, 1) &&
+						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_TOP, 1);
+
+					return result;
+				}
+
 				bool floorIdRangeValid(const Json::Value& jsonValue) {
 					bool result =
 						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_FLOOR_MIN_ID, 0) &&
@@ -220,6 +232,10 @@ namespace r3 {
 
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0) {
 								result.healthValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::FOOD_HEALTH, 1);
+							}
+
+							if (spawnTypeStr.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0) {
+								result.regionValid = regionValid(jsonValue[StoryLevelProperties::REGION]);
 							}
 						}
 					}
@@ -272,6 +288,10 @@ namespace r3 {
 						errorMessages.push_back("The \"health\" is invalid.  It must be an integer of 1 or higher.");
 					}
 
+					if (!foodValidationResult.regionValid) {
+						errorMessages.push_back("The \"region\" is invalid.  It must be an object with valid integer \"left\", \"top\", \"width\", and \"height\" properties.");
+					}
+
 					if (!foodValidationResult.floorIdRangeValid) {
 						errorMessages.push_back("The \"floorIdRange\" is invalid.  It must be an object with \"minId\" and \"maxId\" integer properties of 0 or higher.  The \"minId\" must be less or equal to the \"maxId\".");
 					}
@@ -300,6 +320,10 @@ namespace r3 {
 
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) {
 								result.lengthReachedValid = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::OBJECT_LENGTH_REACHED, 2);
+							}
+
+							if (spawnTypeStr.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0) {
+								result.regionValid = regionValid(jsonValue[StoryLevelProperties::REGION]);
 							}
 						}
 					}
@@ -342,6 +366,10 @@ namespace r3 {
 
 					if (!dangerValidationResult.lengthReachedValid) {
 						errorMessages.push_back("The \"lengthReached\" is invalid.  It must be an integer of 2 or higher.");
+					}
+
+					if (!dangerValidationResult.regionValid) {
+						errorMessages.push_back("The \"region\" is invalid.  It must be an object with valid integer \"left\", \"top\", \"width\", and \"height\" properties.");
 					}
 
 					if (!dangerValidationResult.floorIdRangeValid) {

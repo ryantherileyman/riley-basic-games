@@ -29,6 +29,15 @@ namespace r3 {
 				return result;
 			}
 
+			bool positionInRect(const sf::Vector2i& position, const sf::IntRect& rect) {
+				bool result =
+					(position.x >= rect.left) &&
+					(position.x < (rect.left + rect.width)) &&
+					(position.y >= rect.top) &&
+					(position.y < (rect.top + rect.height));
+				return result;
+			}
+
 		}
 
 		Snake::Snake(const SnakeStartDefn& startDefn) {
@@ -123,6 +132,30 @@ namespace r3 {
 			for (int currSegmentIndex = 0; currSegmentIndex < bodyLength; currSegmentIndex++) {
 				SnakeSegment currBodySegment = this->bodyList.at(currSegmentIndex);
 				result = result || (currBodySegment.position == position);
+				if (result) {
+					break;
+				}
+			}
+
+			return result;
+		}
+
+		bool Snake::occupiesRect(const sf::IntRect& rect) const {
+			bool result =
+				SnakeUtils::positionInRect(this->head.position, rect) ||
+				this->bodyOccupiesRect(rect) ||
+				SnakeUtils::positionInRect(this->tail.position, rect);
+
+			return result;
+		}
+
+		bool Snake::bodyOccupiesRect(const sf::IntRect& rect) const {
+			bool result = false;
+
+			int bodyLength = this->bodyList.size();
+			for (int currSegmentIndex = 0; currSegmentIndex < bodyLength; currSegmentIndex++) {
+				SnakeSegment currBodySegment = this->bodyList.at(currSegmentIndex);
+				result = result || SnakeUtils::positionInRect(currBodySegment.position, rect);
 				if (result) {
 					break;
 				}

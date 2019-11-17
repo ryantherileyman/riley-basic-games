@@ -46,7 +46,7 @@ namespace r3 {
 		typedef struct Snake_StoryFoodSpawnCheckInput {
 			sf::Time timeSinceLevelStarted;
 			std::default_random_engine* randomizer;
-			int snakeLength;
+			const Snake* snake;
 			float snakeHealth;
 		} StoryFoodSpawnCheckInput;
 
@@ -86,7 +86,7 @@ namespace r3 {
 		typedef struct Snake_StoryDangerSpawnCheckInput {
 			sf::Time timeSinceLevelStarted;
 			std::default_random_engine* randomizer;
-			int snakeLength;
+			const Snake* snake;
 		} StoryDangerSpawnCheckInput;
 
 		typedef struct Snake_StoryDangerPositionCheckResult {
@@ -172,6 +172,7 @@ namespace r3 {
 			bool areTimerConditionsMet(const StoryFoodSpawnCheckInput& input);
 			bool areLengthReachedConditionsMet(const StoryFoodSpawnCheckInput& input);
 			bool areHealthFellConditionsMet(const StoryFoodSpawnCheckInput& input);
+			bool areSnakePositionConditionsMet(const StoryFoodSpawnCheckInput& input);
 
 		private:
 			int findFoodInstanceIndex(int foodInstanceId) const;
@@ -210,6 +211,11 @@ namespace r3 {
 		public:
 			void spawnDanger(const StoryDangerInstance& dangerInstance);
 			void despawnDanger(int dangerInstanceId);
+
+		private:
+			bool areTimerConditionsMet(const StoryDangerSpawnCheckInput& input);
+			bool areLengthReachedConditionsMet(const StoryDangerSpawnCheckInput& input);
+			bool areSnakePositionConditionsMet(const StoryDangerSpawnCheckInput& input);
 
 		private:
 			int findDangerInstanceIndex(int dangerInstanceId) const;

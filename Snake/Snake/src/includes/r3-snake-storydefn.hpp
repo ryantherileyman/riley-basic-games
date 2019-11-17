@@ -154,6 +154,7 @@ namespace r3 {
 			ON_TIMER,
 			ON_LENGTH_REACHED,
 			ON_HEALTH_FELL,
+			ON_SNAKE_POSITION,
 		} StoryObjectSpawnType;
 
 		typedef struct Snake_StoryFoodDefn {
@@ -166,6 +167,7 @@ namespace r3 {
 			int timePassed;
 			int interval;
 			int health;
+			sf::IntRect region;
 			int minFloorId;
 			int maxFloorId;
 		} StoryFoodDefn;
@@ -178,6 +180,7 @@ namespace r3 {
 			int interval;
 			int timePassed;
 			int lengthReached;
+			sf::IntRect region;
 			int minFloorId;
 			int maxFloorId;
 		} StoryDangerDefn;

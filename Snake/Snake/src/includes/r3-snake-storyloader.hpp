@@ -137,6 +137,7 @@ namespace r3 {
 			bool intervalValid = true;
 			bool lengthReachedValid = true;
 			bool healthValid = true;
+			bool regionValid = true;
 			bool floorIdRangeValid = false;
 
 			bool valid() const {
@@ -151,6 +152,7 @@ namespace r3 {
 					intervalValid &&
 					lengthReachedValid &&
 					healthValid &&
+					regionValid &&
 					floorIdRangeValid;
 				return result;
 			}
@@ -163,8 +165,9 @@ namespace r3 {
 			bool chancePctValid = false;
 			bool maxSpawnCountValid = false;
 			bool intervalValid = false;
-			bool timePassedValid = false;
+			bool timePassedValid = true;
 			bool lengthReachedValid = true;
+			bool regionValid = true;
 			bool floorIdRangeValid = false;
 
 			bool valid() const {
@@ -177,6 +180,7 @@ namespace r3 {
 					intervalValid &&
 					timePassedValid &&
 					lengthReachedValid &&
+					regionValid &&
 					floorIdRangeValid;
 				return result;
 			}
@@ -361,6 +365,11 @@ namespace r3 {
 				extern const char* POSITION_Y;
 				extern const char* TIME_PASSED;
 				extern const char* INTERVAL;
+				extern const char* REGION;
+				extern const char* REGION_LEFT;
+				extern const char* REGION_TOP;
+				extern const char* REGION_WIDTH;
+				extern const char* REGION_HEIGHT;
 
 				extern const char* OPENING_CUTSCENE;
 				extern const char* WIN_CUTSCENE;
@@ -452,6 +461,7 @@ namespace r3 {
 				extern const char* ON_TIMER;
 				extern const char* ON_LENGTH_REACHED;
 				extern const char* ON_HEALTH_FELL;
+				extern const char* ON_SNAKE_POSITION;
 
 			}
 

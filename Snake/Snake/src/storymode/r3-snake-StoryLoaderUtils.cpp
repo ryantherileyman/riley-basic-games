@@ -63,6 +63,11 @@ namespace r3 {
 				const char* POSITION_Y = "y";
 				const char* TIME_PASSED = "timePassed";
 				const char* INTERVAL = "interval";
+				const char* REGION = "region";
+				const char* REGION_LEFT = "left";
+				const char* REGION_TOP = "top";
+				const char* REGION_WIDTH = "width";
+				const char* REGION_HEIGHT = "height";
 
 				const char* OPENING_CUTSCENE = "openingCutscene";
 				const char* WIN_CUTSCENE = "winCutscene";
@@ -154,6 +159,7 @@ namespace r3 {
 				const char* ON_TIMER = "onTimer";
 				const char* ON_LENGTH_REACHED = "onLengthReached";
 				const char* ON_HEALTH_FELL = "onHealthFell";
+				const char* ON_SNAKE_POSITION = "onSnakePosition";
 
 			}
 
@@ -485,7 +491,19 @@ namespace r3 {
 				else if (jsonValueStr.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0) {
 					result = StoryObjectSpawnType::ON_HEALTH_FELL;
 				}
+				else if (jsonValueStr.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0) {
+					result = StoryObjectSpawnType::ON_SNAKE_POSITION;
+				}
 
+				return result;
+			}
+
+			sf::IntRect convertJsonValueToIntRect(const Json::Value& jsonValue) {
+				sf::IntRect result;
+				result.left = jsonValue[StoryLevelProperties::REGION_LEFT].asInt();
+				result.top = jsonValue[StoryLevelProperties::REGION_TOP].asInt();
+				result.width = jsonValue[StoryLevelProperties::REGION_WIDTH].asInt();
+				result.height = jsonValue[StoryLevelProperties::REGION_HEIGHT].asInt();
 				return result;
 			}
 
@@ -511,6 +529,10 @@ namespace r3 {
 					result.health = jsonValue[StoryLevelProperties::FOOD_HEALTH].asInt();
 				}
 
+				if (result.spawnType == StoryObjectSpawnType::ON_SNAKE_POSITION) {
+					result.region = convertJsonValueToIntRect(jsonValue[StoryLevelProperties::REGION]);
+				}
+
 				Json::Value floorIdRangeValue = jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE];
 				result.minFloorId = floorIdRangeValue[StoryLevelProperties::OBJECT_FLOOR_MIN_ID].asInt();
 				result.maxFloorId = floorIdRangeValue[StoryLevelProperties::OBJECT_FLOOR_MAX_ID].asInt();
@@ -533,6 +555,10 @@ namespace r3 {
 
 				if (result.spawnType == StoryObjectSpawnType::ON_LENGTH_REACHED) {
 					result.lengthReached = jsonValue[StoryLevelProperties::OBJECT_LENGTH_REACHED].asInt();
+				}
+
+				if (result.spawnType == StoryObjectSpawnType::ON_SNAKE_POSITION) {
+					result.region = convertJsonValueToIntRect(jsonValue[StoryLevelProperties::REGION]);
 				}
 
 				Json::Value floorIdRangeValue = jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE];

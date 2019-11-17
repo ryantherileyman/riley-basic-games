@@ -420,7 +420,7 @@ namespace r3 {
 				StoryFoodSpawnCheckInput checkInput;
 				checkInput.timeSinceLevelStarted = this->clock.getElapsedTime();
 				checkInput.randomizer = &this->randomizer;
-				checkInput.snakeLength = this->getSnake()->getLength();
+				checkInput.snake = this->getSnake();
 				checkInput.snakeHealth = this->snakeHealth;
 
 				if (currFoodSpawnTracker.shouldFoodSpawn(checkInput)) {
@@ -552,7 +552,7 @@ namespace r3 {
 				StoryDangerSpawnCheckInput checkInput;
 				checkInput.timeSinceLevelStarted = this->getTimeElapsed();
 				checkInput.randomizer = &this->randomizer;
-				checkInput.snakeLength = this->snake->getLength();
+				checkInput.snake = this->snake;
 
 				if (currDangerSpawnTracker.shouldDangerSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableDangerSpawnPositionList(currDangerSpawnTracker.getDangerDefn());

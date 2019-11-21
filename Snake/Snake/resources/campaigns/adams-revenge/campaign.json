@@ -15,14 +15,14 @@
             "winCondition": {
                 "conditionType": "onFoodEaten",
                 "foodType": "Apple",
-                "foodCount": 100
+                "foodCount": 75
             },
             "foodList": [
                 {
                     "foodType": "Apple",
                     "spawnType": "onDespawn",
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 4,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 1, "maxId": 1 }
                 },
@@ -39,7 +39,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 46, "top": 1, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 1, "maxId": 1 }
                 },
@@ -48,7 +48,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 46, "top": 19, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 1, "maxId": 1 }
                 },
@@ -123,7 +123,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 7,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 2, "maxId": 2 }
                 },
@@ -132,7 +132,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 10,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 2, "maxId": 2 }
                 },
@@ -141,7 +141,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 10, "top": 1, "width": 2, "height": 5 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 1, "maxId": 1 }
                 },
@@ -150,7 +150,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 43, "top": 7, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 1, "maxId": 1 }
                 },
@@ -216,7 +216,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 13,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
                 },
@@ -225,7 +225,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 16,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
                 },
@@ -234,7 +234,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 10, "top": 7, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
                 },
@@ -243,7 +243,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 40, "top": 7, "width": 2, "height": 5 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 1, "maxId": 1 }
                 },
@@ -309,7 +309,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 19,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 4, "maxId": 4 }
                 },
@@ -318,7 +318,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 22,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 4, "maxId": 4 }
                 },
@@ -327,7 +327,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 10, "top": 10, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 4, "maxId": 4 }
                 },
@@ -336,7 +336,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 37, "top": 10, "width": 2, "height": 5 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 1, "maxId": 1 }
                 },
@@ -448,7 +448,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 25,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 6, "maxId": 6 }
                 },
@@ -457,7 +457,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 28,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 6, "maxId": 6 }
                 },
@@ -466,7 +466,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 7, "top": 13, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 6, "maxId": 6 }
                 },
@@ -475,7 +475,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 34, "top": 13, "width": 2, "height": 6 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 6, "maxId": 6 }
                 },
@@ -541,7 +541,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 31,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 7, "maxId": 7 }
                 },
@@ -550,7 +550,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 34,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 7, "maxId": 7 }
                 },
@@ -559,7 +559,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 7, "top": 16, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 7, "maxId": 7 }
                 },
@@ -568,7 +568,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 31, "top": 16, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 7, "maxId": 7 }
                 },
@@ -634,7 +634,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 37,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 8, "maxId": 8 }
                 },
@@ -643,7 +643,7 @@
                     "spawnType": "onLengthReached",
                     "lengthReached": 40,
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 8, "maxId": 8 }
                 },
@@ -652,7 +652,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 4, "top": 19, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 8, "maxId": 8 }
                 },
@@ -661,7 +661,7 @@
                     "spawnType": "onSnakePosition",
                     "region": { "left": 31, "top": 19, "width": 2, "height": 2 },
                     "chancePct": 100,
-                    "maxSpawnCount": 3,
+                    "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 8, "maxId": 8 }
                 },
@@ -895,6 +895,78 @@
                     "maxSpawnCount": 100,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 0, "maxId": 0 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 1, "top": 1, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 7, "top": 1, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 4, "top": 4, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 7, "top": 4, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 4, "top": 7, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 7, "top": 7, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 4, "top": 10, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 7, "top": 10, "width": 2, "height": 2 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 11 }
                 },
                 {
                     "foodType": "Green Apple",

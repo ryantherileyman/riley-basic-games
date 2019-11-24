@@ -14,7 +14,7 @@
             "snakeHealth": 5,
             "winCondition": {
                 "conditionType": "onLengthReached",
-                "snakeLength": 1000
+                "snakeLength": 150
             },
             "foodList": [
                 {
@@ -404,6 +404,96 @@
                     "floorIdRange": { "minId": 6, "maxId": 6 }
                 },
                 {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 4, "top": 17, "width": 8, "height": 3 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 8, "maxId": 8 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 18, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 8, "maxId": 8 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 18, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 8, "maxId": 8 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 18, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 8, "maxId": 8 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 18, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 8, "maxId": 8 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 36, "top": 17, "width": 8, "height": 3 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 27, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 27, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 27, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
+                    "foodType": "Banana",
+                    "spawnType": "onSnakePosition",
+                    "region": { "left": 27, "top": 15, "width": 4, "height": 5 },
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 9, "maxId": 9 }
+                },
+                {
                     "foodType": "Carrot",
                     "spawnType": "onTimer",
                     "timePassed": 10,
@@ -487,6 +577,33 @@
                     "maxSpawnCount": 10,
                     "growthRate": 4,
                     "floorIdRange": { "minId": 30, "maxId": 30 }
+                },
+                {
+                    "foodType": "Green Apple",
+                    "spawnType": "onHealthFell",
+                    "health": 3,
+                    "chancePct": 25,
+                    "maxSpawnCount": 10,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 10, "maxId": 10 }
+                },
+                {
+                    "foodType": "Green Apple",
+                    "spawnType": "onHealthFell",
+                    "health": 2,
+                    "chancePct": 50,
+                    "maxSpawnCount": 10,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 10, "maxId": 10 }
+                },
+                {
+                    "foodType": "Green Apple",
+                    "spawnType": "onHealthFell",
+                    "health": 1,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10,
+                    "growthRate": 4,
+                    "floorIdRange": { "minId": 10, "maxId": 10 }
                 }
             ],
             "dangerList": [

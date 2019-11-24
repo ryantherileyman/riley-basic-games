@@ -33,6 +33,7 @@ Music from https://filmmusic.io
 "Monkoto" by Kevin MacLeod (https://incompetech.com)
 "Artifact" by Kevin MacLeod (https://incompetech.com)
 "Kumasi Groove" by Kevin MacLeod (https://incompetech.com)
+"Digya" by Kevin MacLeod (https://incompetech.com)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 
 Sound Effects from https://www.zapsplat.com/

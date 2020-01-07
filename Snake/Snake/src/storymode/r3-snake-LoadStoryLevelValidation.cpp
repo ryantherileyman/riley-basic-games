@@ -177,7 +177,7 @@ namespace r3 {
 						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_LEFT, 0) &&
 						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_TOP, 0) &&
 						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_WIDTH, 1) &&
-						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_TOP, 1);
+						r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::REGION_HEIGHT, 1);
 
 					return result;
 				}

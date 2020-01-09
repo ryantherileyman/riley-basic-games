@@ -3,6 +3,35 @@
     "menuDescription": "Adam has trapped you in his diabolical gauntlet!",
     "levelList": [
         {
+            "map": "map-level-09",
+            "music": "Digya-level07.ogg",
+            "snakeStart": {
+                "position": { "x": 1, "y": 22 },
+                "direction": "right",
+                "length": 3
+            },
+            "snakeSpeed": 9,
+            "snakeHealth": 5,
+            "winCondition": {
+                "conditionType": "onLengthReached",
+                "snakeLength": 1000
+            },
+            "foodList": [
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 100,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 0, "maxId": 0 }
+                }
+            ],
+            "dangerList": [
+            ],
+            "soundFxList": [
+            ]
+        },
+        {
             "map": "map-level-08",
             "music": "Digya-level07.ogg",
             "snakeStart": {

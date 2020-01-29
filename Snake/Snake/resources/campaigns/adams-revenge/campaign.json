@@ -642,6 +642,42 @@
                     "chancePct": 100,
                     "maxSpawnCount": 10000,
                     "floorIdRange": { "minId": 29, "maxId": 29 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 1,
+                    "interval": 6,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 30, "maxId": 30 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 4,
+                    "interval": 6,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 31, "maxId": 31 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 1,
+                    "interval": 6,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 32, "maxId": 32 }
+                },
+                {
+                    "dangerType": "Spike",
+                    "spawnType": "onTimer",
+                    "timePassed": 4,
+                    "interval": 6,
+                    "chancePct": 100,
+                    "maxSpawnCount": 10000,
+                    "floorIdRange": { "minId": 33, "maxId": 33 }
                 }
             ],
             "soundFxList": [

@@ -422,6 +422,7 @@ namespace r3 {
 				checkInput.randomizer = &this->randomizer;
 				checkInput.snake = this->getSnake();
 				checkInput.snakeHealth = this->snakeHealth;
+				checkInput.foodEatenCountMap = &this->foodEatenCountMap;
 
 				if (currFoodSpawnTracker.shouldFoodSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableFoodSpawnPositionList(currFoodSpawnTracker.getFoodDefn());

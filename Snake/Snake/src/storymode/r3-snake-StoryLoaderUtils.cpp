@@ -90,6 +90,8 @@ namespace r3 {
 				const char* OBJECT_FLOOR_ID_RANGE = "floorIdRange";
 				const char* OBJECT_FLOOR_MIN_ID = "minId";
 				const char* OBJECT_FLOOR_MAX_ID = "maxId";
+				const char* EATEN_FOOD_TYPE = "eatenFoodType";
+				const char* EATEN_FOOD_COUNT = "eatenFoodCount";
 				const char* FOOD_LIST = "foodList";
 				const char* FOOD_TYPE = "foodType";
 				const char* FOOD_GROWTH_RATE = "growthRate";
@@ -160,6 +162,7 @@ namespace r3 {
 				const char* ON_LENGTH_REACHED = "onLengthReached";
 				const char* ON_HEALTH_FELL = "onHealthFell";
 				const char* ON_SNAKE_POSITION = "onSnakePosition";
+				const char* ON_FOOD_EATEN = "onFoodEaten";
 
 			}
 
@@ -494,6 +497,9 @@ namespace r3 {
 				else if (jsonValueStr.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0) {
 					result = StoryObjectSpawnType::ON_SNAKE_POSITION;
 				}
+				else if (jsonValueStr.compare(SpawnTypeValues::ON_FOOD_EATEN) == 0 ) {
+					result = StoryObjectSpawnType::ON_FOOD_EATEN;
+				}
 
 				return result;
 			}
@@ -531,6 +537,11 @@ namespace r3 {
 
 				if (result.spawnType == StoryObjectSpawnType::ON_SNAKE_POSITION) {
 					result.region = convertJsonValueToIntRect(jsonValue[StoryLevelProperties::REGION]);
+				}
+
+				if (result.spawnType == StoryObjectSpawnType::ON_FOOD_EATEN) {
+					result.eatenFoodType = convertJsonValueToFoodType(jsonValue[StoryLevelProperties::EATEN_FOOD_TYPE]);
+					result.eatenFoodCount = jsonValue[StoryLevelProperties::EATEN_FOOD_COUNT].asInt();
 				}
 
 				Json::Value floorIdRangeValue = jsonValue[StoryLevelProperties::OBJECT_FLOOR_ID_RANGE];

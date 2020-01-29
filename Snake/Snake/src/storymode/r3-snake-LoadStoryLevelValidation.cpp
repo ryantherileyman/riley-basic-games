@@ -66,7 +66,8 @@ namespace r3 {
 						(spawnTypeString.compare(SpawnTypeValues::ON_LENGTH_REACHED) == 0) ||
 						(spawnTypeString.compare(SpawnTypeValues::ON_TIMER) == 0) ||
 						(spawnTypeString.compare(SpawnTypeValues::ON_HEALTH_FELL) == 0) ||
-						(spawnTypeString.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0);
+						(spawnTypeString.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0) ||
+						(spawnTypeString.compare(SpawnTypeValues::ON_FOOD_EATEN) == 0);
 
 					return result;
 				}
@@ -237,6 +238,14 @@ namespace r3 {
 							if (spawnTypeStr.compare(SpawnTypeValues::ON_SNAKE_POSITION) == 0) {
 								result.regionValid = regionValid(jsonValue[StoryLevelProperties::REGION]);
 							}
+
+							if (spawnTypeStr.compare(SpawnTypeValues::ON_FOOD_EATEN) == 0) {
+								result.eatenFoodType =
+									r3::json::ValidationUtils::requiredString(jsonValue, StoryLevelProperties::EATEN_FOOD_TYPE) &&
+									foodTypeValueValid(jsonValue[StoryLevelProperties::EATEN_FOOD_TYPE]);
+
+								result.eatenFoodCount = r3::json::ValidationUtils::requiredInt(jsonValue, StoryLevelProperties::EATEN_FOOD_COUNT, 1);
+							}
 						}
 					}
 
@@ -286,6 +295,14 @@ namespace r3 {
 
 					if (!foodValidationResult.healthValid) {
 						errorMessages.push_back("The \"health\" is invalid.  It must be an integer of 1 or higher.");
+					}
+
+					if (!foodValidationResult.eatenFoodType) {
+						errorMessages.push_back("The \"eatenFoodType\" is invalid.  It must be a string referencing an available food type.");
+					}
+
+					if (!foodValidationResult.eatenFoodCount) {
+						errorMessages.push_back("The \"eatenFoodCount\" is invalid.  It must be an integer of 1 or higher.");
 					}
 
 					if (!foodValidationResult.regionValid) {

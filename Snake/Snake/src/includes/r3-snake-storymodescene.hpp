@@ -48,6 +48,7 @@ namespace r3 {
 			std::default_random_engine* randomizer;
 			const Snake* snake;
 			float snakeHealth;
+			const std::unordered_map<StoryFoodType, int>* foodEatenCountMap;
 		} StoryFoodSpawnCheckInput;
 
 		typedef struct Snake_StoryFoodPositionCheckResult {
@@ -173,6 +174,7 @@ namespace r3 {
 			bool areLengthReachedConditionsMet(const StoryFoodSpawnCheckInput& input);
 			bool areHealthFellConditionsMet(const StoryFoodSpawnCheckInput& input);
 			bool areSnakePositionConditionsMet(const StoryFoodSpawnCheckInput& input);
+			bool areFoodEatenConditionsMet(const StoryFoodSpawnCheckInput& input);
 
 		private:
 			int findFoodInstanceIndex(int foodInstanceId) const;

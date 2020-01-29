@@ -53,6 +53,9 @@ namespace r3 {
 			case StoryObjectSpawnType::ON_SNAKE_POSITION:
 				conditionsMet = this->areSnakePositionConditionsMet(input);
 				break;
+			case StoryObjectSpawnType::ON_FOOD_EATEN:
+				conditionsMet = this->areFoodEatenConditionsMet(input);
+				break;
 			}
 
 			bool result = false;
@@ -160,6 +163,18 @@ namespace r3 {
 
 			bool result =
 				(input.snake->bodyOccupiesRect(this->foodDefn->region)) &&
+				(this->foodInstanceList.empty()) &&
+				(this->spawnCount < this->foodDefn->maxSpawnCount) &&
+				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);
+
+			return result;
+		}
+
+		bool StoryFoodSpawnTracker::areFoodEatenConditionsMet(const StoryFoodSpawnCheckInput& input) {
+			sf::Time timeSinceLastChanceCheck = input.timeSinceLevelStarted - this->timeOfLastChanceCheck;
+
+			bool result =
+				(input.foodEatenCountMap->at(this->foodDefn->eatenFoodType) >= this->foodDefn->eatenFoodCount) &&
 				(this->foodInstanceList.empty()) &&
 				(this->spawnCount < this->foodDefn->maxSpawnCount) &&
 				(timeSinceLastChanceCheck.asSeconds() >= 1.0f);

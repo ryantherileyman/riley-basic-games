@@ -137,6 +137,8 @@ namespace r3 {
 			bool intervalValid = true;
 			bool lengthReachedValid = true;
 			bool healthValid = true;
+			bool eatenFoodType = true;
+			bool eatenFoodCount = true;
 			bool regionValid = true;
 			bool floorIdRangeValid = false;
 
@@ -152,6 +154,8 @@ namespace r3 {
 					intervalValid &&
 					lengthReachedValid &&
 					healthValid &&
+					eatenFoodType &&
+					eatenFoodCount &&
 					regionValid &&
 					floorIdRangeValid;
 				return result;
@@ -392,6 +396,8 @@ namespace r3 {
 				extern const char* OBJECT_FLOOR_ID_RANGE;
 				extern const char* OBJECT_FLOOR_MIN_ID;
 				extern const char* OBJECT_FLOOR_MAX_ID;
+				extern const char* EATEN_FOOD_TYPE;
+				extern const char* EATEN_FOOD_COUNT;
 				extern const char* FOOD_LIST;
 				extern const char* FOOD_TYPE;
 				extern const char* FOOD_GROWTH_RATE;
@@ -462,6 +468,7 @@ namespace r3 {
 				extern const char* ON_LENGTH_REACHED;
 				extern const char* ON_HEALTH_FELL;
 				extern const char* ON_SNAKE_POSITION;
+				extern const char* ON_FOOD_EATEN;
 
 			}
 

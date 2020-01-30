@@ -19,56 +19,6 @@
             },
             "foodList": [
                 {
-                    "foodType": "Apple",
-                    "spawnType": "onTimer",
-                    "timePassed": 4,
-                    "interval": 4,
-                    "chancePct": 100,
-                    "maxSpawnCount": 12,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 14, "maxId": 14 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onTimer",
-                    "timePassed": 6,
-                    "interval": 4,
-                    "chancePct": 100,
-                    "maxSpawnCount": 12,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 15, "maxId": 15 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onTimer",
-                    "timePassed": 9,
-                    "interval": 3,
-                    "chancePct": 100,
-                    "maxSpawnCount": 12,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 16, "maxId": 16 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onTimer",
-                    "timePassed": 6,
-                    "interval": 4,
-                    "chancePct": 100,
-                    "maxSpawnCount": 12,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 17, "maxId": 17 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onTimer",
-                    "timePassed": 4,
-                    "interval": 4,
-                    "chancePct": 100,
-                    "maxSpawnCount": 12,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 18, "maxId": 18 }
-                },
-                {
                     "foodType": "Green Apple",
                     "spawnType": "onTimer",
                     "timePassed": 10,
@@ -79,22 +29,6 @@
                     "floorIdRange": { "minId": 9, "maxId": 13 }
                 },
                 {
-                    "foodType": "Apple",
-                    "spawnType": "onDespawn",
-                    "chancePct": 100,
-                    "maxSpawnCount": 2,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 1, "maxId": 1 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onDespawn",
-                    "chancePct": 100,
-                    "maxSpawnCount": 2,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 1, "maxId": 1 }
-                },
-                {
                     "foodType": "Green Apple",
                     "spawnType": "onHealthFell",
                     "health": 3,
@@ -111,22 +45,6 @@
                     "maxSpawnCount": 10,
                     "growthRate": 5,
                     "floorIdRange": { "minId": 1, "maxId": 2 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onDespawn",
-                    "chancePct": 100,
-                    "maxSpawnCount": 2,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 3, "maxId": 3 }
-                },
-                {
-                    "foodType": "Apple",
-                    "spawnType": "onDespawn",
-                    "chancePct": 100,
-                    "maxSpawnCount": 2,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 3, "maxId": 3 }
                 },
                 {
                     "foodType": "Green Apple",
@@ -147,14 +65,6 @@
                     "floorIdRange": { "minId": 3, "maxId": 4 }
                 },
                 {
-                    "foodType": "Apple",
-                    "spawnType": "onDespawn",
-                    "chancePct": 100,
-                    "maxSpawnCount": 2,
-                    "growthRate": 3,
-                    "floorIdRange": { "minId": 5, "maxId": 5 }
-                },
-                {
                     "foodType": "Green Apple",
                     "spawnType": "onHealthFell",
                     "health": 3,
@@ -173,6 +83,102 @@
                     "floorIdRange": { "minId": 5, "maxId": 6 }
                 },
                 {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 1, "maxId": 1 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 1, "maxId": 1 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 15, "maxId": 15 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 17, "maxId": 17 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 5, "maxId": 5 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onDespawn",
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 16, "maxId": 16 }
+                },
+                {
                     "foodType": "Cherries",
                     "spawnType": "onFoodEaten",
                     "eatenFoodType": "Apple",
@@ -250,6 +256,46 @@
                     "chancePct": 100,
                     "maxSpawnCount": 2,
                     "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
                 },
                 {
@@ -261,6 +307,46 @@
                     "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 15, "maxId": 15 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 15, "maxId": 15 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 17, "maxId": 17 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 17, "maxId": 17 }
                 },
                 {
                     "foodType": "Apple",
@@ -273,6 +359,16 @@
                     "floorIdRange": { "minId": 5, "maxId": 5 }
                 },
                 {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Cherries",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 16, "maxId": 16 }
+                },
+                {
                     "foodType": "Orange",
                     "spawnType": "onFoodEaten",
                     "eatenFoodType": "Apple",
@@ -350,6 +446,46 @@
                     "chancePct": 100,
                     "maxSpawnCount": 2,
                     "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
                 },
                 {
@@ -361,6 +497,46 @@
                     "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 15, "maxId": 15 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 15, "maxId": 15 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 17, "maxId": 17 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 17, "maxId": 17 }
                 },
                 {
                     "foodType": "Apple",
@@ -373,6 +549,16 @@
                     "floorIdRange": { "minId": 5, "maxId": 5 }
                 },
                 {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Orange",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 16, "maxId": 16 }
+                },
+                {
                     "foodType": "Pear",
                     "spawnType": "onFoodEaten",
                     "eatenFoodType": "Apple",
@@ -450,6 +636,46 @@
                     "chancePct": 100,
                     "maxSpawnCount": 2,
                     "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 14, "maxId": 14 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 18, "maxId": 18 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
                 },
                 {
@@ -461,6 +687,46 @@
                     "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 3, "maxId": 3 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 15, "maxId": 15 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 15, "maxId": 15 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 17, "maxId": 17 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 2,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 17, "maxId": 17 }
                 },
                 {
                     "foodType": "Apple",
@@ -471,6 +737,16 @@
                     "maxSpawnCount": 2,
                     "growthRate": 3,
                     "floorIdRange": { "minId": 5, "maxId": 5 }
+                },
+                {
+                    "foodType": "Apple",
+                    "spawnType": "onFoodEaten",
+                    "eatenFoodType": "Pear",
+                    "eatenFoodCount": 5,
+                    "chancePct": 100,
+                    "maxSpawnCount": 3,
+                    "growthRate": 3,
+                    "floorIdRange": { "minId": 16, "maxId": 16 }
                 },
                 {
                     "foodType": "Carrot",

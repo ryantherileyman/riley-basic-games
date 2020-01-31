@@ -269,6 +269,7 @@ namespace r3 {
 
 		private:
 			int score;
+			int scoreAtLevelStart;
 
 		public:
 			StoryGame();
@@ -281,6 +282,10 @@ namespace r3 {
 			void startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn);
 			void startRunningLevel();
 			void stopRunningLevel();
+
+		public:
+			void snapshotScoreAtLevelStart();
+			void resetScoreToLevelStart();
 
 		public:
 			StoryMap* getMap() const;

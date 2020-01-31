@@ -500,6 +500,7 @@ namespace r3 {
 			}
 
 			if (updateResult.snakeDiedFlag) {
+				this->storyGame->resetScoreToLevelStart();
 				this->stopRunningLevel();
 
 				if (this->levelDefnList[this->currLevelIndex].lossCutsceneDefn.existsFlag) {
@@ -540,6 +541,7 @@ namespace r3 {
 			else {
 				this->currLevelIndex++;
 				this->mode = StoryGameMode::LOAD_LEVEL;
+				this->storyGame->snapshotScoreAtLevelStart();
 				this->initiateLoadLevel();
 			}
 		}

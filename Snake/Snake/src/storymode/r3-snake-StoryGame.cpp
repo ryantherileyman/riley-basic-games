@@ -89,6 +89,7 @@ namespace r3 {
 			this->nextFoodInstanceId = 1;
 			this->nextDangerInstanceId = 1;
 			this->score = 0;
+			this->scoreAtLevelStart = 0;
 		}
 
 		StoryGame::~StoryGame() {
@@ -154,6 +155,14 @@ namespace r3 {
 		void StoryGame::stopRunningLevel() {
 			this->status = StoryGameStatus::ENDED;
 			this->timeElapsedWhenEnded = this->clock.getElapsedTime();
+		}
+
+		void StoryGame::snapshotScoreAtLevelStart() {
+			this->scoreAtLevelStart = this->score;
+		}
+
+		void StoryGame::resetScoreToLevelStart() {
+			this->score = this->scoreAtLevelStart;
 		}
 
 		StoryMap* StoryGame::getMap() const {

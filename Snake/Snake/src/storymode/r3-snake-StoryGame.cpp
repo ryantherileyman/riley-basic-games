@@ -98,6 +98,7 @@ namespace r3 {
 
 		void StoryGame::startNewCampaign() {
 			this->score = 0;
+			this->scoreAtLevelStart = 0;
 		}
 
 		void StoryGame::startNewLevel(const StoryMapDefn& mapDefn, const StoryLevelDefn& levelDefn) {

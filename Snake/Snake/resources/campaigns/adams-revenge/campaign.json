@@ -4173,7 +4173,122 @@
                 }
             ],
             "soundFxList": [
-            ]
+                {
+                    "triggerType": "onFirstFoodSpawn",
+                    "sound": "goe-level05-trigger01-foodSpawn-green-apples.wav",
+                    "foodType": "Green Apple"
+                }
+            ],
+            "winCutscene": {
+                "soundTrack": "level-05-win-cutscene.wav",
+                "eventList": [
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-05"
+                    },
+                    {
+                        "framesSinceLastEvent": 40,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 45, "y": 4 },
+                            "direction": "up",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 250,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-winlevel05-openpath"
+                    },
+                    {
+                        "framesSinceLastEvent": 40,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-winlevel05-nextmap"
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 47, "y": 19 },
+                            "direction": "up",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-06"
+                    },
+                    {
+                        "framesSinceLastEvent": 722,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-06"
+                    }
+                ]
+            },
+            "lossCutscene": {
+                "soundTrack": "level-05-loss-cutscene.wav",
+                "eventList": [
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-05"
+                    },
+                    {
+                        "framesSinceLastEvent": 280,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-05"
+                    }
+                ]
+            }
         },
         {
             "map": "map-level-06",

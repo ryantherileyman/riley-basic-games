@@ -6538,11 +6538,635 @@
                 }
             ],
             "soundFxList": [
-            ]
+                {
+                    "triggerType": "onFirstFoodSpawn",
+                    "sound": "goe-level07-trigger01-foodSpawn-bananas.wav",
+                    "foodType": "Banana"
+                },
+                {
+                    "triggerType": "onFirstFoodSpawn",
+                    "sound": "goe-level07-trigger02-foodSpawn-greenApples.wav",
+                    "foodType": "Green Apple"
+                }
+            ],
+            "lossCutscene": {
+                "soundTrack": "level-07-loss-cutscene.wav",
+                "eventList": [
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-07"
+                    },
+                    {
+                        "framesSinceLastEvent": 260,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-07"
+                    }
+                ]
+            },
+            "winCutscene": {
+                "soundTrack": "level-07-win-cutscene.wav",
+                "eventList": [
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-07"
+                    },
+                    {
+                        "framesSinceLastEvent": 40,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 24, "y": 19 },
+                            "direction": "up",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 230,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-winlevel07-openpath"
+                    },
+                    {
+                        "framesSinceLastEvent": 60,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "up",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-winlevel07-nextmap"
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "showSnake",
+                        "snakeStart": {
+                            "position": { "x": 2, "y": 4 },
+                            "direction": "right",
+                            "length": 3
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-08"
+                    },
+                    {
+                        "framesSinceLastEvent": 0,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "down",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 10,
+                        "eventType": "moveSnake",
+                        "snakeMovement": {
+                            "direction": "right",
+                            "grow": false
+                        }
+                    },
+                    {
+                        "framesSinceLastEvent": 300,
+                        "eventType": "showMap",
+                        "fadeFrames": 0,
+                        "map": "map-level-08"
+                    }
+                ]
+            }
         },
         {
             "map": "map-level-08",
-            "music": "Digya-level07.ogg",
+            "music": "Digya.ogg",
             "snakeStart": {
                 "position": { "x": 11, "y": 20 },
                 "direction": "right",

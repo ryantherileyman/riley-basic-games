@@ -1,4 +1,4 @@
-
+﻿
 Riley Entertainment - The Garden of Eating
 
 
@@ -34,6 +34,8 @@ Music from https://filmmusic.io
 "Artifact" by Kevin MacLeod (https://incompetech.com)
 "Kumasi Groove" by Kevin MacLeod (https://incompetech.com)
 "Digya" by Kevin MacLeod (https://incompetech.com)
+"Witch Hunt" by Kevin MacLeod (https://incompetech.com)
+"Adding the Sun" by Kevin MacLeod (https://incompetech.com)
 License: CC BY (http://creativecommons.org/licenses/by/4.0/)
 
 Sound Effects from https://www.zapsplat.com/

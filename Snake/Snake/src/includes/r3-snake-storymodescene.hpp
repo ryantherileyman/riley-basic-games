@@ -23,6 +23,7 @@ namespace r3 {
 			GAME_RUNNING,
 			PLAY_WIN_CUTSCENE,
 			PLAY_LOSS_CUTSCENE,
+			LEVEL_SCORE_SUMMARY,
 			LEVEL_LOST,
 			CAMPAIGN_WON,
 		} StoryGameMode;
@@ -429,6 +430,14 @@ namespace r3 {
 
 		};
 
+		typedef struct Snake_StoryFoodEatenSummaryDt {
+			StoryFoodType foodType;
+			int totalEaten;
+			int totalBaseScore;
+			int totalBonusScore;
+			int totalScore;
+		} StoryFoodEatenSummaryDt;
+
 		class StoryGameController {
 
 		private:
@@ -451,6 +460,9 @@ namespace r3 {
 
 		private:
 			sf::Time timeSnakeLastDamaged;
+
+		private:
+			std::unordered_map<StoryFoodType, StoryFoodEatenSummaryDt> foodEatenSummaryMap;
 
 		public:
 			StoryGameController(sf::RenderWindow& window);
@@ -479,6 +491,7 @@ namespace r3 {
 			StoryGameSceneClientRequest processGameRunningKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processPlayWinCutsceneKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processPlayLossCutsceneKeyEvent(sf::Event& event);
+			StoryGameSceneClientRequest processLevelSummaryKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processLevelLostKeyEvent(sf::Event& event);
 			StoryGameSceneClientRequest processCampaignWonKeyEvent(sf::Event& event);
 
@@ -487,6 +500,9 @@ namespace r3 {
 			void updateWinCutscene();
 			void updateLossCutscene();
 			void updateGameRunning();
+
+		private:
+			void updateFoodEatenSummaryMap(const StoryFoodEatenResult& foodEatenResult);
 		
 		private:
 			void stopRunningLevel();
@@ -504,6 +520,11 @@ namespace r3 {
 			const StoryLevelAssetBundle* levelAssetBundle;
 			const StoryCutscene* storyCutscene;
 		} StoryCutsceneRenderState;
+
+		typedef struct Snake_StoryLevelSummaryRenderState {
+			StoryGameRenderState gameRenderState;
+			const std::unordered_map<StoryFoodType, StoryFoodEatenSummaryDt>* foodEatenSummaryMap;
+		} StoryLevelSummaryRenderState;
 
 		typedef struct Snake_StoryFoodEatenAnimation {
 			sf::Vector2i tilePosition;
@@ -541,6 +562,7 @@ namespace r3 {
 			void renderCutsceneDangers(sf::RenderTarget& renderTarget, const StoryCutsceneRenderState& renderState);
 			void renderWaitToStart(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderGameRunning(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderLevelSummary(sf::RenderTarget& renderTarget, const StoryLevelSummaryRenderState& renderState);
 			void renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderCampaignWon(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 
@@ -551,6 +573,7 @@ namespace r3 {
 			void renderFoodSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderDangerSpawns(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
 			void renderFoodEatenAnimations(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState);
+			void renderLevelSummaryUi(sf::RenderTarget& renderTarget, const StoryLevelSummaryRenderState& renderState);
 			void renderWaitToStartInstructions(sf::RenderTarget& renderTarget);
 			void renderExitInstructions(sf::RenderTarget& renderTarget);
 

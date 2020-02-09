@@ -72,6 +72,9 @@ namespace r3 {
 				case StoryGameMode::PLAY_LOSS_CUTSCENE:
 					result = this->processPlayLossCutsceneKeyEvent(event);
 					break;
+				case StoryGameMode::LEVEL_SCORE_SUMMARY:
+					result = this->processLevelSummaryKeyEvent(event);
+					break;
 				case StoryGameMode::LEVEL_LOST:
 					result = this->processLevelLostKeyEvent(event);
 					break;
@@ -153,6 +156,18 @@ namespace r3 {
 				renderState.snakeDamagedFlag = ((this->storyGame->getTimeElapsed().asSeconds() - this->timeSnakeLastDamaged.asSeconds()) < 0.5f);
 
 				this->renderer->renderGameRunning(*this->window, renderState);
+				this->window->display();
+			}
+				break;
+			case StoryGameMode::LEVEL_SCORE_SUMMARY:
+			{
+				StoryLevelSummaryRenderState renderState;
+				renderState.gameRenderState.levelAssetBundle = this->levelAssetBundle;
+				renderState.gameRenderState.storyGame = this->storyGame;
+				renderState.gameRenderState.snakeDamagedFlag = false;
+				renderState.foodEatenSummaryMap = &this->foodEatenSummaryMap;
+
+				this->renderer->renderLevelSummary(*this->window, renderState);
 				this->window->display();
 			}
 				break;
@@ -327,7 +342,7 @@ namespace r3 {
 			switch (event.key.code) {
 			case sf::Keyboard::Key::Escape:
 			case sf::Keyboard::Key::Enter:
-				this->moveToNextLevel();
+				this->mode = StoryGameMode::LEVEL_SCORE_SUMMARY;
 
 				this->levelAssetBundle->getWinCutsceneMusic().stop();
 
@@ -351,6 +366,18 @@ namespace r3 {
 
 				delete this->storyCutscene;
 				this->storyCutscene = nullptr;
+				break;
+			}
+
+			return result;
+		}
+
+		StoryGameSceneClientRequest StoryGameController::processLevelSummaryKeyEvent(sf::Event& event) {
+			StoryGameSceneClientRequest result = StoryGameSceneClientRequest::NONE;
+
+			switch (event.key.code) {
+			case sf::Keyboard::Key::Enter:
+				this->moveToNextLevel();
 				break;
 			}
 
@@ -430,7 +457,7 @@ namespace r3 {
 			}
 
 			if (this->storyCutscene->update()) {
-				this->moveToNextLevel();
+				this->mode = StoryGameMode::LEVEL_SCORE_SUMMARY;
 
 				this->levelAssetBundle->getWinCutsceneMusic().stop();
 
@@ -478,6 +505,10 @@ namespace r3 {
 			}
 
 			if (!updateResult.foodEatenResultList.empty()) {
+				for (auto const& currFoodEatenResult : updateResult.foodEatenResultList) {
+					this->updateFoodEatenSummaryMap(currFoodEatenResult);
+				}
+
 				this->renderer->queueFoodEatenAnimations(updateResult.foodEatenResultList, this->storyGame);
 
 				this->soundManager.play(this->levelAssetBundle->getEatFoodSoundBuffer());
@@ -501,6 +532,7 @@ namespace r3 {
 
 			if (updateResult.snakeDiedFlag) {
 				this->storyGame->resetScoreToLevelStart();
+				this->foodEatenSummaryMap.clear();
 				this->stopRunningLevel();
 
 				if (this->levelDefnList[this->currLevelIndex].lossCutsceneDefn.existsFlag) {
@@ -522,11 +554,29 @@ namespace r3 {
 					this->mode = StoryGameMode::PLAY_WIN_CUTSCENE;
 				}
 				else {
-					this->moveToNextLevel();
+					this->mode = StoryGameMode::LEVEL_SCORE_SUMMARY;
 				}
 			}
 
 			this->snakeMovementInputQueue.clear();
+		}
+
+		void StoryGameController::updateFoodEatenSummaryMap(const StoryFoodEatenResult& foodEatenResult) {
+			if (this->foodEatenSummaryMap.count(foodEatenResult.foodInstance.foodType) == 0) {
+				StoryFoodEatenSummaryDt newFoodEatenSummaryDt;
+				newFoodEatenSummaryDt.foodType = foodEatenResult.foodInstance.foodType;
+				newFoodEatenSummaryDt.totalEaten = 0;
+				newFoodEatenSummaryDt.totalBaseScore = 0;
+				newFoodEatenSummaryDt.totalBonusScore = 0;
+				newFoodEatenSummaryDt.totalScore = 0;
+
+				this->foodEatenSummaryMap[foodEatenResult.foodInstance.foodType] = newFoodEatenSummaryDt;
+			}
+
+			this->foodEatenSummaryMap[foodEatenResult.foodInstance.foodType].totalEaten++;
+			this->foodEatenSummaryMap[foodEatenResult.foodInstance.foodType].totalBaseScore += foodEatenResult.scoreResult.baseScore;
+			this->foodEatenSummaryMap[foodEatenResult.foodInstance.foodType].totalBonusScore += (foodEatenResult.scoreResult.bonusPathScore + foodEatenResult.scoreResult.perfectPathScore);
+			this->foodEatenSummaryMap[foodEatenResult.foodInstance.foodType].totalScore += foodEatenResult.scoreResult.totalScore;
 		}
 
 		void StoryGameController::stopRunningLevel() {
@@ -541,6 +591,7 @@ namespace r3 {
 			else {
 				this->currLevelIndex++;
 				this->mode = StoryGameMode::LOAD_LEVEL;
+				this->foodEatenSummaryMap.clear();
 				this->storyGame->snapshotScoreAtLevelStart();
 				this->initiateLoadLevel();
 			}

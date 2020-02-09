@@ -174,6 +174,18 @@ namespace r3 {
 
 		}
 
+		namespace StoryLevelSummaryRenderUtils {
+
+			bool compareFoodEatenSummaryDt(StoryFoodEatenSummaryDt dt1, StoryFoodEatenSummaryDt dt2) {
+				bool result = dt1.totalEaten > dt2.totalEaten;
+				if (dt1.totalEaten == dt2.totalEaten) {
+					result = dt1.totalScore > dt2.totalScore;
+				}
+				return result;
+			}
+
+		}
+
 		StoryGameRenderer::StoryGameRenderer() {
 			this->uiFont = new sf::Font();
 			this->healthBarTexture = new sf::Texture();
@@ -427,6 +439,13 @@ namespace r3 {
 			this->renderFoodEatenAnimations(renderTarget, renderState);
 		}
 
+		void StoryGameRenderer::renderLevelSummary(sf::RenderTarget& renderTarget, const StoryLevelSummaryRenderState& renderState) {
+			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
+			this->renderGameRunningUi(renderTarget, renderState.gameRenderState);
+			this->renderPlayingField(renderTarget, renderState.gameRenderState);
+			this->renderLevelSummaryUi(renderTarget, renderState);
+		}
+
 		void StoryGameRenderer::renderLevelLost(sf::RenderTarget& renderTarget, const StoryGameRenderState& renderState) {
 			renderTarget.clear(StoryGameRenderConstants::BACKGROUND_COLOR);
 			this->renderGameRunningUi(renderTarget, renderState);
@@ -652,6 +671,70 @@ namespace r3 {
 					renderTarget.draw(foodEatenText);
 				}
 			}
+		}
+
+		void StoryGameRenderer::renderLevelSummaryUi(sf::RenderTarget& renderTarget, const StoryLevelSummaryRenderState& renderState) {
+			float foodUiHeight = renderState.foodEatenSummaryMap->size() * 84.0f;
+			float totalUiHeight = foodUiHeight + 200.0f;
+
+			sf::RectangleShape backgroundShape = this->createTextBackgroundShape(1300.0f, totalUiHeight);
+			renderTarget.draw(backgroundShape);
+
+			std::vector<StoryFoodEatenSummaryDt> foodEatenSummaryList;
+			for (auto const& currFoodEatenSummaryPair : *renderState.foodEatenSummaryMap) {
+				foodEatenSummaryList.push_back(currFoodEatenSummaryPair.second);
+			}
+			std::sort(foodEatenSummaryList.begin(), foodEatenSummaryList.end(), StoryLevelSummaryRenderUtils::compareFoodEatenSummaryDt);
+			
+			sf::Sprite foodSprite;
+			foodSprite.setTexture(renderState.gameRenderState.levelAssetBundle->getFoodTexture());
+
+			wchar_t summaryStr[48];
+
+			sf::Text summaryText;
+			summaryText.setFont(*this->uiFont);
+			summaryText.setCharacterSize(48);
+
+			float currYPos = (ViewUtils::VIEW_SIZE.y / 2.0f) - (totalUiHeight / 2.0f) + 50.0f;
+
+			summaryText.setString(L"Type of Food");
+			summaryText.setPosition(410.0f, currYPos);
+			renderTarget.draw(summaryText);
+
+			summaryText.setString(L"# Eaten");
+			summaryText.setPosition(1220.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+			renderTarget.draw(summaryText);
+
+			summaryText.setString(L"Score");
+			summaryText.setPosition(1580.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+			renderTarget.draw(summaryText);
+
+			currYPos += 84.0f;
+
+			for (auto const& currFoodEatenSummary : foodEatenSummaryList) {
+				StoryGameRenderUtils::setFoodSpriteTextureRect(foodSprite, currFoodEatenSummary.foodType);
+				foodSprite.setPosition(360.0f - (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE / 2.0f, currYPos);
+				renderTarget.draw(foodSprite);
+
+				summaryText.setString(StoryGameRenderUtils::resolveFoodTypeLabel(currFoodEatenSummary.foodType));
+				summaryText.setPosition(410.0f, currYPos);
+				renderTarget.draw(summaryText);
+
+				swprintf_s(summaryStr, L"x%d", currFoodEatenSummary.totalEaten);
+				summaryText.setString(summaryStr);
+				summaryText.setPosition(1220.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+				renderTarget.draw(summaryText);
+
+				swprintf_s(summaryStr, L"%d", currFoodEatenSummary.totalScore);
+				summaryText.setString(summaryStr);
+				summaryText.setPosition(1580.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+				renderTarget.draw(summaryText);
+
+				currYPos += 84.0f;
+			}
+
+			sf::Text instructionsText = this->createInstructionsText(L"Press ENTER to continue...", currYPos);
+			renderTarget.draw(instructionsText);
 		}
 
 		void StoryGameRenderer::renderWaitToStartInstructions(sf::RenderTarget& renderTarget) {

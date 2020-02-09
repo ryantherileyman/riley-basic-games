@@ -33,6 +33,10 @@ namespace r3 {
 			const wchar_t* SCORE_FOOD_EATEN_WITH_BONUS = L"+%d Bonus Path!";
 			const wchar_t* SCORE_FOOD_EATEN_PERFECT_PATH = L"+%d Perfect Path!";
 
+			const wchar_t* SUMMARY_TITLE_FOOD_TYPE = L"Type of Food";
+			const wchar_t* SUMMARY_TITLE_COUNT = L"# Eaten";
+			const wchar_t* SUMMARY_TITLE_SCORE = L"Score";
+
 			const wchar_t* CAMPAIGN_ERROR_MESSAGE = L"An error occurred attempting to load the campaign.";
 			const wchar_t* LEVEL_ERROR_MESSAGE = L"An error occurred attempting to load the next level's assets.";
 			const wchar_t* SEE_LOG_MESSAGE = L"See log.txt in the game folder for more information.";
@@ -677,7 +681,7 @@ namespace r3 {
 			float foodUiHeight = renderState.foodEatenSummaryMap->size() * 84.0f;
 			float totalUiHeight = foodUiHeight + 200.0f;
 
-			sf::RectangleShape backgroundShape = this->createTextBackgroundShape(1300.0f, totalUiHeight);
+			sf::RectangleShape backgroundShape = this->createTextBackgroundShape(1040.0f, totalUiHeight);
 			renderTarget.draw(backgroundShape);
 
 			std::vector<StoryFoodEatenSummaryDt> foodEatenSummaryList;
@@ -697,37 +701,41 @@ namespace r3 {
 
 			float currYPos = (ViewUtils::VIEW_SIZE.y / 2.0f) - (totalUiHeight / 2.0f) + 50.0f;
 
-			summaryText.setString(L"Type of Food");
-			summaryText.setPosition(410.0f, currYPos);
+			summaryText.setString(StoryGameRenderConstants::SUMMARY_TITLE_FOOD_TYPE);
+			summaryText.setPosition(540.0f, currYPos);
 			renderTarget.draw(summaryText);
 
-			summaryText.setString(L"# Eaten");
-			summaryText.setPosition(1220.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+			summaryText.setString(StoryGameRenderConstants::SUMMARY_TITLE_COUNT);
+			summaryText.setPosition(1120.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
 			renderTarget.draw(summaryText);
 
-			summaryText.setString(L"Score");
-			summaryText.setPosition(1580.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+			summaryText.setString(StoryGameRenderConstants::SUMMARY_TITLE_SCORE);
+			summaryText.setPosition(1450.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
 			renderTarget.draw(summaryText);
+
+			sf::RectangleShape titleLine(sf::Vector2f(1000.0f, 4.0f));
+			titleLine.setPosition((ViewUtils::VIEW_SIZE.x / 2.0f) - 500.0f, currYPos + 72.0f);
+			renderTarget.draw(titleLine);
 
 			currYPos += 84.0f;
 
 			for (auto const& currFoodEatenSummary : foodEatenSummaryList) {
 				StoryGameRenderUtils::setFoodSpriteTextureRect(foodSprite, currFoodEatenSummary.foodType);
-				foodSprite.setPosition(360.0f - (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE / 2.0f, currYPos);
+				foodSprite.setPosition(490.0f - (float)StoryGameRenderConstants::FOOD_PIXEL_SIZE / 2.0f, currYPos);
 				renderTarget.draw(foodSprite);
 
 				summaryText.setString(StoryGameRenderUtils::resolveFoodTypeLabel(currFoodEatenSummary.foodType));
-				summaryText.setPosition(410.0f, currYPos);
+				summaryText.setPosition(540.0f, currYPos);
 				renderTarget.draw(summaryText);
 
-				swprintf_s(summaryStr, L"x%d", currFoodEatenSummary.totalEaten);
+				swprintf_s(summaryStr, L"%d", currFoodEatenSummary.totalEaten);
 				summaryText.setString(summaryStr);
-				summaryText.setPosition(1220.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+				summaryText.setPosition(1120.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
 				renderTarget.draw(summaryText);
 
 				swprintf_s(summaryStr, L"%d", currFoodEatenSummary.totalScore);
 				summaryText.setString(summaryStr);
-				summaryText.setPosition(1580.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
+				summaryText.setPosition(1450.0f - FontUtils::resolveTextWidth(summaryText), currYPos);
 				renderTarget.draw(summaryText);
 
 				currYPos += 84.0f;

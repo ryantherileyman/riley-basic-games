@@ -8583,7 +8583,7 @@
             "winCondition": {
                 "conditionType": "onFoodEaten",
                 "foodType": "Apple",
-                "foodCount": 1
+                "foodCount": 100
             },
             "foodList": [
                 {

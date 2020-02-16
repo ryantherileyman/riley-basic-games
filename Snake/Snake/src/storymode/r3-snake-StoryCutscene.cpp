@@ -60,7 +60,7 @@ namespace r3 {
 			this->currFrame = (int)framesElapsed + 1;
 			this->framesSinceLastEvent = this->currFrame - this->lastEventFrame;
 
-			printf("Now at frame %d\n", this->currFrame);
+			// printf("Now at frame %d\n", this->currFrame);
 
 			bool result = (this->nextEventIndex >= this->cutsceneDefn->eventDefnList.size());
 			return result;
@@ -180,7 +180,7 @@ namespace r3 {
 				delete this->snake;
 				this->snake = nullptr;
 
-				printf("Cut-scene:  Teleporting the snake to a new position %d, %d\n", snakeEventDefn.snakeStart.headPosition.x, snakeEventDefn.snakeStart.headPosition.y);
+				// printf("Cut-scene:  Teleporting the snake to a new position %d, %d\n", snakeEventDefn.snakeStart.headPosition.x, snakeEventDefn.snakeStart.headPosition.y);
 			}
 
 			if (
@@ -190,13 +190,13 @@ namespace r3 {
 				this->snake = new Snake(snakeEventDefn.snakeStart);
 			}
 			else {
-				printf("Cut-scene:  The \"showSnake\" event will be ignored, as no map is currently visible\n");
+				// printf("Cut-scene:  The \"showSnake\" event will be ignored, as no map is currently visible\n");
 			}
 		}
 
 		void StoryCutscene::processMoveSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn) {
 			if (this->snake == nullptr) {
-				printf("Cut-scene:  The \"moveSnake\" event will be ignored, as the snake is not currently visible\n");
+				// printf("Cut-scene:  The \"moveSnake\" event will be ignored, as the snake is not currently visible\n");
 			}
 			else {
 				if (snakeEventDefn.snakeGrowFlag) {
@@ -210,7 +210,7 @@ namespace r3 {
 
 		void StoryCutscene::processHideSnakeEvent(const StoryCutsceneSnakeEventDefn& snakeEventDefn) {
 			if (this->snake == nullptr) {
-				printf("Cut-scene:  The \"hideSnake\" event will be ignored, as the snake is not currently visible\n");
+				// printf("Cut-scene:  The \"hideSnake\" event will be ignored, as the snake is not currently visible\n");
 			}
 			else {
 				delete this->snake;
@@ -220,7 +220,7 @@ namespace r3 {
 
 		void StoryCutscene::processShowFoodEvent(const StoryCutsceneFoodEventDefn& foodEventDefn) {
 			if (this->foodInstanceMap.count(foodEventDefn.instanceId) > 0) {
-				printf("Cut-scene:  Food instance %d already exists\n", foodEventDefn.instanceId);
+				// printf("Cut-scene:  Food instance %d already exists\n", foodEventDefn.instanceId);
 			}
 
 			StoryFoodInstance newFoodInstance;
@@ -233,7 +233,7 @@ namespace r3 {
 
 		void StoryCutscene::processHideFoodEvent(const StoryCutsceneFoodEventDefn& foodEventDefn) {
 			if (this->foodInstanceMap.count(foodEventDefn.instanceId) == 0) {
-				printf("Cut-scene:  The \"hideFood\" event will be ignored, as the instance ID is not currently visible.\n");
+				// printf("Cut-scene:  The \"hideFood\" event will be ignored, as the instance ID is not currently visible.\n");
 			}
 			else {
 				this->foodInstanceMap.erase(foodEventDefn.instanceId);
@@ -242,7 +242,7 @@ namespace r3 {
 
 		void StoryCutscene::processShowDangerEvent(const StoryCutsceneDangerEventDefn& dangerEventDefn) {
 			if (this->dangerInstanceMap.count(dangerEventDefn.instanceId) > 0) {
-				printf("Cut-scene:  Danger instance %d already exists\n", dangerEventDefn.instanceId);
+				// printf("Cut-scene:  Danger instance %d already exists\n", dangerEventDefn.instanceId);
 			}
 
 			StoryDangerInstance newDangerInstance;
@@ -255,7 +255,7 @@ namespace r3 {
 
 		void StoryCutscene::processHideDangerEvent(const StoryCutsceneDangerEventDefn& dangerEventDefn) {
 			if (this->dangerInstanceMap.count(dangerEventDefn.instanceId) == 0) {
-				printf("Cut-scene:  The \"hideDanger\" event will be ignored, as the instance ID is not currently visible.\n");
+				// printf("Cut-scene:  The \"hideDanger\" event will be ignored, as the instance ID is not currently visible.\n");
 			}
 			else {
 				this->dangerInstanceMap.erase(dangerEventDefn.instanceId);

@@ -50,10 +50,10 @@ namespace r3 {
 
 			bool result = false;
 			if (conditionsMet) {
-				printf("Checking if danger will spawn...\n");
+				// printf("Checking if danger will spawn...\n");
 				float chanceComparison = this->chancePctDistribution(*input.randomizer);
-				printf("Time since last chance check is %f seconds\n", timeSinceLastChanceCheck.asSeconds());
-				printf("Rolled %f, with chance of %f\n", chanceComparison, this->dangerDefn->chancePct);
+				// printf("Time since last chance check is %f seconds\n", timeSinceLastChanceCheck.asSeconds());
+				// printf("Rolled %f, with chance of %f\n", chanceComparison, this->dangerDefn->chancePct);
 				this->timeOfLastChanceCheck = input.timeSinceLevelStarted;
 				result = (chanceComparison <= this->dangerDefn->chancePct);
 				if (result) {

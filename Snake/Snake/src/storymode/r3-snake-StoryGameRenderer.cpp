@@ -219,7 +219,7 @@ namespace r3 {
 				currAnimation.eatenTime = storyGame->getTimeElapsed();
 				currAnimation.scoreResult = currFoodEaten.scoreResult;
 
-				printf("Adding food eaten animation for score of %d\n", currAnimation.scoreResult.totalScore);
+				// printf("Adding food eaten animation for score of %d\n", currAnimation.scoreResult.totalScore);
 
 				this->foodEatenAnimationList.push_back(currAnimation);
 			}
@@ -277,20 +277,20 @@ namespace r3 {
 
 			for (auto const& currScreenView : renderState.storyCutscene->getActiveScreenViewList()) {
 				if (currScreenView.screenEventType == StoryCutsceneScreenViewType::COLOR) {
-					printf("Screen view color %d,%d,%d,%d\n", currScreenView.color.r, currScreenView.color.g, currScreenView.color.b, currScreenView.color.a);
+					// printf("Screen view color %d,%d,%d,%d\n", currScreenView.color.r, currScreenView.color.g, currScreenView.color.b, currScreenView.color.a);
 
 					sf::RectangleShape colorShape = StoryCutsceneRenderUtils::createScreenViewColorShape(currScreenView);
 					renderTarget.draw(colorShape);
 				}
 				else if (currScreenView.screenEventType == StoryCutsceneScreenViewType::TEXTURE) {
-					printf("Screen view texture <%s> at %d alpha\n", currScreenView.textureFilename.c_str(), StoryCutsceneRenderUtils::resolveScreenViewAlpha(currScreenView));
+					// printf("Screen view texture <%s> at %d alpha\n", currScreenView.textureFilename.c_str(), StoryCutsceneRenderUtils::resolveScreenViewAlpha(currScreenView));
 
 					const sf::Texture& texture = renderState.levelAssetBundle->getTexture(currScreenView.textureFilename);
 					sf::Sprite textureSprite = StoryCutsceneRenderUtils::createScreenViewTextureSprite(currScreenView, texture);
 					renderTarget.draw(textureSprite);
 				}
 				else if ( currScreenView.screenEventType == StoryCutsceneScreenViewType::MAP) {
-					printf("Screen view map <%s> at %d alpha\n", currScreenView.mapFilename.c_str(), StoryCutsceneRenderUtils::resolveScreenViewAlpha(currScreenView));
+					// printf("Screen view map <%s> at %d alpha\n", currScreenView.mapFilename.c_str(), StoryCutsceneRenderUtils::resolveScreenViewAlpha(currScreenView));
 
 					sf::RenderTexture mapTexture;
 					mapTexture.create((unsigned int)ViewUtils::VIEW_SIZE.x, (unsigned int)ViewUtils::VIEW_SIZE.y);
@@ -656,7 +656,7 @@ namespace r3 {
 				if (secondsSinceFoodEaten >= 1.0f) {
 					this->foodEatenAnimationList.erase(this->foodEatenAnimationList.begin() + animationIndex);
 
-					printf("Removing food eaten animation at index %d, size is now %d\n", animationIndex, this->foodEatenAnimationList.size());
+					// printf("Removing food eaten animation at index %d, size is now %d\n", animationIndex, this->foodEatenAnimationList.size());
 				}
 				else {
 					swprintf_s(foodEatenStr, StoryGameRenderUtils::resolveFoodEatenFormatString(currAnimation.scoreResult), currAnimation.scoreResult.totalScore);

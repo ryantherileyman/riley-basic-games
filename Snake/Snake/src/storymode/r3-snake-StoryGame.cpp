@@ -60,7 +60,7 @@ namespace r3 {
 
 				result.totalScore = result.baseScore + result.bonusPathScore + result.perfectPathScore;
 
-				printf("Scoring for food eaten: Base=%d + BonusPath=%d + PerfectPath=%d = %d\n", result.baseScore, result.bonusPathScore, result.perfectPathScore, result.totalScore);
+				// printf("Scoring for food eaten: Base=%d + BonusPath=%d + PerfectPath=%d = %d\n", result.baseScore, result.bonusPathScore, result.perfectPathScore, result.totalScore);
 
 				return result;
 			}
@@ -150,7 +150,7 @@ namespace r3 {
 		void StoryGame::startRunningLevel() {
 			this->clock.restart();
 			this->status = StoryGameStatus::RUNNING;
-			printf("Clock restarted, is at %f seconds\n", this->clock.getElapsedTime().asSeconds());
+			// printf("Clock restarted, is at %f seconds\n", this->clock.getElapsedTime().asSeconds());
 		}
 
 		void StoryGame::stopRunningLevel() {
@@ -392,13 +392,13 @@ namespace r3 {
 			}
 
 			for (int currModifierId : modifierIdListToRemove) {
-				printf("Removing movement multiplier of %f\n", this->snakeMovementModifierMap[currModifierId].movementMultiplier);
+				// printf("Removing movement multiplier of %f\n", this->snakeMovementModifierMap[currModifierId].movementMultiplier);
 
 				this->snakeMovementModifierMap.erase(currModifierId);
 			}
 
 			if (!modifierIdListToRemove.empty()) {
-				printf("New speed will be %f\n", this->resolveSnakeSpeedTilesPerSecond());
+				// printf("New speed will be %f\n", this->resolveSnakeSpeedTilesPerSecond());
 			}
 		}
 
@@ -411,7 +411,7 @@ namespace r3 {
 		}
 
 		void StoryGame::addNewSnakeMovementModifier(float movementMultiplier, float secondsToApply) {
-			printf("Adding movement multiplier of %f\n", movementMultiplier);
+			// printf("Adding movement multiplier of %f\n", movementMultiplier);
 
 			this->snakeMovementModifierMap[this->nextSnakeMovementModifierId] = StorySnakeMovementModifier();
 			this->snakeMovementModifierMap[this->nextSnakeMovementModifierId].movementMultiplier = movementMultiplier;
@@ -420,7 +420,7 @@ namespace r3 {
 
 			this->nextSnakeMovementModifierId++;
 
-			printf("New speed will be %f\n", this->resolveSnakeSpeedTilesPerSecond());
+			// printf("New speed will be %f\n", this->resolveSnakeSpeedTilesPerSecond());
 		}
 
 		std::vector<StoryFoodInstance> StoryGame::checkForFoodSpawns() {
@@ -436,7 +436,7 @@ namespace r3 {
 
 				if (currFoodSpawnTracker.shouldFoodSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableFoodSpawnPositionList(currFoodSpawnTracker.getFoodDefn());
-					// TODO printf("There are %d positions on the map that the food can spawn\n", availablePositionList.size());
+					// printf("There are %d positions on the map that the food can spawn\n", availablePositionList.size());
 					if (availablePositionList.size() > 0) {
 						StoryFoodInstance newFoodInstance = this->createFoodInstance(currFoodSpawnTracker.getFoodDefn().foodType, availablePositionList);
 						currFoodSpawnTracker.spawnFood(newFoodInstance);
@@ -567,7 +567,7 @@ namespace r3 {
 
 				if (currDangerSpawnTracker.shouldDangerSpawn(checkInput)) {
 					std::vector<sf::Vector2i> availablePositionList = this->buildAvailableDangerSpawnPositionList(currDangerSpawnTracker.getDangerDefn());
-					// TODO printf("There are %d positions on the map that the danger can spawn\n", availablePositionList.size());
+					// printf("There are %d positions on the map that the danger can spawn\n", availablePositionList.size());
 					if (availablePositionList.size() > 0) {
 						StoryDangerInstance newDangerInstance = this->createDangerInstance(currDangerSpawnTracker.getDangerDefn().dangerType, availablePositionList);
 						currDangerSpawnTracker.spawnDanger(newDangerInstance);
@@ -728,19 +728,19 @@ namespace r3 {
 			case StoryWinConditionType::ON_FOOD_EATEN:
 				result = (this->foodEatenCountMap.at(this->levelDefn->winCondition.foodType) >= this->levelDefn->winCondition.foodCount);
 				if (result) {
-					printf("Reached %d of required food to win the level!\n", this->levelDefn->winCondition.foodCount);
+					// printf("Reached %d of required food to win the level!\n", this->levelDefn->winCondition.foodCount);
 				}
 				break;
 			case StoryWinConditionType::ON_LENGTH_REACHED:
 				result = (this->snake->getLength() >= this->levelDefn->winCondition.snakeLength);
 				if (result) {
-					printf("Snake reached length %d to win the level!\n", this->levelDefn->winCondition.snakeLength);
+					// printf("Snake reached length %d to win the level!\n", this->levelDefn->winCondition.snakeLength);
 				}
 				break;
 			case StoryWinConditionType::ON_TIME_SURVIVED:
 				result = (this->clock.getElapsedTime().asSeconds() >= (float)this->levelDefn->winCondition.timePassed);
 				if (result) {
-					printf("Survived for %d seconds to win the level!\n", this->levelDefn->winCondition.timePassed);
+					// printf("Survived for %d seconds to win the level!\n", this->levelDefn->winCondition.timePassed);
 				}
 				break;
 			}

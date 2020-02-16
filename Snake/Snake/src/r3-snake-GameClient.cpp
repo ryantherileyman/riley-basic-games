@@ -242,7 +242,7 @@ namespace r3 {
 				}
 
 				sf::Int64 microSecondsElapsed = clock.getElapsedTime().asMicroseconds();
-				// TODO printf("microseconds elapsed this frame = %lld\n", microSecondsElapsed);
+				// printf("microseconds elapsed this frame = %lld\n", microSecondsElapsed);
 				if (microSecondsElapsed < GameLoopUtils::MICROSECONDS_PER_FRAME) {
 					std::this_thread::sleep_for(std::chrono::microseconds(GameLoopUtils::MICROSECONDS_PER_FRAME - microSecondsElapsed));
 				}

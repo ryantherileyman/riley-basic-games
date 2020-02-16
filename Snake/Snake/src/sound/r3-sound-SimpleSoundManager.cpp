@@ -15,12 +15,12 @@ namespace r3 {
 		}
 
 		void SimpleSoundManager::play(const sf::SoundBuffer& soundBuffer) {
-			printf("Playing sound in slot %d\n", this->nextSoundIndex);
+			// printf("Playing sound in slot %d\n", this->nextSoundIndex);
 			if (
 				(this->soundArray[this->nextSoundIndex].getBuffer() != nullptr) &&
 				(this->soundArray[this->nextSoundIndex].getStatus() != sf::Sound::Status::Stopped)
 			) {
-				printf("Previous sound in this slot did not stop yet!");
+				// printf("Previous sound in this slot did not stop yet!");
 				this->soundArray[this->nextSoundIndex].stop();
 			}
 
